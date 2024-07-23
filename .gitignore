@@ -1,0 +1,11 @@
+# eclipse
+.classpath
+.project
+.settings/
+.ruleset
+.pmd
+
+# ? validate
+reports/
+
+target/
