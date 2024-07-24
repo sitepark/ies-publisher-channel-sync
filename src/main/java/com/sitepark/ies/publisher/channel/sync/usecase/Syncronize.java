@@ -77,7 +77,7 @@ public class Syncronize {
     } else {
       Files.delete(path);
     }
-    return Files.exists(path);
+    return !Files.exists(path);
   }
 
   @SuppressWarnings("PMD.AvoidDuplicateLiterals")
