@@ -13,7 +13,6 @@ import com.sitepark.ies.publisher.channel.sync.domain.entity.PublicationDirector
 import com.sitepark.ies.publisher.channel.sync.domain.entity.PublicationType;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.PublishedPath;
 import com.sitepark.ies.publisher.channel.sync.service.Channel;
-import com.sitepark.ies.publisher.channel.sync.service.analyser.AnalyserContext;
 import java.nio.file.Path;
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;
