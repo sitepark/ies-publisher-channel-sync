@@ -16,6 +16,7 @@ import com.sitepark.ies.publisher.channel.sync.service.Channel;
 import com.sitepark.ies.publisher.channel.sync.service.PublicationDirectoryTreeBuilder;
 import com.sitepark.ies.publisher.channel.sync.service.analyser.Collision;
 import com.sitepark.ies.publisher.channel.sync.service.analyser.DirectoryFileMismatch;
+import com.sitepark.ies.publisher.channel.sync.service.analyser.DocumentRootLayoutFiles;
 import com.sitepark.ies.publisher.channel.sync.service.analyser.EmbeddedMediaDirectory;
 import com.sitepark.ies.publisher.channel.sync.service.analyser.EmptyPath;
 import com.sitepark.ies.publisher.channel.sync.service.analyser.FileDirectoryMismatch;
@@ -63,6 +64,7 @@ public class Analyse {
 
     this.publishedPathAnalysers =
         Arrays.asList(
+            new DocumentRootLayoutFiles(),
             new FileDirectoryMismatch(),
             new DirectoryFileMismatch(),
             new PublicationTypeMismatch(),
