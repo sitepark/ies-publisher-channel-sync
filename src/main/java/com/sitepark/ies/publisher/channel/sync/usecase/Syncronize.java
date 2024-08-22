@@ -40,7 +40,7 @@ public class Syncronize {
             .build());
   }
 
-  public Syncronize(SyncronizeContext ctx) {
+  protected Syncronize(SyncronizeContext ctx) {
     this(
         ctx,
         Arrays.asList(
@@ -52,7 +52,7 @@ public class Syncronize {
             new TemplateMissing()));
   }
 
-  public Syncronize(SyncronizeContext ctx, List<Syncronizer> syncronizers) {
+  protected Syncronize(SyncronizeContext ctx, List<Syncronizer> syncronizers) {
     this.ctx = ctx;
     this.syncronizers.addAll(syncronizers);
   }

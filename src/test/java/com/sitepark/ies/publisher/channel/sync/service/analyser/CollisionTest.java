@@ -19,9 +19,9 @@ import org.junit.jupiter.api.Test;
 
 class CollisionTest extends AnalyserTest {
 
-  private Path resourceDir = Path.of("src/test/resources/service/analyser/CollisionTest");
+  private final Path resourceDir = Path.of("src/test/resources/service/analyser/CollisionTest");
 
-  private Collision analyser = new Collision();
+  private final Collision analyser = new Collision();
 
   @Test
   void testWhenPublishedPathIsNotADirectory() throws IOException {

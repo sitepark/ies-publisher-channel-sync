@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
 
 class EmptyPathTest extends AnalyserTest {
 
-  private EmptyPath analyser = new EmptyPath();
+  private final EmptyPath analyser = new EmptyPath();
 
   @Test
   void testWhenPublishedPathIsDirectory() throws IOException {

@@ -18,13 +18,13 @@ import org.junit.jupiter.api.Test;
 
 class TemplateMissingTest {
 
-  private Publisher publisher = mock();
+  private final Publisher publisher = mock();
 
-  private SyncNotifier notifier = mock();
+  private final SyncNotifier notifier = mock();
 
   private SyncronizeContext ctx;
 
-  private TemplateMissing syncronizer = new TemplateMissing();
+  private final Syncronizer syncronizer = new TemplateMissing();
 
   @BeforeEach
   public void setup() {

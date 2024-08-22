@@ -6,6 +6,7 @@ import java.nio.file.Path;
 
 public class UnknownFileOrDirectory implements Syncronizer {
 
+  @SuppressWarnings("PMD.AvoidDuplicateLiterals")
   @Override
   public void syncronize(SyncronizeContext ctx, ResultEntry entry) {
 

@@ -18,15 +18,20 @@ import java.nio.file.Path;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings({
+  "PMD.JUnitTestContainsTooManyAsserts",
+  "PMD.TooManyMethods",
+  "PMD.AvoidDuplicateLiterals"
+})
 class MissingOrInvalidFileTest {
 
-  private Publisher publisher = mock();
+  private final Publisher publisher = mock();
 
-  private SyncNotifier notifier = mock();
+  private final SyncNotifier notifier = mock();
 
   private SyncronizeContext ctx;
 
-  private MissingOrInvalidFile syncronizer = new MissingOrInvalidFile();
+  private final Syncronizer syncronizer = new MissingOrInvalidFile();
 
   @BeforeEach
   public void setup() {

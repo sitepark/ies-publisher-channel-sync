@@ -16,12 +16,13 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 class EmbeddedMediaDirectoryTest extends AnalyserTest {
 
-  private Path resourceDir =
+  private final Path resourceDir =
       Path.of("src/test/resources/service/analyser/EmbeddedMediaDirectoryTest");
 
-  private EmbeddedMediaDirectory analyser = new EmbeddedMediaDirectory();
+  private final EmbeddedMediaDirectory analyser = new EmbeddedMediaDirectory();
 
   @Test
   void testWhenPublishedPathIsNotADirectory() throws IOException {

@@ -17,9 +17,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 class MediaMetaFileTest extends AnalyserTest {
 
-  private MediaMetaFile analyser = new MediaMetaFile();
+  private final MediaMetaFile analyser = new MediaMetaFile();
 
   @Test
   void testWhenPublishedPathIsDirectory() throws IOException {

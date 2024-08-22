@@ -35,11 +35,12 @@ class ChannelDirectoryStreamTest {
 
   @Test
   void testClose() throws IOException {
-    DirectoryStream<Path> stream = mock();
-    ChannelDirectoryStream channelDirectoryStream =
-        new ChannelDirectoryStream(PublicationType.OBJECT, stream);
-    channelDirectoryStream.close();
+    try (DirectoryStream<Path> stream = mock();
+        ChannelDirectoryStream channelDirectoryStream =
+            new ChannelDirectoryStream(PublicationType.OBJECT, stream)) {
+      channelDirectoryStream.close();
 
-    verify(stream, times(1)).close();
+      verify(stream, times(1)).close();
+    }
   }
 }

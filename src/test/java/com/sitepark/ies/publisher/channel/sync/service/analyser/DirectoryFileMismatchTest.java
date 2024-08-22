@@ -14,9 +14,10 @@ import java.io.IOException;
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 class DirectoryFileMismatchTest extends AnalyserTest {
 
-  private DirectoryFileMismatch analyser = new DirectoryFileMismatch();
+  private final DirectoryFileMismatch analyser = new DirectoryFileMismatch();
 
   @Test
   void testWhenPublishedPathIsNotADirectory() throws IOException {

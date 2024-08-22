@@ -17,13 +17,13 @@ import org.junit.jupiter.api.Test;
 
 class LegalFileCollisionsTest {
 
-  private Publisher publisher = mock();
+  private final Publisher publisher = mock();
 
-  private SyncNotifier notifier = mock();
+  private final SyncNotifier notifier = mock();
 
   private SyncronizeContext ctx;
 
-  private LegalFileCollisions syncronizer = new LegalFileCollisions();
+  private final Syncronizer syncronizer = new LegalFileCollisions();
 
   @BeforeEach
   public void setup() {

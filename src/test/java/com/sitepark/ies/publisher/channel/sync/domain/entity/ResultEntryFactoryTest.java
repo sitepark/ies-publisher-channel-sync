@@ -14,7 +14,7 @@ class ResultEntryFactoryTest {
   private ResultEntryFactory factory;
 
   @BeforeEach
-  void setUp() {
+  void setup() {
     AnalyserContext ctx = mock();
     this.publicationDirectory = mock();
     when(ctx.getPublicationDirectory()).thenReturn(this.publicationDirectory);

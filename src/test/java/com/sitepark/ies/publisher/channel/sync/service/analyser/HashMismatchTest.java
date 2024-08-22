@@ -18,9 +18,9 @@ import org.junit.jupiter.api.Test;
 
 class HashMismatchTest extends AnalyserTest {
 
-  private HashMismatch analyser = new HashMismatch(new TestHasher());
+  private final HashMismatch analyser = new HashMismatch(new TestHasher());
 
-  private Path resourceDir = Path.of("src/test/resources/service/analyser/HashMismatchTest");
+  private final Path resourceDir = Path.of("src/test/resources/service/analyser/HashMismatchTest");
 
   @Test
   void testWhenPublishedPathIsDirectory() throws IOException {
@@ -77,7 +77,8 @@ class HashMismatchTest extends AnalyserTest {
     assertEquals(expected, result, "Unexpected result");
   }
 
-  private static class TestHasher implements Hasher {
+  @SuppressWarnings("PMD.TestClassWithoutTestCases")
+  private static final class TestHasher implements Hasher {
     @Override
     public String hash(Path file) throws IOException {
       return "valid-hash";

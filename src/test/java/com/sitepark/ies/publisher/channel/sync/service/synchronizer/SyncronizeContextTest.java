@@ -16,12 +16,13 @@ import java.util.Comparator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings({"PMD.TooManyMethods", "PMD.AvoidDuplicateLiterals"})
 class SyncronizeContextTest {
 
-  private Path workDir = Path.of("target/test/SyncronizeContextTest");
+  private final Path workDir = Path.of("target/test/SyncronizeContextTest");
 
   @BeforeEach
-  private void setup() throws IOException {
+  public void setup() throws IOException {
     this.deleteWorkDir();
     Files.createDirectories(this.workDir);
   }

@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings("PMD.TooManyMethods")
 class ChannelTest {
 
   private final Path root = Path.of("src/test/resources/service/ChannelTest").toAbsolutePath();
@@ -51,6 +52,7 @@ class ChannelTest {
   }
 
   @Test
+  @SuppressWarnings("PMD.AvoidDuplicateLiterals")
   void testResolveWithPathFromDocumentRootLayout() {
     Channel channel = new Channel(ChannelLayout.DOCUMENT_ROOT, this.root);
     assertEquals(

@@ -17,15 +17,16 @@ import java.nio.file.Path;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings({"PMD.JUnitTestContainsTooManyAsserts", "PMD.AvoidDuplicateLiterals"})
 class FileDirectoryMismatchTest {
 
-  private Publisher publisher = mock();
+  private final Publisher publisher = mock();
 
-  private SyncNotifier notifier = mock();
+  private final SyncNotifier notifier = mock();
 
   private SyncronizeContext ctx;
 
-  private FileDirectoryMismatch syncronizer = new FileDirectoryMismatch();
+  private final Syncronizer syncronizer = new FileDirectoryMismatch();
 
   @BeforeEach
   public void setup() {

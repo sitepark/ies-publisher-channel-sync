@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 
 class FileDirectoryMismatchTest extends AnalyserTest {
 
-  private FileDirectoryMismatch analyser = new FileDirectoryMismatch();
+  private final FileDirectoryMismatch analyser = new FileDirectoryMismatch();
 
   @Test
   void testWhenPublishedPathIsDirectory() throws IOException {

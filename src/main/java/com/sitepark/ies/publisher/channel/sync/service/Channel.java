@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
 
+@SuppressWarnings("PMD.TooManyMethods")
 public final class Channel {
 
   private final Path root;

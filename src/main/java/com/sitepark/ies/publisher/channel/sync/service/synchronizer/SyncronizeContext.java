@@ -9,7 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
 
-public class SyncronizeContext {
+public final class SyncronizeContext {
 
   private final boolean test;
 
@@ -79,12 +79,17 @@ public class SyncronizeContext {
     return new Builder();
   }
 
+  @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
   public static class Builder {
 
     private boolean test;
+
     private boolean deleteForce;
+
     private boolean notifyLegalCollisions;
+
     private Publisher publisher;
+
     private SyncNotifier notifier;
 
     public Builder test(boolean test) {

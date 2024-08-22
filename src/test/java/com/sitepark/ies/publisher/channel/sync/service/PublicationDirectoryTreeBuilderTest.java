@@ -9,6 +9,7 @@ import com.sitepark.ies.publisher.channel.sync.domain.entity.Ref;
 import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 class PublicationDirectoryTreeBuilderTest {
 
   @Test

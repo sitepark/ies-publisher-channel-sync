@@ -17,15 +17,16 @@ import java.nio.file.Path;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings("PMD.JUnitTestContainsTooManyAsserts")
 class IllegalFileCollisionsTest {
 
-  private Publisher publisher = mock();
+  private final Publisher publisher = mock();
 
-  private SyncNotifier notifier = mock();
+  private final SyncNotifier notifier = mock();
 
   private SyncronizeContext ctx;
 
-  private IllegalFileCollisions syncronizer = new IllegalFileCollisions();
+  private final Syncronizer syncronizer = new IllegalFileCollisions();
 
   @BeforeEach
   public void setup() {

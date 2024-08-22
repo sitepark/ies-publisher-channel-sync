@@ -15,9 +15,9 @@ import org.junit.jupiter.api.Test;
 
 class TranslationsDirectoryTest extends AnalyserTest {
 
-  private TranslationsDirectory analyser = new TranslationsDirectory();
+  private final TranslationsDirectory analyser = new TranslationsDirectory();
 
-  private Path resourceDir =
+  private final Path resourceDir =
       Path.of("src/test/resources/service/analyser/TranslationsDirectoryTest");
 
   @Test

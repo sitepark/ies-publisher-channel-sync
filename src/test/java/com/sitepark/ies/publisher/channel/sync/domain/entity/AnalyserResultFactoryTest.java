@@ -21,7 +21,7 @@ class AnalyserResultFactoryTest {
   private AnalyserResultFactory factory;
 
   @BeforeEach
-  void setUp() {
+  void setup() {
     this.entryFactory = mock();
     this.publication = mock();
     this.path = mock();

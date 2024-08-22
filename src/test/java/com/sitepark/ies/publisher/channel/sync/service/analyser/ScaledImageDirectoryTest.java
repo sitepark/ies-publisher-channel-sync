@@ -17,9 +17,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 class ScaledImageDirectoryTest extends AnalyserTest {
 
-  private ScaledImageDirectory analyser = new ScaledImageDirectory();
+  private final ScaledImageDirectory analyser = new ScaledImageDirectory();
 
   @Test
   void testWhenPublishedPathIsFile() throws IOException {

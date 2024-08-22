@@ -16,11 +16,12 @@ import java.io.IOException;
 import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 class MissingFileTest extends AnalyserTest {
 
-  private MissingFile analyser = new MissingFile();
+  private final MissingFile analyser = new MissingFile();
 
-  private Path resourceDir = Path.of("src/test/resources/service/analyser/MissingFileTest");
+  private final Path resourceDir = Path.of("src/test/resources/service/analyser/MissingFileTest");
 
   @Test
   void testWithNonEqualsPublicationType() throws IOException {

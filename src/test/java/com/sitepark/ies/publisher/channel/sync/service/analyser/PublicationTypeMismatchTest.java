@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
 
 class PublicationTypeMismatchTest extends AnalyserTest {
 
-  private PublicationTypeMismatch analyser = new PublicationTypeMismatch();
+  private final PublicationTypeMismatch analyser = new PublicationTypeMismatch();
 
   @Test
   void testWhenPublishedPathIsDirectory() throws IOException {
