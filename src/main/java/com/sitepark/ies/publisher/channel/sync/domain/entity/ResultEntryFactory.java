@@ -1,5 +1,7 @@
 package com.sitepark.ies.publisher.channel.sync.domain.entity;
 
+import com.sitepark.ies.publisher.channel.sync.service.analyser.AnalyserContext;
+
 public class ResultEntryFactory {
 
   private final AnalyserContext ctx;

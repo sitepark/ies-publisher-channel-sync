@@ -1,6 +1,5 @@
 package com.sitepark.ies.publisher.channel.sync.usecase;
 
-import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserContext;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResult;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResultFactory;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ChannelLayout;
@@ -14,6 +13,7 @@ import com.sitepark.ies.publisher.channel.sync.port.Hasher;
 import com.sitepark.ies.publisher.channel.sync.port.Publisher;
 import com.sitepark.ies.publisher.channel.sync.service.Channel;
 import com.sitepark.ies.publisher.channel.sync.service.PublicationDirectoryTreeBuilder;
+import com.sitepark.ies.publisher.channel.sync.service.analyser.AnalyserContext;
 import com.sitepark.ies.publisher.channel.sync.service.analyser.Collision;
 import com.sitepark.ies.publisher.channel.sync.service.analyser.DirectoryFileMismatch;
 import com.sitepark.ies.publisher.channel.sync.service.analyser.DocumentRootLayoutFiles;

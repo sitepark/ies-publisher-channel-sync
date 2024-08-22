@@ -3,7 +3,6 @@ package com.sitepark.ies.publisher.channel.sync.service.analyser;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserContext;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResultFactory;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.PublicationDirectory;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultEntryFactory;
