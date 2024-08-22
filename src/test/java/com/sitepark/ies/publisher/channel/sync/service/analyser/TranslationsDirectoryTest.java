@@ -1,15 +1,17 @@
 package com.sitepark.ies.publisher.channel.sync.service.analyser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResult;
+import com.sitepark.ies.publisher.channel.sync.domain.entity.Publication;
+import com.sitepark.ies.publisher.channel.sync.domain.entity.PublicationDirectory;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.PublishedPath;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultType;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 class TranslationsDirectoryTest extends AnalyserTest {
@@ -33,6 +35,16 @@ class TranslationsDirectoryTest extends AnalyserTest {
   void testWithDirectoryNonTranslationsSuffix() throws IOException {
     AnalyserContext ctx = this.mockAnalyserContext();
 
+    PublicationDirectory directory = mock();
+    when(ctx.getPublicationDirectory()).thenReturn(directory);
+
+    Publication depublishedPublication = mock();
+    when(depublishedPublication.isPublished()).thenReturn(false);
+    Publication publishedPublication = mock();
+    when(publishedPublication.isPublished()).thenReturn(true);
+    when(directory.getPublications("baseName"))
+        .thenReturn(Arrays.asList(depublishedPublication, publishedPublication));
+
     PublishedPath path = mock();
     when(path.isDirectory()).thenReturn(true);
     when(path.baseName()).thenReturn("baseName");
@@ -41,30 +53,22 @@ class TranslationsDirectoryTest extends AnalyserTest {
   }
 
   @Test
-  void testPublicationDirectoryWithoutParent() throws IOException {
-    AnalyserContext ctx = this.mockAnalyserContext();
-
-    PublishedPath path = mock();
-    when(path.isDirectory()).thenReturn(true);
-    when(path.baseName()).thenReturn("baseName.translations");
-    when(path.absolutePath()).thenReturn(Path.of("baseName.translations"));
-
-    assertThrows(
-        IllegalArgumentException.class,
-        () -> {
-          this.analyser.analyse(ctx, path);
-        });
-  }
-
-  @Test
   void testWithExistsPublicationDirectory() throws IOException {
     AnalyserContext ctx = this.mockAnalyserContext();
+
+    PublicationDirectory directory = mock();
+    when(ctx.getPublicationDirectory()).thenReturn(directory);
+
+    Publication depublishedPublication = mock();
+    when(depublishedPublication.isPublished()).thenReturn(false);
+    Publication publishedPublication = mock();
+    when(publishedPublication.isPublished()).thenReturn(true);
+    when(directory.getPublications("existsDir"))
+        .thenReturn(Arrays.asList(depublishedPublication, publishedPublication));
 
     PublishedPath path = mock();
     when(path.isDirectory()).thenReturn(true);
     when(path.baseName()).thenReturn("existsDir.translations");
-    when(path.absolutePath())
-        .thenReturn(this.resourceDir.resolve("existsDir.translations").toAbsolutePath());
 
     assertEquals(
         AnalyserResult.OK_AND_INTERRUPT,

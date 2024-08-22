@@ -2,11 +2,10 @@ package com.sitepark.ies.publisher.channel.sync.service.analyser;
 
 import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResult;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResultFactory;
+import com.sitepark.ies.publisher.channel.sync.domain.entity.Publication;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.PublishedPath;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultType;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 public class TranslationsDirectory implements PublishedPathAnalyser {
 
@@ -24,15 +23,12 @@ public class TranslationsDirectory implements PublishedPathAnalyser {
       return AnalyserResult.OK;
     }
 
-    Path parent = path.absolutePath().getParent();
-    if (parent == null) {
-      throw new IllegalArgumentException("The parent path must not be null");
-    }
-
     String translationBaseName = name.substring(0, name.lastIndexOf(SUFFIX));
-    Path translationBase = parent.resolve(translationBaseName);
-    if (Files.exists(translationBase)) {
-      return AnalyserResult.OK_AND_INTERRUPT;
+
+    for (Publication p : ctx.getPublicationDirectory().getPublications(translationBaseName)) {
+      if (p.isPublished()) {
+        return AnalyserResult.OK_AND_INTERRUPT;
+      }
     }
 
     AnalyserResultFactory resultFactory = ctx.getAnalyserResultFactory();
