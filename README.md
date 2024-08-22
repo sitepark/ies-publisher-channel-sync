@@ -1,3 +1,7 @@
+[![codecov](https://codecov.io/gh/sitepark/ies-publisher-channel-sync/graph/badge.svg?token=hp7owyVaQ7)](https://codecov.io/gh/sitepark/ies-publisher-channel-sync)
+[![Known Vulnerabilities](https://snyk.io/test/github/sitepark/ies-publisher-channel-sync/badge.svg)](https://snyk.io/test/github/sitepark/ies-publisher-channel-sync/)
+[![java-21](https://img.shields.io/badge/java_21-%23ED8B00.svg?style=flat&logo=openjdk&logoColor=white)](https://openjdk.org/projects/jdk/21/)
+
 # Publisher Channel Sync
 
 The published content is written as files from the IES to a directory (Publisher Channel). They are also deleted by the CMS when the publication is canceled. The Publisher Channel Sync can be used to check whether the files in the directory correspond to the publication status of the IES. If this is not the case, the corresponding data in the directory can be synchronized so that they correspond to the publication status of the IES.
