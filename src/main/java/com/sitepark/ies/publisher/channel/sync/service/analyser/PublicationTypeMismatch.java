@@ -30,7 +30,7 @@ public class PublicationTypeMismatch implements PublishedPathAnalyser {
 
     List<ResultEntry> list = new ArrayList<ResultEntry>();
 
-    for (Publication p : ctx.getIesDirectory().getPublications(path.baseName())) {
+    for (Publication p : ctx.getPublicationDirectory().getPublications(path.baseName())) {
 
       if (!p.isPublished()) {
         continue;

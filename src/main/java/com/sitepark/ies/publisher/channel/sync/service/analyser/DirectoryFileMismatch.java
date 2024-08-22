@@ -19,7 +19,7 @@ public class DirectoryFileMismatch implements PublishedPathAnalyser {
 
     AnalyserResultFactory resultFactory = ctx.getAnalyserResultFactory();
 
-    for (Publication p : ctx.getIesDirectory().getPublications(path.baseName())) {
+    for (Publication p : ctx.getPublicationDirectory().getPublications(path.baseName())) {
       if (p.isPublished()) {
         return resultFactory.createResult(ResultType.FILE_DIRECTORY_MISMATCH, p);
       }

@@ -34,7 +34,7 @@ public class HashMismatch implements PublishedPathAnalyser {
 
     List<ResultEntry> list = new ArrayList<ResultEntry>();
 
-    for (Publication p : ctx.getIesDirectory().getPublications(path.baseName())) {
+    for (Publication p : ctx.getPublicationDirectory().getPublications(path.baseName())) {
 
       if (!p.isPublished()) {
         continue;
@@ -42,17 +42,18 @@ public class HashMismatch implements PublishedPathAnalyser {
 
       String publicationPath = p.path().toString();
 
-      if (!publicationPath.isEmpty()) {
+      if (publicationPath.isEmpty()) {
+        continue;
+      }
 
-        Path pf = p.absolutePath();
-        if (!Files.exists(pf)) {
-          continue;
-        }
+      Path pf = p.absolutePath();
+      if (!Files.exists(pf)) {
+        continue;
+      }
 
-        String hash = this.hasher.hash(pf);
-        if (!hash.equals(p.hash())) {
-          list.add(resultEntryFactory.createResultEntry(ResultType.HASH_MISMATCH, p));
-        }
+      String hash = this.hasher.hash(pf);
+      if (!hash.equals(p.hash())) {
+        list.add(resultEntryFactory.createResultEntry(ResultType.HASH_MISMATCH, p));
       }
     }
 

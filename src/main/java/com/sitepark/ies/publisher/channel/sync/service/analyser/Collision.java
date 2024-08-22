@@ -4,8 +4,10 @@ import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserContext;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResult;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResultFactory;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.Publication;
+import com.sitepark.ies.publisher.channel.sync.domain.entity.PublicationDirectory;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.PublishedPath;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultType;
+import com.sitepark.ies.publisher.channel.sync.service.Channel;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,12 +23,14 @@ public class Collision implements PublishedPathAnalyser {
 
     AnalyserResultFactory resultFactory = ctx.getAnalyserResultFactory();
 
-    Publication collision = ctx.getIesDirectory().getCollision(path.baseName());
+    PublicationDirectory directory = ctx.getPublicationDirectory();
+    Publication collision = directory.getCollision(path.baseName());
     if (collision == null) {
       return AnalyserResult.OK;
     }
 
-    Path collisionFile = ctx.getChannel().resolve(collision.type(), collision.path());
+    Channel channel = ctx.getChannel();
+    Path collisionFile = channel.resolve(collision.type(), collision.path());
     if (Files.exists(collisionFile)) {
       return resultFactory.createInterruptResult(ResultType.LEGAL_FILENAME_COLLISION, collision);
     } else {

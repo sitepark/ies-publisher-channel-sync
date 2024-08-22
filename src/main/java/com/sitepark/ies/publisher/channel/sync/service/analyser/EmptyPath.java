@@ -25,7 +25,7 @@ public class EmptyPath implements PublishedPathAnalyser {
 
     ResultEntryFactory resultEntryFactory = ctx.getResultEntryFactory();
 
-    for (Publication p : ctx.getIesDirectory().getPublications(path.baseName())) {
+    for (Publication p : ctx.getPublicationDirectory().getPublications(path.baseName())) {
 
       if (!p.isPublished()) {
         continue;

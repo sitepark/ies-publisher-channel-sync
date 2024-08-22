@@ -33,7 +33,7 @@ public class EmbeddedMediaDirectory implements PublishedPathAnalyser, Publicatio
 
     String mediaOwnerName = name.substring(0, name.lastIndexOf(SUFFIX));
 
-    for (Publication p : ctx.getIesDirectory().getPublications(mediaOwnerName)) {
+    for (Publication p : ctx.getPublicationDirectory().getPublications(mediaOwnerName)) {
       if (p.isPublished()) {
         return AnalyserResult.OK_AND_INTERRUPT;
       }

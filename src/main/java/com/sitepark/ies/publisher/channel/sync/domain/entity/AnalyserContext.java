@@ -8,31 +8,31 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AnalyserContext {
+public final class AnalyserContext {
   private final Channel channel;
   private final PublicationType publicationType;
   private final Path base;
   private final Path directory;
-  private final PublicationDirectory iesDirectory;
+  private final PublicationDirectory publicationDirectory;
   private final Map<String, PublishedPath> directoryEntries;
   private final boolean recursive;
   private final ResultEntryFactory resultEntryFactory;
   private final AnalyserResultFactory analyserResultFactory;
 
   @SuppressFBWarnings("EI_EXPOSE_REP2")
-  public AnalyserContext(
+  private AnalyserContext(
       Channel channel,
       PublicationType publicationType,
       Path base,
       Path directory,
-      PublicationDirectory iesDirectory,
+      PublicationDirectory publicationDirectory,
       Map<String, PublishedPath> directoryEntries,
       boolean recursive) {
     this.channel = channel;
     this.publicationType = publicationType;
     this.base = base;
     this.directory = directory;
-    this.iesDirectory = iesDirectory;
+    this.publicationDirectory = publicationDirectory;
     this.directoryEntries = Collections.unmodifiableMap(directoryEntries);
     this.recursive = recursive;
     this.resultEntryFactory = new ResultEntryFactory(this);
@@ -56,8 +56,8 @@ public class AnalyserContext {
     return this.directory;
   }
 
-  public PublicationDirectory getIesDirectory() {
-    return this.iesDirectory;
+  public PublicationDirectory getPublicationDirectory() {
+    return this.publicationDirectory;
   }
 
   public Collection<PublishedPath> getDirectoryEntries() {
@@ -90,7 +90,7 @@ public class AnalyserContext {
     private PublicationType publicationType;
     private Path base;
     private Path directory;
-    private PublicationDirectory iesDirectory;
+    private PublicationDirectory publicationDirectory;
 
     @SuppressWarnings("PMD.UseConcurrentHashMap")
     private final Map<String, PublishedPath> directoryEntries = new HashMap<>();
@@ -118,8 +118,8 @@ public class AnalyserContext {
       return this;
     }
 
-    public Builder iesDirectory(PublicationDirectory iesDirectory) {
-      this.iesDirectory = iesDirectory;
+    public Builder publicationDirectory(PublicationDirectory publicationDirectory) {
+      this.publicationDirectory = publicationDirectory;
       return this;
     }
 
@@ -146,7 +146,7 @@ public class AnalyserContext {
           this.publicationType,
           this.base,
           this.directory,
-          this.iesDirectory,
+          this.publicationDirectory,
           this.directoryEntries,
           this.recursive);
     }

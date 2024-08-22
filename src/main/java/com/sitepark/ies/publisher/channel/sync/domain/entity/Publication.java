@@ -22,22 +22,12 @@ public record Publication(
     return new Builder();
   }
 
-  public Builder toBuilder() {
-    return new Builder()
-        .type(this.type)
-        .object(this.object)
-        .path(this.path)
-        .isPublished(this.isPublished)
-        .collidesWith(this.collidesWith)
-        .absolutePath(this.absolutePath)
-        .hash(this.hash);
-  }
-
   @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
   public static final class Builder {
     private PublicationType type;
     private Ref object;
     private Path path;
+    private String fileName;
     private boolean isPublished;
     private Ref collidesWith;
     private Path absolutePath;
@@ -55,14 +45,22 @@ public record Publication(
 
     public Builder path(Path path) {
 
-      // remove leading slash
+      Objects.requireNonNull(path, "path must not be null");
+
+      Path fileName = path.getFileName();
+
+      if (fileName == null) {
+        throw new IllegalArgumentException("path must have a file name");
+      }
+      this.fileName = fileName.toString();
+
+      Path relativizePath = path;
       Path root = path.getRoot();
       if (root != null) {
-        this.path = root.relativize(path);
-        return this;
+        relativizePath = root.relativize(path);
       }
 
-      this.path = path;
+      this.path = relativizePath;
       return this;
     }
 
@@ -96,14 +94,9 @@ public record Publication(
       Objects.requireNonNull(this.type, "type must not be null");
       Objects.requireNonNull(this.path, "path must not be null");
 
-      Path fileName = this.path.getFileName();
-      if (fileName == null) {
-        throw new IllegalArgumentException("path must have a file name");
-      }
-
       return new Publication(
           this.type,
-          fileName.toString(),
+          this.fileName,
           this.object,
           this.path,
           this.isPublished,

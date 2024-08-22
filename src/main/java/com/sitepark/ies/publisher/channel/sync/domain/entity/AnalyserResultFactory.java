@@ -20,15 +20,6 @@ public class AnalyserResultFactory {
     return new AnalyserResult(Arrays.asList(entry), false);
   }
 
-  public AnalyserResult createInterruptResultDeleteForce(ResultType type, PublishedPath path) {
-    ResultEntry entry = this.resultEntryFactory.createResultEntryDeleteForce(type, path);
-    return new AnalyserResult(Arrays.asList(entry), true);
-  }
-
-  public AnalyserResult createResult(List<ResultEntry> entries) {
-    return new AnalyserResult(entries, false);
-  }
-
   public AnalyserResult createInterruptResult(ResultType type, Publication publication) {
     ResultEntry entry = this.resultEntryFactory.createResultEntry(type, publication);
     return new AnalyserResult(Arrays.asList(entry), true);
@@ -37,6 +28,15 @@ public class AnalyserResultFactory {
   public AnalyserResult createInterruptResult(ResultType type, PublishedPath path) {
     ResultEntry entry = this.resultEntryFactory.createResultEntry(type, path);
     return new AnalyserResult(Arrays.asList(entry), true);
+  }
+
+  public AnalyserResult createInterruptResultDeleteForce(ResultType type, PublishedPath path) {
+    ResultEntry entry = this.resultEntryFactory.createResultEntryDeleteForce(type, path);
+    return new AnalyserResult(Arrays.asList(entry), true);
+  }
+
+  public AnalyserResult createResult(List<ResultEntry> entries) {
+    return new AnalyserResult(entries, false);
   }
 
   public AnalyserResult createInterruptResult(List<ResultEntry> entries) {

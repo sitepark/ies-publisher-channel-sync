@@ -32,7 +32,7 @@ public class MediaMetaFile implements PublishedPathAnalyser {
 
     String mediaFileName = name.substring(0, name.lastIndexOf(SUFFIX));
 
-    for (Publication p : ctx.getIesDirectory().getPublications(mediaFileName)) {
+    for (Publication p : ctx.getPublicationDirectory().getPublications(mediaFileName)) {
       if (p.isPublished()) {
         return AnalyserResult.OK_AND_INTERRUPT;
       }

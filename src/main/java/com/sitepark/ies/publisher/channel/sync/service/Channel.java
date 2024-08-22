@@ -60,10 +60,6 @@ public final class Channel {
 
     Path relativePath = this.root.relativize(path);
 
-    if (relativePath.getNameCount() == 0) {
-      return Path.of("");
-    }
-
     PublicationType type = this.getTypeByPath(relativePath);
     return this.relativize(type, path);
   }
@@ -98,5 +94,10 @@ public final class Channel {
     return (o instanceof Channel that)
         && Objects.equals(this.layout, that.layout)
         && Objects.equals(this.root, that.root);
+  }
+
+  @Override
+  public String toString() {
+    return "Channel [root=" + root + ", layout=" + layout + "]";
   }
 }

@@ -79,7 +79,7 @@ public class Analyse {
   }
 
   public AnalyserResult analyse(Path base, boolean recursive) throws IOException {
-    PublicationDirectory iesDirectory = this.buildPublicationDirectory(base);
+    PublicationDirectory publicationDirectory = this.buildPublicationDirectory(base);
 
     List<PublicationType> types = new ArrayList<>();
     if (this.channel.getLayout() == ChannelLayout.DOCUMENT_ROOT) {
@@ -90,13 +90,13 @@ public class Analyse {
 
     List<ResultEntry> list = new ArrayList<ResultEntry>();
     for (PublicationType type : types) {
-      AnalyserResult result = this.analyseByType(iesDirectory, type, base, recursive);
+      AnalyserResult result = this.analyseByType(publicationDirectory, type, base, recursive);
       list.addAll(result.entries());
     }
 
     for (PublicationType type : types) {
       AnalyserContext ctx =
-          this.createAnalyserContext(type, base, Path.of(""), iesDirectory, recursive);
+          this.createAnalyserContext(type, base, Path.of(""), publicationDirectory, recursive);
       AnalyserResult publicationsResult = this.analysePublications(ctx);
       list.addAll(publicationsResult.entries());
     }
@@ -105,10 +105,10 @@ public class Analyse {
   }
 
   public AnalyserResult analyseByType(
-      PublicationDirectory iesDirectory, PublicationType type, Path base, boolean recursive)
+      PublicationDirectory publicationDirectory, PublicationType type, Path base, boolean recursive)
       throws IOException {
     AnalyserContext ctx =
-        this.createAnalyserContext(type, base, Path.of(""), iesDirectory, recursive);
+        this.createAnalyserContext(type, base, Path.of(""), publicationDirectory, recursive);
     return this.analyse(ctx);
   }
 
@@ -138,7 +138,7 @@ public class Analyse {
       PublicationType type,
       Path base,
       Path directory,
-      PublicationDirectory iesDirectory,
+      PublicationDirectory publicationDirectory,
       boolean recursive)
       throws IOException {
 
@@ -148,7 +148,7 @@ public class Analyse {
             .publicationType(type)
             .base(base)
             .directory(directory)
-            .iesDirectory(iesDirectory)
+            .publicationDirectory(publicationDirectory)
             .recursive(recursive);
 
     Path contextDir = base.resolve(directory);
@@ -229,7 +229,7 @@ public class Analyse {
       return resultFactory.createResult(list);
     }
 
-    PublicationDirectory child = ctx.getIesDirectory().getChild(path.baseName());
+    PublicationDirectory child = ctx.getPublicationDirectory().getChild(path.baseName());
     if (child != null) {
       AnalyserContext childCtx =
           this.createAnalyserContext(
@@ -250,7 +250,7 @@ public class Analyse {
     AnalyserResultFactory resultFactory = ctx.getAnalyserResultFactory();
     List<ResultEntry> list = new ArrayList<ResultEntry>();
 
-    for (Publication publication : ctx.getIesDirectory().getPublications(false)) {
+    for (Publication publication : ctx.getPublicationDirectory().getPublications(false)) {
 
       if (ctx.getChannel().getLayout() == ChannelLayout.RESOURCES
           && ctx.getPublicationType() != publication.type()) {
@@ -264,7 +264,7 @@ public class Analyse {
       }
     }
 
-    for (PublicationDirectory child : ctx.getIesDirectory().getChildren()) {
+    for (PublicationDirectory child : ctx.getPublicationDirectory().getChildren()) {
       AnalyserContext childCtx =
           this.createAnalyserContext(
               ctx.getPublicationType(),

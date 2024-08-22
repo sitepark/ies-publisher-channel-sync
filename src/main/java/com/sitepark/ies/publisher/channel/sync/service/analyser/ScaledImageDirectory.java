@@ -32,7 +32,7 @@ public class ScaledImageDirectory implements PublishedPathAnalyser {
 
     String imageFileName = name.substring(0, name.lastIndexOf(SUFFIX));
 
-    for (Publication p : ctx.getIesDirectory().getPublications(imageFileName)) {
+    for (Publication p : ctx.getPublicationDirectory().getPublications(imageFileName)) {
       if (p.isPublished()) {
         return AnalyserResult.OK_AND_INTERRUPT;
       }

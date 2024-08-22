@@ -16,7 +16,7 @@ public class FileDirectoryMismatch implements PublishedPathAnalyser {
       return AnalyserResult.OK;
     }
 
-    PublicationDirectory child = ctx.getIesDirectory().getChild(path.baseName());
+    PublicationDirectory child = ctx.getPublicationDirectory().getChild(path.baseName());
     if (child == null) {
       return AnalyserResult.OK;
     }

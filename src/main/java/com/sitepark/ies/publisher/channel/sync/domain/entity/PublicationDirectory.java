@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public final class PublicationDirectory {
 
@@ -36,6 +35,68 @@ public final class PublicationDirectory {
     this.collisions = Collections.unmodifiableMap(collisions);
   }
 
+  public String getName() {
+    return this.name;
+  }
+
+  public PublicationDirectory getParent() {
+    return this.parent;
+  }
+
+  public List<Publication> getPublications(boolean recursive) {
+    List<Publication> list = new ArrayList<Publication>();
+
+    for (List<Publication> l : this.publications.values()) {
+      list.addAll(l);
+    }
+    if (recursive) {
+      for (PublicationDirectory child : this.children.values()) {
+        list.addAll(child.getPublications(true));
+      }
+    }
+    return list;
+  }
+
+  public Collection<String> getPublicationFileNames() {
+    return this.publications.keySet();
+  }
+
+  public List<Publication> getPublications(String fileName) {
+    List<Publication> publications = this.publications.get(fileName);
+    if (publications == null) {
+      return Collections.emptyList();
+    }
+
+    return publications;
+  }
+
+  public boolean hasPublications(String fileName) {
+    return !this.getPublications(fileName).isEmpty();
+  }
+
+  public Collection<PublicationDirectory> getChildren() {
+    return this.children.values();
+  }
+
+  public PublicationDirectory getChild(String name) {
+    return this.children.get(name);
+  }
+
+  public PublicationDirectory findChild(Path path) {
+    PublicationDirectory directory = this;
+    for (Path name : path) {
+      directory = directory.getChild(name.toString());
+      if (directory == null) {
+        return null;
+      }
+    }
+    return directory;
+  }
+
+  public Publication getCollision(String name) {
+    return this.collisions.get(name);
+  }
+
   @Override
   public final int hashCode() {
     return Objects.hash(this.name, this.children, this.publications, this.collisions);
@@ -54,138 +115,19 @@ public final class PublicationDirectory {
     return new Builder();
   }
 
-  public Builder toBuilder() {
-    return new Builder()
-        .name(this.name)
-        .children(this.children.values())
-        .publications(
-            this.publications.values().stream()
-                .flatMap(T -> T.stream())
-                .collect(Collectors.toList()));
-  }
-
-  public String getName() {
-    return this.name;
-  }
-
-  public PublicationDirectory getParent() {
-    return this.parent;
-  }
-
-  public String getPath() {
-    StringBuilder path = new StringBuilder();
-    PublicationDirectory d = this;
-    while (d != null) {
-      if (d.getName() != null) {
-        path.insert(0, d.getName());
-      }
-      d = d.getParent();
-    }
-    return path.toString();
-  }
-
-  public List<Publication> getPublications(boolean recursive) {
-    List<Publication> list = new ArrayList<Publication>();
-
-    if (this.publications != null) {
-      for (List<Publication> l : this.publications.values()) {
-        list.addAll(l);
-      }
-    }
-    if (recursive && this.children != null) {
-      for (PublicationDirectory child : this.children.values()) {
-        list.addAll(child.getPublications(true));
-      }
-    }
-    return list;
-  }
-
-  public Collection<String> getPublicationFileNames() {
-    if (this.publications == null) {
-      return new ArrayList<>();
-    } else {
-      return this.publications.keySet();
-    }
-  }
-
-  public List<Publication> getPublications(String fileName) {
-    if (this.publications == null) {
-      return Collections.emptyList();
-    }
-
-    List<Publication> publications = this.publications.get(fileName);
-    if (publications == null) {
-      return Collections.emptyList();
-    }
-
-    return publications;
-  }
-
-  public boolean hasPublications(String fileName) {
-    return !this.getPublications(fileName).isEmpty();
-  }
-
-  public Collection<PublicationDirectory> getChildren() {
-    if (this.children == null) {
-      return Collections.emptyList();
-    } else {
-      return this.children.values();
-    }
-  }
-
-  public PublicationDirectory getChild(String name) {
-    if (this.children == null) {
-      return null;
-    } else {
-      return this.children.get(name);
-    }
-  }
-
-  public PublicationDirectory findChild(Path path) {
-    if (this.children == null) {
-      return null;
-    } else {
-      PublicationDirectory directory = this;
-      for (Path name : path) {
-        directory = directory.getChild(name.toString());
-        if (directory == null) {
-          return null;
-        }
-      }
-      return directory;
-    }
-  }
-
-  public Publication getCollision(String name) {
-    return this.collisions.get(name);
-  }
-
   @Override
   public String toString() {
-    StringBuilder b = new StringBuilder(this.getPath());
-    if (!this.publications.isEmpty()) {
-      StringBuilder pb = new StringBuilder();
-      for (List<Publication> list : this.publications.values()) {
-        for (Publication publication : list) {
-          if (!pb.isEmpty()) {
-            pb.append(", ");
-          }
-          pb.append(publication.path()).append(" (").append(publication.object()).append(')');
-        }
-      }
-      b.append(", publications:(").append(pb).append(')');
-    }
-    if (!this.children.isEmpty()) {
-      StringBuilder cb = new StringBuilder();
-      for (PublicationDirectory child : this.children.values()) {
-        if (!cb.isEmpty()) {
-          cb.append(", ");
-        }
-        cb.append(child.toString());
-      }
-      b.append(", children:(").append(cb).append(')');
-    }
-    return b.toString();
+    return "PublicationDirectory [name="
+        + name
+        + ", parent="
+        + (parent == null ? null : parent.getName())
+        + ", children="
+        + children
+        + ", publications="
+        + publications
+        + ", collisions="
+        + collisions
+        + "]";
   }
 
   @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")

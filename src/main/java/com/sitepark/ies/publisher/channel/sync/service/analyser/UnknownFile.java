@@ -17,7 +17,7 @@ public class UnknownFile implements PublishedPathAnalyser {
       return AnalyserResult.OK;
     }
 
-    for (Publication p : ctx.getIesDirectory().getPublications(path.baseName())) {
+    for (Publication p : ctx.getPublicationDirectory().getPublications(path.baseName())) {
       if (p.isPublished()) {
         return AnalyserResult.OK;
       }

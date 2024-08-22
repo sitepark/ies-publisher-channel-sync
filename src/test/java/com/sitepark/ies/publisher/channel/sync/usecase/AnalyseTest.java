@@ -3,6 +3,7 @@ package com.sitepark.ies.publisher.channel.sync.usecase;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -67,6 +68,23 @@ class AnalyseTest {
   }
 
   @Test
+  void testWithAbsolutePath() throws IOException {
+
+    AnalyserBuilder analyseBuilder =
+        analyseBuilder()
+            .root(this.root.resolve("testWithEmptyRootDir"))
+            .layout(ChannelLayout.DOCUMENT_ROOT);
+
+    Analyse analyse = analyseBuilder.build();
+
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> {
+          analyse.analyse(Path.of("/"), true);
+        });
+  }
+
+  @Test
   void testWithEmptyDirectoryUnkownDir() throws IOException {
 
     Path testRoot = this.root.resolve("testWithEmptyDirectoryUnkownDir");
@@ -74,14 +92,14 @@ class AnalyseTest {
     AnalyserBuilder analyseBuilder =
         analyseBuilder().root(testRoot).layout(ChannelLayout.DOCUMENT_ROOT);
 
-    PublicationDirectory iesDirectory = analyseBuilder.buildPublicationDirectory();
+    PublicationDirectory publicationDirectory = analyseBuilder.buildPublicationDirectory();
 
     List<ResultEntry> result = this.analyseRecursive(analyseBuilder.build());
 
     ResultEntry expected =
         ResultEntry.builder()
             .resultType(ResultType.UNKNOWN_FILE_OR_DIRECTORY)
-            .iesDirectory(iesDirectory)
+            .publicationDirectory(publicationDirectory)
             .publishedPath(this.createPublishedPath(testRoot, "empty-directory"))
             .build();
 
@@ -97,9 +115,9 @@ class AnalyseTest {
             .layout(ChannelLayout.DOCUMENT_ROOT)
             .publication("empty-directory-missing-publication/f");
 
-    PublicationDirectory iesDirectory = analyseBuilder.buildPublicationDirectory();
+    PublicationDirectory publicationDirectory = analyseBuilder.buildPublicationDirectory();
     PublicationDirectory emptyDirectoryMissingPublication =
-        iesDirectory.getChild("empty-directory-missing-publication");
+        publicationDirectory.getChild("empty-directory-missing-publication");
     Publication f = emptyDirectoryMissingPublication.getPublications("f").get(0);
 
     List<ResultEntry> result = this.analyseRecursive(analyseBuilder.build());
@@ -107,7 +125,7 @@ class AnalyseTest {
     ResultEntry expected =
         ResultEntry.builder()
             .resultType(ResultType.MISSING_FILE)
-            .iesDirectory(emptyDirectoryMissingPublication)
+            .publicationDirectory(emptyDirectoryMissingPublication)
             .publication(f)
             .build();
 
@@ -149,14 +167,14 @@ class AnalyseTest {
     AnalyserBuilder analyseBuilder =
         analyseBuilder().root(testRoot).layout(ChannelLayout.DOCUMENT_ROOT);
 
-    PublicationDirectory iesDirectory = analyseBuilder.buildPublicationDirectory();
+    PublicationDirectory publicationDirectory = analyseBuilder.buildPublicationDirectory();
 
     List<ResultEntry> result = this.analyseRecursive(analyseBuilder.build());
 
     ResultEntry expected =
         ResultEntry.builder()
             .resultType(ResultType.UNKNOWN_FILE_OR_DIRECTORY)
-            .iesDirectory(iesDirectory)
+            .publicationDirectory(publicationDirectory)
             .publishedPath(this.createPublishedPath(testRoot, "a.scaled"))
             .deleteForce(true)
             .build();
@@ -183,8 +201,8 @@ class AnalyseTest {
             .collidesWith(collidesWith)
             .build());
 
-    PublicationDirectory iesDirectory = analyseBuilder.buildPublicationDirectory();
-    PublicationDirectory a = iesDirectory.getChild("a");
+    PublicationDirectory publicationDirectory = analyseBuilder.buildPublicationDirectory();
+    PublicationDirectory a = publicationDirectory.getChild("a");
 
     Publication b = a.getPublications("b").get(1);
 
@@ -193,7 +211,7 @@ class AnalyseTest {
     ResultEntry expected =
         ResultEntry.builder()
             .resultType(ResultType.LEGAL_FILENAME_COLLISION)
-            .iesDirectory(a)
+            .publicationDirectory(a)
             .publication(b)
             .build();
 
@@ -217,15 +235,15 @@ class AnalyseTest {
             .collidesWith(collidesWith)
             .build());
 
-    PublicationDirectory iesDirectory = analyseBuilder.buildPublicationDirectory();
-    Publication a = iesDirectory.getPublications("a").get(0);
+    PublicationDirectory publicationDirectory = analyseBuilder.buildPublicationDirectory();
+    Publication a = publicationDirectory.getPublications("a").get(0);
 
     List<ResultEntry> result = this.analyseRecursive(analyseBuilder.build());
 
     ResultEntry expected =
         ResultEntry.builder()
             .resultType(ResultType.MISSING_FILE)
-            .iesDirectory(iesDirectory)
+            .publicationDirectory(publicationDirectory)
             .publication(a)
             .build();
 
@@ -240,21 +258,21 @@ class AnalyseTest {
     AnalyserBuilder analyseBuilder =
         analyseBuilder().root(testRoot).layout(ChannelLayout.DOCUMENT_ROOT).publication("a");
 
-    PublicationDirectory iesDirectory = analyseBuilder.buildPublicationDirectory();
-    Publication a = iesDirectory.getPublications("a").get(0);
+    PublicationDirectory publicationDirectory = analyseBuilder.buildPublicationDirectory();
+    Publication a = publicationDirectory.getPublications("a").get(0);
 
     List<ResultEntry> result = this.analyseRecursive(analyseBuilder.build());
 
     ResultEntry expectedMismatch =
         ResultEntry.builder()
             .resultType(ResultType.FILE_DIRECTORY_MISMATCH)
-            .iesDirectory(iesDirectory)
+            .publicationDirectory(publicationDirectory)
             .publication(a)
             .build();
     ResultEntry expectedUnknown =
         ResultEntry.builder()
             .resultType(ResultType.UNKNOWN_FILE_OR_DIRECTORY)
-            .iesDirectory(iesDirectory)
+            .publicationDirectory(publicationDirectory)
             .publishedPath(this.createPublishedPath(testRoot, "a"))
             .build();
 
@@ -271,8 +289,8 @@ class AnalyseTest {
     AnalyserBuilder analyseBuilder =
         analyseBuilder().root(testRoot).layout(ChannelLayout.DOCUMENT_ROOT).publication("a/b");
 
-    PublicationDirectory iesDirectory = analyseBuilder.buildPublicationDirectory();
-    PublicationDirectory a = iesDirectory.getChild("a");
+    PublicationDirectory publicationDirectory = analyseBuilder.buildPublicationDirectory();
+    PublicationDirectory a = publicationDirectory.getChild("a");
     Publication b = a.getPublications("b").get(0);
 
     List<ResultEntry> result = this.analyseRecursive(analyseBuilder.build());
@@ -280,13 +298,13 @@ class AnalyseTest {
     ResultEntry expectedMismatch =
         ResultEntry.builder()
             .resultType(ResultType.FILE_DIRECTORY_MISMATCH)
-            .iesDirectory(iesDirectory)
+            .publicationDirectory(publicationDirectory)
             .publishedPath(this.createPublishedPath(testRoot, "a"))
             .build();
     ResultEntry missingFile =
         ResultEntry.builder()
             .resultType(ResultType.MISSING_FILE)
-            .iesDirectory(a)
+            .publicationDirectory(a)
             .publication(b)
             .build();
 
@@ -305,15 +323,15 @@ class AnalyseTest {
             .layout(ChannelLayout.DOCUMENT_ROOT);
     analyseBuilder.publication(analyseBuilder.publicationBuilder("a").hash("other").build());
 
-    PublicationDirectory iesDirectory = analyseBuilder.buildPublicationDirectory();
-    Publication a = iesDirectory.getPublications("a").get(0);
+    PublicationDirectory publicationDirectory = analyseBuilder.buildPublicationDirectory();
+    Publication a = publicationDirectory.getPublications("a").get(0);
 
     List<ResultEntry> result = this.analyseRecursive(analyseBuilder.build());
 
     ResultEntry expected =
         ResultEntry.builder()
             .resultType(ResultType.HASH_MISMATCH)
-            .iesDirectory(iesDirectory)
+            .publicationDirectory(publicationDirectory)
             .publication(a)
             .build();
 
@@ -331,21 +349,21 @@ class AnalyseTest {
             .layout(ChannelLayout.DOCUMENT_ROOT);
     analyseBuilder.publication(analyseBuilder.publicationBuilder("a").isPublished(false).build());
 
-    PublicationDirectory iesDirectory = analyseBuilder.buildPublicationDirectory();
+    PublicationDirectory publicationDirectory = analyseBuilder.buildPublicationDirectory();
 
     List<ResultEntry> result = this.analyseRecursive(analyseBuilder.build());
 
     ResultEntry expected1 =
         ResultEntry.builder()
             .resultType(ResultType.UNKNOWN_FILE_OR_DIRECTORY)
-            .iesDirectory(iesDirectory)
+            .publicationDirectory(publicationDirectory)
             .publishedPath(this.createPublishedPath(testRoot, "a"))
             .build();
 
     ResultEntry expected2 =
         ResultEntry.builder()
             .resultType(ResultType.UNKNOWN_FILE_OR_DIRECTORY)
-            .iesDirectory(iesDirectory)
+            .publicationDirectory(publicationDirectory)
             .publishedPath(this.createPublishedPath(testRoot, "a.scaled"))
             .deleteForce(true)
             .build();
@@ -366,15 +384,15 @@ class AnalyseTest {
             .publication("a")
             .publication("");
 
-    PublicationDirectory iesDirectory = analyseBuilder.buildPublicationDirectory();
-    Publication b = iesDirectory.getPublications("").get(0);
+    PublicationDirectory publicationDirectory = analyseBuilder.buildPublicationDirectory();
+    Publication b = publicationDirectory.getPublications("").get(0);
 
     List<ResultEntry> result = this.analyseRecursive(analyseBuilder.build());
 
     ResultEntry expectedLostPublication =
         ResultEntry.builder()
             .resultType(ResultType.LOST_PUBLICATION)
-            .iesDirectory(iesDirectory)
+            .publicationDirectory(publicationDirectory)
             .publication(b)
             .build();
 
@@ -396,30 +414,30 @@ class AnalyseTest {
             .publication("")
             .publication("");
 
-    PublicationDirectory iesDirectory = analyseBuilder.buildPublicationDirectory();
-    Publication a1 = iesDirectory.getPublications("").get(0);
-    Publication a2 = iesDirectory.getPublications("").get(1);
+    PublicationDirectory publicationDirectory = analyseBuilder.buildPublicationDirectory();
+    Publication a1 = publicationDirectory.getPublications("").get(0);
+    Publication a2 = publicationDirectory.getPublications("").get(1);
 
     List<ResultEntry> result = this.analyseRecursive(analyseBuilder.build());
 
     ResultEntry unknownFile =
         ResultEntry.builder()
             .resultType(ResultType.UNKNOWN_FILE_OR_DIRECTORY)
-            .iesDirectory(iesDirectory)
+            .publicationDirectory(publicationDirectory)
             .publishedPath(this.createPublishedPath(testRoot, "a"))
             .build();
 
     ResultEntry expectedLostPublication1 =
         ResultEntry.builder()
             .resultType(ResultType.LOST_PUBLICATION)
-            .iesDirectory(iesDirectory)
+            .publicationDirectory(publicationDirectory)
             .publication(a1)
             .build();
 
     ResultEntry expectedLostPublication2 =
         ResultEntry.builder()
             .resultType(ResultType.LOST_PUBLICATION)
-            .iesDirectory(iesDirectory)
+            .publicationDirectory(publicationDirectory)
             .publication(a2)
             .build();
 
@@ -439,15 +457,15 @@ class AnalyseTest {
             .publication("a")
             .publication("b");
 
-    PublicationDirectory iesDirectory = analyseBuilder.buildPublicationDirectory();
-    Publication b = iesDirectory.getPublications("b").get(0);
+    PublicationDirectory publicationDirectory = analyseBuilder.buildPublicationDirectory();
+    Publication b = publicationDirectory.getPublications("b").get(0);
 
     List<ResultEntry> result = this.analyseRecursive(analyseBuilder.build());
 
     ResultEntry expectedMissingFile =
         ResultEntry.builder()
             .resultType(ResultType.MISSING_FILE)
-            .iesDirectory(iesDirectory)
+            .publicationDirectory(publicationDirectory)
             .publication(b)
             .build();
 
@@ -468,15 +486,15 @@ class AnalyseTest {
             .publication("b")
             .publication("c/d");
 
-    PublicationDirectory iesDirectory = analyseBuilder.buildPublicationDirectory();
-    Publication b = iesDirectory.getPublications("b").get(0);
+    PublicationDirectory publicationDirectory = analyseBuilder.buildPublicationDirectory();
+    Publication b = publicationDirectory.getPublications("b").get(0);
 
     List<ResultEntry> result = this.analyseNonRecursive(analyseBuilder.build());
 
     ResultEntry expectedTemplateMissing =
         ResultEntry.builder()
             .resultType(ResultType.MISSING_FILE)
-            .iesDirectory(iesDirectory)
+            .publicationDirectory(publicationDirectory)
             .publication(b)
             .build();
 
@@ -496,8 +514,8 @@ class AnalyseTest {
 
     Analyse analyse = builder.build();
 
-    PublicationDirectory iesDirectory = builder.buildPublicationDirectory();
-    PublicationDirectory a = iesDirectory.getChild("a");
+    PublicationDirectory publicationDirectory = builder.buildPublicationDirectory();
+    PublicationDirectory a = publicationDirectory.getChild("a");
     PublicationDirectory b = a.getChild("b");
     Publication objectPhp = b.getPublications("object.php").get(1);
     Publication missingPhp = b.getPublications("missing.php").get(0);
@@ -510,21 +528,21 @@ class AnalyseTest {
     ResultEntry expectedLegalFilenameCollision =
         ResultEntry.builder()
             .resultType(ResultType.LEGAL_FILENAME_COLLISION)
-            .iesDirectory(b)
+            .publicationDirectory(b)
             .publication(objectPhp)
             .build();
 
     ResultEntry expectedMissingFile =
         ResultEntry.builder()
             .resultType(ResultType.MISSING_FILE)
-            .iesDirectory(b)
+            .publicationDirectory(b)
             .publication(missingPhp)
             .build();
 
     ResultEntry expectedMissingEmbeddedImage =
         ResultEntry.builder()
             .resultType(ResultType.MISSING_FILE)
-            .iesDirectory(mediaId2)
+            .publicationDirectory(mediaId2)
             .publication(missingEmbeddedImage)
             .build();
 
@@ -547,8 +565,8 @@ class AnalyseTest {
 
     Analyse analyse = builder.build();
 
-    PublicationDirectory iesDirectory = builder.buildPublicationDirectory();
-    PublicationDirectory a = iesDirectory.getChild("a");
+    PublicationDirectory publicationDirectory = builder.buildPublicationDirectory();
+    PublicationDirectory a = publicationDirectory.getChild("a");
     PublicationDirectory b = a.getChild("b");
     Publication objectPhp = b.getPublications("object.php").get(1);
     Publication missingPhp = b.getPublications("missing.php").get(0);
@@ -561,21 +579,21 @@ class AnalyseTest {
     ResultEntry expectedLegalFilenameCollision =
         ResultEntry.builder()
             .resultType(ResultType.LEGAL_FILENAME_COLLISION)
-            .iesDirectory(b)
+            .publicationDirectory(b)
             .publication(objectPhp)
             .build();
 
     ResultEntry expectedMissingFile =
         ResultEntry.builder()
             .resultType(ResultType.MISSING_FILE)
-            .iesDirectory(b)
+            .publicationDirectory(b)
             .publication(missingPhp)
             .build();
 
     ResultEntry expectedMissingEmbeddedImage =
         ResultEntry.builder()
             .resultType(ResultType.MISSING_FILE)
-            .iesDirectory(mediaId2)
+            .publicationDirectory(mediaId2)
             .publication(missingEmbeddedImage)
             .build();
 
@@ -642,12 +660,13 @@ class AnalyseTest {
           .forEach(
               pe -> {
                 PublicationType type = null;
-                if (pe.publication() != null) {
-                  type = pe.publication().type();
-                } else if (pe.publishedPath() != null) {
-                  type = pe.publishedPath().type();
+                if (pe.getPublication() != null) {
+                  type = pe.getPublication().type();
+                } else if (pe.getPublishedPath() != null) {
+                  type = pe.getPublishedPath().type();
                 }
-                System.out.println(pe.resultType() + " " + pe.absolutePath() + " (" + type + ")");
+                System.out.println(
+                    pe.getResultType() + " " + pe.getAbsolutePath() + " (" + type + ")");
               });
     }
     return result.entries();

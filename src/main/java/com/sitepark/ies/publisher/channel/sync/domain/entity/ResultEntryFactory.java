@@ -21,6 +21,6 @@ public class ResultEntryFactory {
   }
 
   private ResultEntry.Builder builder() {
-    return ResultEntry.builder().iesDirectory(this.ctx.getIesDirectory());
+    return ResultEntry.builder().publicationDirectory(this.ctx.getPublicationDirectory());
   }
 }
