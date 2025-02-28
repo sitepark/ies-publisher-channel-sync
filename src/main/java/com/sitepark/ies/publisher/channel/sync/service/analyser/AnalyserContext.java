@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("PMD.DataClass")
 public final class AnalyserContext {
   private final Channel channel;
   private final PublicationType publicationType;

@@ -34,25 +34,13 @@ import org.junit.jupiter.api.Test;
 @SuppressWarnings({"PMD.TooManyMethods", "PMD.AvoidDuplicateLiterals"})
 class AnalyseTest {
 
-  private final Path root = Path.of("src/test/resources/usecase/AnalyseTest").toAbsolutePath();
-
   private static final Filter FILTER =
-      new Filter() {
-        @Override
-        @SuppressWarnings("PMD.LiteralsFirstInComparisons")
-        public boolean accept(PublishedPath path) {
-          String name = path.baseName();
-          return name.indexOf("ignore") == -1 && !name.equals(".gitkeep");
-        }
+      path -> {
+        String name = path.baseName();
+        return !name.contains("ignore") && !".gitkeep".equals(name);
       };
-
-  private static final Hasher HASHER =
-      new Hasher() {
-        @Override
-        public String hash(Path path) {
-          return "hash";
-        }
-      };
+  private static final Hasher HASHER = path -> "hash";
+  private final Path root = Path.of("src/test/resources/usecase/AnalyseTest").toAbsolutePath();
 
   @Test
   void testWithEmptyRootDir() throws IOException {
@@ -64,11 +52,11 @@ class AnalyseTest {
 
     List<ResultEntry> result = this.analyseRecursive(analyseBuilder.build());
 
-    assertEquals(Arrays.asList(), result, "Should return an empty list");
+    assertEquals(List.of(), result, "Should return an empty list");
   }
 
   @Test
-  void testWithAbsolutePath() throws IOException {
+  void testWithAbsolutePath() {
 
     AnalyserBuilder analyseBuilder =
         analyseBuilder()
@@ -77,17 +65,13 @@ class AnalyseTest {
 
     Analyse analyse = analyseBuilder.build();
 
-    assertThrows(
-        IllegalArgumentException.class,
-        () -> {
-          analyse.analyse(Path.of("/"), true);
-        });
+    assertThrows(IllegalArgumentException.class, () -> analyse.analyse(Path.of("/"), true));
   }
 
   @Test
-  void testWithEmptyDirectoryUnkownDir() throws IOException {
+  void testWithEmptyDirectoryUnknownDir() throws IOException {
 
-    Path testRoot = this.root.resolve("testWithEmptyDirectoryUnkownDir");
+    Path testRoot = this.root.resolve("testWithEmptyDirectoryUnknownDir");
 
     AnalyserBuilder analyseBuilder =
         analyseBuilder().root(testRoot).layout(ChannelLayout.DOCUMENT_ROOT);
@@ -103,7 +87,7 @@ class AnalyseTest {
             .publishedPath(this.createPublishedPath(testRoot, "empty-directory"))
             .build();
 
-    assertEquals(Arrays.asList(expected), result, "Should return a missing file");
+    assertEquals(List.of(expected), result, "Should return a missing file");
   }
 
   @Test
@@ -118,7 +102,7 @@ class AnalyseTest {
     PublicationDirectory publicationDirectory = analyseBuilder.buildPublicationDirectory();
     PublicationDirectory emptyDirectoryMissingPublication =
         publicationDirectory.getChild("empty-directory-missing-publication");
-    Publication f = emptyDirectoryMissingPublication.getPublications("f").get(0);
+    Publication f = emptyDirectoryMissingPublication.getPublications("f").getFirst();
 
     List<ResultEntry> result = this.analyseRecursive(analyseBuilder.build());
 
@@ -129,7 +113,7 @@ class AnalyseTest {
             .publication(f)
             .build();
 
-    assertEquals(Arrays.asList(expected), result, "Should return a missing file");
+    assertEquals(List.of(expected), result, "Should return a missing file");
   }
 
   @Test
@@ -179,7 +163,7 @@ class AnalyseTest {
             .deleteForce(true)
             .build();
 
-    assertEquals(Arrays.asList(expected), result, "Should return a unknown directory");
+    assertEquals(List.of(expected), result, "Should return a unknown directory");
   }
 
   @Test
@@ -215,7 +199,7 @@ class AnalyseTest {
             .publication(b)
             .build();
 
-    assertEquals(Arrays.asList(expected), result, "Should return a legal filename collision");
+    assertEquals(List.of(expected), result, "Should return a legal filename collision");
   }
 
   @Test
@@ -236,7 +220,7 @@ class AnalyseTest {
             .build());
 
     PublicationDirectory publicationDirectory = analyseBuilder.buildPublicationDirectory();
-    Publication a = publicationDirectory.getPublications("a").get(0);
+    Publication a = publicationDirectory.getPublications("a").getFirst();
 
     List<ResultEntry> result = this.analyseRecursive(analyseBuilder.build());
 
@@ -247,7 +231,7 @@ class AnalyseTest {
             .publication(a)
             .build();
 
-    assertEquals(Arrays.asList(expected), result, "Should return a missing file entry");
+    assertEquals(List.of(expected), result, "Should return a missing file entry");
   }
 
   @Test
@@ -259,7 +243,7 @@ class AnalyseTest {
         analyseBuilder().root(testRoot).layout(ChannelLayout.DOCUMENT_ROOT).publication("a");
 
     PublicationDirectory publicationDirectory = analyseBuilder.buildPublicationDirectory();
-    Publication a = publicationDirectory.getPublications("a").get(0);
+    Publication a = publicationDirectory.getPublications("a").getFirst();
 
     List<ResultEntry> result = this.analyseRecursive(analyseBuilder.build());
 
@@ -291,7 +275,7 @@ class AnalyseTest {
 
     PublicationDirectory publicationDirectory = analyseBuilder.buildPublicationDirectory();
     PublicationDirectory a = publicationDirectory.getChild("a");
-    Publication b = a.getPublications("b").get(0);
+    Publication b = a.getPublications("b").getFirst();
 
     List<ResultEntry> result = this.analyseRecursive(analyseBuilder.build());
 
@@ -324,7 +308,7 @@ class AnalyseTest {
     analyseBuilder.publication(analyseBuilder.publicationBuilder("a").hash("other").build());
 
     PublicationDirectory publicationDirectory = analyseBuilder.buildPublicationDirectory();
-    Publication a = publicationDirectory.getPublications("a").get(0);
+    Publication a = publicationDirectory.getPublications("a").getFirst();
 
     List<ResultEntry> result = this.analyseRecursive(analyseBuilder.build());
 
@@ -335,7 +319,7 @@ class AnalyseTest {
             .publication(a)
             .build();
 
-    assertEquals(Arrays.asList(expected), result, "Should return a hash-mismatch entry");
+    assertEquals(List.of(expected), result, "Should return a hash-mismatch entry");
   }
 
   @Test
@@ -385,7 +369,7 @@ class AnalyseTest {
             .publication("");
 
     PublicationDirectory publicationDirectory = analyseBuilder.buildPublicationDirectory();
-    Publication b = publicationDirectory.getPublications("").get(0);
+    Publication b = publicationDirectory.getPublications("").getFirst();
 
     List<ResultEntry> result = this.analyseRecursive(analyseBuilder.build());
 
@@ -397,9 +381,9 @@ class AnalyseTest {
             .build();
 
     assertEquals(
-        Arrays.asList(expectedLostPublication),
+        List.of(expectedLostPublication),
         result,
-        "Should return a lost publicationand and illegal collistion entry");
+        "Should return a lost publication and illegal collision entry");
   }
 
   @Test
@@ -458,7 +442,7 @@ class AnalyseTest {
             .publication("b");
 
     PublicationDirectory publicationDirectory = analyseBuilder.buildPublicationDirectory();
-    Publication b = publicationDirectory.getPublications("b").get(0);
+    Publication b = publicationDirectory.getPublications("b").getFirst();
 
     List<ResultEntry> result = this.analyseRecursive(analyseBuilder.build());
 
@@ -470,9 +454,7 @@ class AnalyseTest {
             .build();
 
     assertEquals(
-        Arrays.asList(expectedMissingFile),
-        result,
-        "Should return a missing file and collision entry");
+        List.of(expectedMissingFile), result, "Should return a missing file and collision entry");
   }
 
   @Test
@@ -487,7 +469,7 @@ class AnalyseTest {
             .publication("c/d");
 
     PublicationDirectory publicationDirectory = analyseBuilder.buildPublicationDirectory();
-    Publication b = publicationDirectory.getPublications("b").get(0);
+    Publication b = publicationDirectory.getPublications("b").getFirst();
 
     List<ResultEntry> result = this.analyseNonRecursive(analyseBuilder.build());
 
@@ -499,7 +481,7 @@ class AnalyseTest {
             .build();
 
     assertEquals(
-        Arrays.asList(expectedTemplateMissing), result, "Should return a template missing entry");
+        List.of(expectedTemplateMissing), result, "Should return a template missing entry");
   }
 
   @Test
@@ -518,10 +500,10 @@ class AnalyseTest {
     PublicationDirectory a = publicationDirectory.getChild("a");
     PublicationDirectory b = a.getChild("b");
     Publication objectPhp = b.getPublications("object.php").get(1);
-    Publication missingPhp = b.getPublications("missing.php").get(0);
+    Publication missingPhp = b.getPublications("missing.php").getFirst();
     PublicationDirectory mediaId2 = b.getChild("object.php.media").getChild("media-id2");
     Publication missingEmbeddedImage =
-        mediaId2.getPublications("missing-embedded-image.png").get(0);
+        mediaId2.getPublications("missing-embedded-image.png").getFirst();
 
     List<ResultEntry> result = this.analyseRecursive(analyse, Path.of("a"));
 
@@ -569,10 +551,10 @@ class AnalyseTest {
     PublicationDirectory a = publicationDirectory.getChild("a");
     PublicationDirectory b = a.getChild("b");
     Publication objectPhp = b.getPublications("object.php").get(1);
-    Publication missingPhp = b.getPublications("missing.php").get(0);
+    Publication missingPhp = b.getPublications("missing.php").getFirst();
     PublicationDirectory mediaId2 = b.getChild("object.php.media").getChild("media-id2");
     Publication missingEmbeddedImage =
-        mediaId2.getPublications("missing-embedded-image.png").get(0);
+        mediaId2.getPublications("missing-embedded-image.png").getFirst();
 
     List<ResultEntry> result = this.analyseRecursive(analyse, Path.of("a"));
 
@@ -654,9 +636,10 @@ class AnalyseTest {
       throws IOException {
     AnalyserResult result = analyse.analyse(path, recursive);
 
-    boolean debug = true;
+    boolean debug = false;
     if (debug) {
-      result.entries().stream()
+      result
+          .entries()
           .forEach(
               pe -> {
                 PublicationType type = null;
@@ -689,13 +672,10 @@ class AnalyseTest {
   @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
   private static final class AnalyserBuilder {
 
-    private Path root;
-
-    private ChannelLayout layout;
-
-    private Channel channel;
-
     private final List<Publication> publications = new ArrayList<>();
+    private Path root;
+    private ChannelLayout layout;
+    private Channel channel;
 
     public AnalyserBuilder layout(ChannelLayout layout) {
       this.layout = layout;

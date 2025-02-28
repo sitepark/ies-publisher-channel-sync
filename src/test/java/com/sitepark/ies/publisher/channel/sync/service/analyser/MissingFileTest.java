@@ -11,19 +11,18 @@ import com.sitepark.ies.publisher.channel.sync.domain.entity.Publication;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.PublicationType;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultType;
 import com.sitepark.ies.publisher.channel.sync.service.Channel;
-import java.io.IOException;
 import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
-class MissingFileTest extends AnalyserTest {
+class MissingFileTest extends AnalyserTestBase {
 
   private final MissingFile analyser = new MissingFile();
 
   private final Path resourceDir = Path.of("src/test/resources/service/analyser/MissingFileTest");
 
   @Test
-  void testWithNonEqualsPublicationType() throws IOException {
+  void testWithNonEqualsPublicationType() {
     AnalyserContext ctx = this.mockAnalyserContext();
     when(ctx.getPublicationType()).thenReturn(PublicationType.OBJECT);
 
@@ -34,7 +33,7 @@ class MissingFileTest extends AnalyserTest {
   }
 
   @Test
-  void testWithExistsDirectoryEntry() throws IOException {
+  void testWithExistsDirectoryEntry() {
     AnalyserContext ctx = this.mockAnalyserContext();
     when(ctx.getPublicationType()).thenReturn(PublicationType.OBJECT);
     when(ctx.hasDirectoryEntry(any())).thenReturn(true);
@@ -46,7 +45,7 @@ class MissingFileTest extends AnalyserTest {
   }
 
   @Test
-  void testWithCollision() throws IOException {
+  void testWithCollision() {
     AnalyserContext ctx = this.mockAnalyserContext();
     when(ctx.getPublicationType()).thenReturn(PublicationType.OBJECT);
     when(ctx.hasDirectoryEntry(anyString())).thenReturn(false);
@@ -59,7 +58,7 @@ class MissingFileTest extends AnalyserTest {
   }
 
   @Test
-  void testNonPublished() throws IOException {
+  void testNonPublished() {
     AnalyserContext ctx = this.mockAnalyserContext();
     when(ctx.getPublicationType()).thenReturn(PublicationType.OBJECT);
     when(ctx.hasDirectoryEntry(anyString())).thenReturn(false);
@@ -73,7 +72,7 @@ class MissingFileTest extends AnalyserTest {
   }
 
   @Test
-  void testWithEmptyPath() throws IOException {
+  void testWithEmptyPath() {
     AnalyserContext ctx = this.mockAnalyserContext();
     when(ctx.getPublicationType()).thenReturn(PublicationType.OBJECT);
     when(ctx.hasDirectoryEntry(anyString())).thenReturn(false);
@@ -91,35 +90,35 @@ class MissingFileTest extends AnalyserTest {
   }
 
   @Test
-  void testIsRegulareFile() throws IOException {
+  void testIsRegularFile() {
     AnalyserContext ctx = this.mockAnalyserContext();
     when(ctx.getPublicationType()).thenReturn(PublicationType.OBJECT);
     when(ctx.hasDirectoryEntry(anyString())).thenReturn(false);
 
-    Path regulareFile = this.resourceDir.resolve("regulare-file");
+    Path regularFile = this.resourceDir.resolve("regular-file");
     Channel channel = mock();
     when(ctx.getChannel()).thenReturn(channel);
-    when(channel.resolve(any(PublicationType.class), any(Path.class))).thenReturn(regulareFile);
+    when(channel.resolve(any(PublicationType.class), any(Path.class))).thenReturn(regularFile);
 
     Publication publication = mock();
     when(publication.type()).thenReturn(PublicationType.OBJECT);
     when(publication.isCollision()).thenReturn(false);
     when(publication.isPublished()).thenReturn(true);
-    when(publication.path()).thenReturn(Path.of("regulare-file"));
+    when(publication.path()).thenReturn(Path.of("regular-file"));
 
     assertEquals(AnalyserResult.OK, this.analyser.analyse(ctx, publication), "Should return OK");
   }
 
   @Test
-  void testMissingFile() throws IOException {
+  void testMissingFile() {
     AnalyserContext ctx = this.mockAnalyserContext();
     when(ctx.getPublicationType()).thenReturn(PublicationType.OBJECT);
     when(ctx.hasDirectoryEntry(anyString())).thenReturn(false);
 
-    Path regulareFile = this.resourceDir.resolve("missing-file");
+    Path regularFile = this.resourceDir.resolve("missing-file");
     Channel channel = mock();
     when(ctx.getChannel()).thenReturn(channel);
-    when(channel.resolve(any(PublicationType.class), any(Path.class))).thenReturn(regulareFile);
+    when(channel.resolve(any(PublicationType.class), any(Path.class))).thenReturn(regularFile);
 
     Publication publication = mock();
     when(publication.type()).thenReturn(PublicationType.OBJECT);

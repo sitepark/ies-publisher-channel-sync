@@ -23,7 +23,7 @@ public enum ResultType {
 
   private final String description;
 
-  private ResultType(char symbol, String description) {
+  ResultType(char symbol, String description) {
     this.symbol = symbol;
     this.description = description;
   }

@@ -13,13 +13,12 @@ import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultEntry;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultType;
 import com.sitepark.ies.publisher.channel.sync.port.Publisher;
 import com.sitepark.ies.publisher.channel.sync.port.SyncNotifier;
-import java.io.IOException;
 import java.nio.file.Path;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings({
-  "PMD.JUnitTestContainsTooManyAsserts",
+  "PMD.UnitTestContainsTooManyAsserts",
   "PMD.TooManyMethods",
   "PMD.AvoidDuplicateLiterals"
 })
@@ -28,10 +27,8 @@ class MissingOrInvalidFileTest {
   private final Publisher publisher = mock();
 
   private final SyncNotifier notifier = mock();
-
-  private SyncronizeContext ctx;
-
-  private final Syncronizer syncronizer = new MissingOrInvalidFile();
+  private final Synchronizer synchronize = new MissingOrInvalidFile();
+  private SynchronizeContext ctx;
 
   @BeforeEach
   public void setup() {
@@ -41,66 +38,66 @@ class MissingOrInvalidFileTest {
   }
 
   @Test
-  void testWithInvalidResultType() throws IOException {
+  void testWithInvalidResultType() {
 
     ResultEntry entry = mock();
 
-    this.syncronizer.syncronize(this.ctx, entry);
+    this.synchronize.synchronize(this.ctx, entry);
 
     verify(this.notifier, never()).notify(any(), any());
   }
 
   @Test
-  void testTemporaryEntry() throws IOException {
+  void testTemporaryEntry() {
 
     ResultEntry entry = mock();
     when(entry.getResultType()).thenReturn(ResultType.MISSING_FILE);
     when(entry.getAbsolutePath()).thenReturn(Path.of("/a/b/c"));
     when(entry.isTemporary()).thenReturn(true);
 
-    this.syncronizer.syncronize(this.ctx, entry);
+    this.synchronize.synchronize(this.ctx, entry);
 
     verify(this.notifier, times(1)).notify(entry, "published /a/b/c (ignored, is temporary)");
   }
 
   @Test
-  void testWithTypeMissingFile() throws IOException {
+  void testWithTypeMissingFile() {
 
     ResultEntry entry = mock();
     when(entry.getResultType()).thenReturn(ResultType.MISSING_FILE);
     when(entry.getAbsolutePath()).thenReturn(Path.of("/a/b/c"));
 
-    this.syncronizer.syncronize(this.ctx, entry);
+    this.synchronize.synchronize(this.ctx, entry);
 
     verify(this.notifier).notify(any(), any());
   }
 
   @Test
-  void testWithTypeHashMismatch() throws IOException {
+  void testWithTypeHashMismatch() {
 
     ResultEntry entry = mock();
     when(entry.getResultType()).thenReturn(ResultType.HASH_MISMATCH);
     when(entry.getAbsolutePath()).thenReturn(Path.of("/a/b/c"));
 
-    this.syncronizer.syncronize(this.ctx, entry);
+    this.synchronize.synchronize(this.ctx, entry);
 
     verify(this.notifier).notify(any(), any());
   }
 
   @Test
-  void testWithTypeLostPublication() throws IOException {
+  void testWithTypeLostPublication() {
 
     ResultEntry entry = mock();
     when(entry.getResultType()).thenReturn(ResultType.LOST_PUBLICATION);
     when(entry.getAbsolutePath()).thenReturn(Path.of("/a/b/c"));
 
-    this.syncronizer.syncronize(this.ctx, entry);
+    this.synchronize.synchronize(this.ctx, entry);
 
     verify(this.notifier).notify(any(), any());
   }
 
   @Test
-  void testWithDelete() throws IOException {
+  void testWithDelete() {
 
     ResultEntry entry = mock();
     when(entry.getResultType()).thenReturn(ResultType.MISSING_FILE);
@@ -109,7 +106,7 @@ class MissingOrInvalidFileTest {
     when(this.ctx.exists(any())).thenReturn(true);
     when(this.ctx.delete(any())).thenReturn(true);
 
-    this.syncronizer.syncronize(this.ctx, entry);
+    this.synchronize.synchronize(this.ctx, entry);
 
     verify(this.ctx).delete(any());
     verify(this.notifier).notify(entry, "deleted /a/b/c");
@@ -118,7 +115,7 @@ class MissingOrInvalidFileTest {
   }
 
   @Test
-  void testWithDeleteFailed() throws IOException {
+  void testWithDeleteFailed() {
 
     ResultEntry entry = mock();
     when(entry.getResultType()).thenReturn(ResultType.MISSING_FILE);
@@ -127,7 +124,7 @@ class MissingOrInvalidFileTest {
     when(this.ctx.exists(any())).thenReturn(true);
     when(this.ctx.delete(any())).thenReturn(false);
 
-    this.syncronizer.syncronize(this.ctx, entry);
+    this.synchronize.synchronize(this.ctx, entry);
 
     verify(this.ctx).delete(any());
     verify(this.notifier).notify(entry, "deleted /a/b/c (failed)");
@@ -136,7 +133,7 @@ class MissingOrInvalidFileTest {
   }
 
   @Test
-  void testWithDeleteInTestMode() throws IOException {
+  void testWithDeleteInTestMode() {
 
     ResultEntry entry = mock();
     when(entry.getResultType()).thenReturn(ResultType.MISSING_FILE);
@@ -146,7 +143,7 @@ class MissingOrInvalidFileTest {
     when(this.ctx.exists(any())).thenReturn(true);
     when(this.ctx.delete(any())).thenReturn(true);
 
-    this.syncronizer.syncronize(this.ctx, entry);
+    this.synchronize.synchronize(this.ctx, entry);
 
     verify(this.ctx, never()).delete(any());
     verify(this.notifier).notify(entry, "deleted /a/b/c (test)");
@@ -155,7 +152,7 @@ class MissingOrInvalidFileTest {
   }
 
   @Test
-  void testWithoutDelete() throws IOException {
+  void testWithoutDelete() {
 
     ResultEntry entry = mock();
     when(entry.getResultType()).thenReturn(ResultType.MISSING_FILE);
@@ -163,7 +160,7 @@ class MissingOrInvalidFileTest {
     when(entry.getObject()).thenReturn(new Ref("1"));
     when(this.ctx.exists(any())).thenReturn(false);
 
-    this.syncronizer.syncronize(this.ctx, entry);
+    this.synchronize.synchronize(this.ctx, entry);
 
     verify(this.ctx, never()).delete(any());
     verify(this.notifier, times(1)).notify(any(), any());
@@ -172,7 +169,7 @@ class MissingOrInvalidFileTest {
   }
 
   @Test
-  void testPublishFailed() throws IOException {
+  void testPublishFailed() {
 
     ResultEntry entry = mock();
     when(entry.getResultType()).thenReturn(ResultType.MISSING_FILE);
@@ -182,7 +179,7 @@ class MissingOrInvalidFileTest {
     Throwable t = new RuntimeException("test");
     doThrow(t).when(this.publisher).publish(any());
 
-    this.syncronizer.syncronize(this.ctx, entry);
+    this.synchronize.synchronize(this.ctx, entry);
 
     verify(this.publisher).publish(new Ref("1"));
     verify(this.notifier).notify(entry, "publish /a/b/c (failed: test)", t);

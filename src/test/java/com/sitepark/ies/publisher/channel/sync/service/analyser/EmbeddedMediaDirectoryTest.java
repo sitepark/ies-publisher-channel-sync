@@ -10,13 +10,12 @@ import com.sitepark.ies.publisher.channel.sync.domain.entity.Publication;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.PublicationDirectory;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.PublishedPath;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultType;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
-class EmbeddedMediaDirectoryTest extends AnalyserTest {
+class EmbeddedMediaDirectoryTest extends AnalyserTestBase {
 
   private final Path resourceDir =
       Path.of("src/test/resources/service/analyser/EmbeddedMediaDirectoryTest");
@@ -24,7 +23,7 @@ class EmbeddedMediaDirectoryTest extends AnalyserTest {
   private final EmbeddedMediaDirectory analyser = new EmbeddedMediaDirectory();
 
   @Test
-  void testWhenPublishedPathIsNotADirectory() throws IOException {
+  void testWhenPublishedPathIsNotADirectory() {
     AnalyserContext ctx = this.mockAnalyserContext();
     PublishedPath path = mock();
     when(path.isDirectory()).thenReturn(false);
@@ -33,7 +32,7 @@ class EmbeddedMediaDirectoryTest extends AnalyserTest {
   }
 
   @Test
-  void testNoDotMediaSuffix() throws IOException {
+  void testNoDotMediaSuffix() {
     AnalyserContext ctx = this.mockAnalyserContext();
     PublishedPath path = mock();
     when(path.isDirectory()).thenReturn(true);
@@ -43,7 +42,7 @@ class EmbeddedMediaDirectoryTest extends AnalyserTest {
   }
 
   @Test
-  void testInvalidParentPath() throws IOException {
+  void testInvalidParentPath() {
     AnalyserContext ctx = this.mockAnalyserContext();
     PublishedPath path = mock();
     when(path.isDirectory()).thenReturn(true);
@@ -54,7 +53,7 @@ class EmbeddedMediaDirectoryTest extends AnalyserTest {
   }
 
   @Test
-  void testWithPublication() throws IOException {
+  void testWithPublication() {
     AnalyserContext ctx = this.mockAnalyserContext();
     PublishedPath path = mock();
     when(path.isDirectory()).thenReturn(true);
@@ -77,7 +76,7 @@ class EmbeddedMediaDirectoryTest extends AnalyserTest {
   }
 
   @Test
-  void testWithoutPublication() throws IOException {
+  void testWithoutPublication() {
     AnalyserContext ctx = this.mockAnalyserContext();
     PublishedPath path = mock();
     when(path.isDirectory()).thenReturn(true);
@@ -97,7 +96,7 @@ class EmbeddedMediaDirectoryTest extends AnalyserTest {
   }
 
   @Test
-  void testPublicationWithoutMediaIdDir() throws IOException {
+  void testPublicationWithoutMediaIdDir() {
     AnalyserContext ctx = this.mockAnalyserContext();
     Publication publication = mock();
     when(publication.absolutePath()).thenReturn(Path.of("test.php"));
@@ -106,7 +105,7 @@ class EmbeddedMediaDirectoryTest extends AnalyserTest {
   }
 
   @Test
-  void testPublicationWithoutMediaDir() throws IOException {
+  void testPublicationWithoutMediaDir() {
     AnalyserContext ctx = this.mockAnalyserContext();
     Publication publication = mock();
     when(publication.absolutePath()).thenReturn(Path.of("b/test.php"));
@@ -115,7 +114,7 @@ class EmbeddedMediaDirectoryTest extends AnalyserTest {
   }
 
   @Test
-  void testPublicationWithoutMediaSuffixDir() throws IOException {
+  void testPublicationWithoutMediaSuffixDir() {
     AnalyserContext ctx = this.mockAnalyserContext();
     Publication publication = mock();
     when(publication.absolutePath()).thenReturn(Path.of("a/b/test.php"));
@@ -124,7 +123,7 @@ class EmbeddedMediaDirectoryTest extends AnalyserTest {
   }
 
   @Test
-  void testWithExistsPublication() throws IOException {
+  void testWithExistsPublication() {
     AnalyserContext ctx = this.mockAnalyserContext();
     Publication publication = mock();
     when(publication.absolutePath())
@@ -137,12 +136,12 @@ class EmbeddedMediaDirectoryTest extends AnalyserTest {
   }
 
   @Test
-  void testWithNonExistsPublication() throws IOException {
+  void testWithNonExistsPublication() {
     AnalyserContext ctx = this.mockAnalyserContext();
     Publication publication = mock();
     when(publication.absolutePath())
         .thenReturn(
-            this.resourceDir.resolve("test.php.media/123/non-existsimage.png").toAbsolutePath());
+            this.resourceDir.resolve("test.php.media/123/non-exists-image.png").toAbsolutePath());
 
     AnalyserResult result = this.analyser.analyse(ctx, publication);
 

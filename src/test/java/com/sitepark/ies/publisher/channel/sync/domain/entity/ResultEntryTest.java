@@ -1,7 +1,6 @@
 package com.sitepark.ies.publisher.channel.sync.domain.entity;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -26,7 +25,7 @@ class ResultEntryTest {
 
   @Test
   @SuppressWarnings("PMD.JUnitTestsShouldIncludeAssert")
-  public void testToString() {
+  void testToString() {
     ToStringVerifier.forClass(ResultEntry.class).withClassName(NameStyle.SIMPLE_NAME).verify();
   }
 
@@ -62,13 +61,13 @@ class ResultEntryTest {
   @Test
   void testIsDeleteForce() {
     ResultEntry resultEntry = ResultEntry.builder().deleteForce(true).build();
-    assertEquals(true, resultEntry.isDeleteForce(), "unexpected delete force");
+    assertTrue(resultEntry.isDeleteForce(), "unexpected delete force");
   }
 
   @Test
   void testIsTemporary() {
     ResultEntry resultEntry = ResultEntry.builder().temporary(true).build();
-    assertEquals(true, resultEntry.isTemporary(), "unexpected temporary");
+    assertTrue(resultEntry.isTemporary(), "unexpected temporary");
   }
 
   @Test

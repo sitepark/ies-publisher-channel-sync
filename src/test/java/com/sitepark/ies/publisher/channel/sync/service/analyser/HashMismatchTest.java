@@ -10,19 +10,19 @@ import com.sitepark.ies.publisher.channel.sync.domain.entity.PublicationDirector
 import com.sitepark.ies.publisher.channel.sync.domain.entity.PublishedPath;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultType;
 import com.sitepark.ies.publisher.channel.sync.port.Hasher;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
-class HashMismatchTest extends AnalyserTest {
+@SuppressWarnings("DuplicateExpressions")
+class HashMismatchTest extends AnalyserTestBase {
 
   private final HashMismatch analyser = new HashMismatch(new TestHasher());
 
   private final Path resourceDir = Path.of("src/test/resources/service/analyser/HashMismatchTest");
 
   @Test
-  void testWhenPublishedPathIsDirectory() throws IOException {
+  void testWhenPublishedPathIsDirectory() {
     AnalyserContext ctx = this.mockAnalyserContext();
 
     PublishedPath path = mock();
@@ -32,7 +32,7 @@ class HashMismatchTest extends AnalyserTest {
   }
 
   @Test
-  void testWithMatchedPublicationDirectory() throws IOException {
+  void testWithMatchedPublicationDirectory() {
     AnalyserContext ctx = this.mockAnalyserContext();
 
     PublishedPath path = mock();
@@ -79,7 +79,7 @@ class HashMismatchTest extends AnalyserTest {
   @SuppressWarnings("PMD.TestClassWithoutTestCases")
   private static final class TestHasher implements Hasher {
     @Override
-    public String hash(Path file) throws IOException {
+    public String hash(Path file) {
       return "valid-hash";
     }
   }

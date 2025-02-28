@@ -4,14 +4,13 @@ import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResult;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResultFactory;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.Publication;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultType;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class MissingFile implements PublicationAnalyser {
 
   @Override
-  public AnalyserResult analyse(AnalyserContext ctx, Publication publication) throws IOException {
+  public AnalyserResult analyse(AnalyserContext ctx, Publication publication) {
 
     if (ctx.getPublicationType() != publication.type()) {
       return AnalyserResult.OK;

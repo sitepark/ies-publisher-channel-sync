@@ -26,7 +26,7 @@ class ChannelFactoryTest {
     Channel expected =
         new Channel(ChannelLayout.DOCUMENT_ROOT, this.resourceBase.resolve("documentRootLayout"));
 
-    assertEquals(expected, channel, "unsexpected channel");
+    assertEquals(expected, channel, "unexpected channel");
   }
 
   @Test
@@ -38,7 +38,7 @@ class ChannelFactoryTest {
     Channel expected =
         new Channel(ChannelLayout.DOCUMENT_ROOT, this.resourceBase.resolve("documentRootLayout"));
 
-    assertEquals(expected, channel, "unsexpected channel");
+    assertEquals(expected, channel, "unexpected channel");
   }
 
   @Test
@@ -49,7 +49,7 @@ class ChannelFactoryTest {
     Channel expected =
         new Channel(ChannelLayout.RESOURCES, this.resourcesLayoutBase.resolve("valid"));
 
-    assertEquals(expected, channel, "unsexpected channel");
+    assertEquals(expected, channel, "unexpected channel");
   }
 
   @Test
@@ -72,11 +72,11 @@ class ChannelFactoryTest {
     Channel expected =
         new Channel(ChannelLayout.RESOURCES, this.resourcesLayoutBase.resolve("valid"));
 
-    assertEquals(expected, channel, "unsexpected channel");
+    assertEquals(expected, channel, "unexpected channel");
   }
 
   @Test
-  void testIndentifyFailed() {
+  void testIdentifyFailed() {
 
     ChannelFactory factory = new ChannelFactory();
     assertThrows(

@@ -3,10 +3,10 @@ package com.sitepark.ies.publisher.channel.sync.service.synchronizer;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultEntry;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultType;
 
-public class MissingOrInvalidFile implements Syncronizer {
+public class MissingOrInvalidFile implements Synchronizer {
 
   @Override
-  public void syncronize(SyncronizeContext ctx, ResultEntry entry) {
+  public void synchronize(SynchronizeContext ctx, ResultEntry entry) {
 
     if (entry.getResultType() != ResultType.HASH_MISMATCH
         && entry.getResultType() != ResultType.MISSING_FILE
@@ -24,7 +24,7 @@ public class MissingOrInvalidFile implements Syncronizer {
     this.publish(ctx, entry);
   }
 
-  private void delete(SyncronizeContext ctx, ResultEntry entry) {
+  private void delete(SynchronizeContext ctx, ResultEntry entry) {
 
     if (!ctx.exists(entry.getAbsolutePath())) {
       return;
@@ -39,17 +39,18 @@ public class MissingOrInvalidFile implements Syncronizer {
         .notify(entry, "deleted " + entry.getAbsolutePath() + (ctx.isTest() ? " (test)" : ""));
   }
 
-  private void publish(SyncronizeContext ctx, ResultEntry entry) {
+  @SuppressWarnings("PMD.AvoidCatchingGenericException")
+  private void publish(SynchronizeContext ctx, ResultEntry entry) {
     try {
       if (!ctx.isTest()) {
         ctx.getPublisher().publish(entry.getObject());
       }
       ctx.getNotifier()
           .notify(entry, "publish " + entry.getAbsolutePath() + (ctx.isTest() ? " (test)" : ""));
-    } catch (Throwable t) {
+    } catch (Exception e) {
       ctx.getNotifier()
           .notify(
-              entry, "publish " + entry.getAbsolutePath() + " (failed: " + t.getMessage() + ")", t);
+              entry, "publish " + entry.getAbsolutePath() + " (failed: " + e.getMessage() + ")", e);
     }
   }
 }

@@ -3,14 +3,13 @@ package com.sitepark.ies.publisher.channel.sync.service.analyser;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResult;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ChannelLayout;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.PublishedPath;
-import java.io.IOException;
 
 public class DocumentRootLayoutFiles implements PublishedPathAnalyser {
 
   @Override
-  public AnalyserResult analyse(AnalyserContext ctx, PublishedPath path) throws IOException {
+  public AnalyserResult analyse(AnalyserContext ctx, PublishedPath path) {
 
-    if (ctx.getChannel().getLayout() != ChannelLayout.DOCUMENT_ROOT) {
+    if (ctx.getChannel().layout() != ChannelLayout.DOCUMENT_ROOT) {
       return AnalyserResult.OK;
     }
 

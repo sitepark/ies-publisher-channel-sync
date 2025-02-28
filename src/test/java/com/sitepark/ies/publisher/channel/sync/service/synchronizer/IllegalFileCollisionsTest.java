@@ -12,21 +12,18 @@ import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultEntry;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultType;
 import com.sitepark.ies.publisher.channel.sync.port.Publisher;
 import com.sitepark.ies.publisher.channel.sync.port.SyncNotifier;
-import java.io.IOException;
 import java.nio.file.Path;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-@SuppressWarnings("PMD.JUnitTestContainsTooManyAsserts")
+@SuppressWarnings("PMD.UnitTestContainsTooManyAsserts")
 class IllegalFileCollisionsTest {
 
   private final Publisher publisher = mock();
 
   private final SyncNotifier notifier = mock();
-
-  private SyncronizeContext ctx;
-
-  private final Syncronizer syncronizer = new IllegalFileCollisions();
+  private final Synchronizer synchronize = new IllegalFileCollisions();
+  private SynchronizeContext ctx;
 
   @BeforeEach
   public void setup() {
@@ -36,17 +33,17 @@ class IllegalFileCollisionsTest {
   }
 
   @Test
-  void testWithInvalidResultType() throws IOException {
+  void testWithInvalidResultType() {
 
     ResultEntry entry = mock();
 
-    this.syncronizer.syncronize(this.ctx, entry);
+    this.synchronize.synchronize(this.ctx, entry);
 
     verify(this.notifier, never()).notify(any(), any());
   }
 
   @Test
-  void testDepublish() throws IOException {
+  void testDepublish() {
 
     ResultEntry entry = mock();
     when(entry.getResultType()).thenReturn(ResultType.ILLEGAL_FILENAME_COLLISION);
@@ -54,14 +51,14 @@ class IllegalFileCollisionsTest {
     when(entry.getObject()).thenReturn(new Ref("1"));
     when(this.ctx.isTest()).thenReturn(false);
 
-    this.syncronizer.syncronize(this.ctx, entry);
+    this.synchronize.synchronize(this.ctx, entry);
 
     verify(this.publisher).depublish(new Ref("1"));
     verify(this.notifier).notify(entry, "depublish /a/b/c");
   }
 
   @Test
-  void testDepublishInTestMode() throws IOException {
+  void testDepublishInTestMode() {
 
     ResultEntry entry = mock();
     when(entry.getResultType()).thenReturn(ResultType.ILLEGAL_FILENAME_COLLISION);
@@ -69,14 +66,14 @@ class IllegalFileCollisionsTest {
     when(entry.getObject()).thenReturn(new Ref("1"));
     when(this.ctx.isTest()).thenReturn(true);
 
-    this.syncronizer.syncronize(this.ctx, entry);
+    this.synchronize.synchronize(this.ctx, entry);
 
     verify(this.publisher, never()).depublish(any());
     verify(this.notifier).notify(entry, "depublish /a/b/c (test)");
   }
 
   @Test
-  void testDepublishWithException() throws IOException {
+  void testDepublishWithException() {
 
     ResultEntry entry = mock();
     when(entry.getResultType()).thenReturn(ResultType.ILLEGAL_FILENAME_COLLISION);
@@ -86,7 +83,7 @@ class IllegalFileCollisionsTest {
     Throwable t = new RuntimeException("test");
     doThrow(t).when(this.publisher).depublish(any());
 
-    this.syncronizer.syncronize(this.ctx, entry);
+    this.synchronize.synchronize(this.ctx, entry);
 
     when(entry.getObject()).thenReturn(new Ref("1"));
     verify(this.notifier).notify(entry, "depublish /a/b/c (failed: test)", t);

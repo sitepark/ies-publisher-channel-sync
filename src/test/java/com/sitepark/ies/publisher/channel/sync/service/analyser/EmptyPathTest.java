@@ -10,19 +10,19 @@ import com.sitepark.ies.publisher.channel.sync.domain.entity.PublicationDirector
 import com.sitepark.ies.publisher.channel.sync.domain.entity.PublishedPath;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultEntry;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultType;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
-class EmptyPathTest extends AnalyserTest {
+@SuppressWarnings("DuplicateExpressions")
+class EmptyPathTest extends AnalyserTestBase {
 
   private final EmptyPath analyser = new EmptyPath();
 
   @Test
-  void testWhenPublishedPathIsDirectory() throws IOException {
+  void testWhenPublishedPathIsDirectory() {
     AnalyserContext ctx = this.mockAnalyserContext();
 
     PublishedPath path = mock();
@@ -32,7 +32,7 @@ class EmptyPathTest extends AnalyserTest {
   }
 
   @Test
-  void testWithLostPublications() throws IOException {
+  void testWithLostPublications() {
     AnalyserContext ctx = this.mockAnalyserContext();
 
     PublicationDirectory directory = mock();
@@ -58,13 +58,13 @@ class EmptyPathTest extends AnalyserTest {
 
     AnalyserResult result = this.analyser.analyse(ctx, path);
 
-    List<ResultEntry> expectedResultEntires = new ArrayList<ResultEntry>();
-    expectedResultEntires.add(
+    List<ResultEntry> expectedResultEntries = new ArrayList<>();
+    expectedResultEntries.add(
         ctx.getResultEntryFactory().createResultEntry(ResultType.LOST_PUBLICATION, c));
-    expectedResultEntires.add(
+    expectedResultEntries.add(
         ctx.getResultEntryFactory().createResultEntry(ResultType.ILLEGAL_FILENAME_COLLISION, d));
 
-    AnalyserResult expected = ctx.getAnalyserResultFactory().createResult(expectedResultEntires);
+    AnalyserResult expected = ctx.getAnalyserResultFactory().createResult(expectedResultEntries);
 
     assertEquals(expected, result, "Unexpected result");
   }

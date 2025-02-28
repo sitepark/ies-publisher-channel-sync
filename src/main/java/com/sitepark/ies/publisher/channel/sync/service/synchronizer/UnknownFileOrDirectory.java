@@ -4,11 +4,11 @@ import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultEntry;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultType;
 import java.nio.file.Path;
 
-public class UnknownFileOrDirectory implements Syncronizer {
+public class UnknownFileOrDirectory implements Synchronizer {
 
   @SuppressWarnings("PMD.AvoidDuplicateLiterals")
   @Override
-  public void syncronize(SyncronizeContext ctx, ResultEntry entry) {
+  public void synchronize(SynchronizeContext ctx, ResultEntry entry) {
 
     if (entry.getResultType() != ResultType.UNKNOWN_FILE_OR_DIRECTORY) {
       return;

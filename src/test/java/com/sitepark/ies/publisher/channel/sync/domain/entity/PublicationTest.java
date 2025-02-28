@@ -12,7 +12,7 @@ import java.nio.file.Path;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
 
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings({"PMD.TooManyMethods", "DuplicateExpressions"})
 class PublicationTest {
 
   @Test
@@ -23,7 +23,7 @@ class PublicationTest {
 
   @Test
   @SuppressWarnings("PMD.JUnitTestsShouldIncludeAssert")
-  public void testToString() {
+  void testToString() {
     ToStringVerifier.forClass(Publication.class).withClassName(NameStyle.SIMPLE_NAME).verify();
   }
 
@@ -51,7 +51,7 @@ class PublicationTest {
   }
 
   @Test
-  void testPahtWithAbsolutePath() {
+  void testPartWithAbsolutePath() {
     PublicationType type = mock();
     Path path = Path.of("/a");
     Publication publication = Publication.builder().type(type).path(path).build();
@@ -113,7 +113,7 @@ class PublicationTest {
     PublicationType type = mock();
     Path path = Path.of("a");
     Publication publication = Publication.builder().type(type).path(path).isPublished().build();
-    assertEquals(true, publication.isPublished(), "unexpected isPublished");
+    assertTrue(publication.isPublished(), "unexpected isPublished");
   }
 
   @Test
@@ -121,7 +121,7 @@ class PublicationTest {
     PublicationType type = mock();
     Path path = Path.of("a");
     Publication publication = Publication.builder().type(type).path(path).isPublished(true).build();
-    assertEquals(true, publication.isPublished(), "unexpected isPublished");
+    assertTrue(publication.isPublished(), "unexpected isPublished");
   }
 
   @Test

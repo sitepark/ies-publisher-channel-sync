@@ -5,7 +5,6 @@ import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResultFacto
 import com.sitepark.ies.publisher.channel.sync.domain.entity.Publication;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.PublishedPath;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultType;
-import java.io.IOException;
 import java.nio.file.Path;
 
 public class MediaMetaFile implements PublishedPathAnalyser {
@@ -13,7 +12,7 @@ public class MediaMetaFile implements PublishedPathAnalyser {
   private static final String SUFFIX = ".meta.php";
 
   @Override
-  public AnalyserResult analyse(AnalyserContext ctx, PublishedPath path) throws IOException {
+  public AnalyserResult analyse(AnalyserContext ctx, PublishedPath path) {
 
     if (path.isDirectory()) {
       return AnalyserResult.OK;

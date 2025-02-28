@@ -9,17 +9,17 @@ import com.sitepark.ies.publisher.channel.sync.domain.entity.Publication;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.PublicationDirectory;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.PublishedPath;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultType;
-import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
-class DirectoryFileMismatchTest extends AnalyserTest {
+class DirectoryFileMismatchTest extends AnalyserTestBase {
 
   private final DirectoryFileMismatch analyser = new DirectoryFileMismatch();
 
   @Test
-  void testWhenPublishedPathIsNotADirectory() throws IOException {
+  void testWhenPublishedPathIsNotADirectory() {
     AnalyserContext ctx = this.mockAnalyserContext();
     PublishedPath path = mock();
     when(path.isDirectory()).thenReturn(false);
@@ -28,7 +28,7 @@ class DirectoryFileMismatchTest extends AnalyserTest {
   }
 
   @Test
-  void testWithPublishedPublication() throws IOException {
+  void testWithPublishedPublication() {
     AnalyserContext ctx = this.mockAnalyserContext();
 
     PublicationDirectory directory = mock();
@@ -55,14 +55,14 @@ class DirectoryFileMismatchTest extends AnalyserTest {
   }
 
   @Test
-  void testWithDepublishedPublication() throws IOException {
+  void testWithDepublishedPublication() {
     AnalyserContext ctx = this.mockAnalyserContext();
 
     PublicationDirectory directory = mock();
     when(ctx.getPublicationDirectory()).thenReturn(directory);
 
     Publication publication = mock();
-    when(directory.getPublications("baseName")).thenReturn(Arrays.asList(publication));
+    when(directory.getPublications("baseName")).thenReturn(Collections.singletonList(publication));
     when(publication.isPublished()).thenReturn(false);
 
     PublishedPath path = mock();
@@ -73,7 +73,7 @@ class DirectoryFileMismatchTest extends AnalyserTest {
   }
 
   @Test
-  void testWithoutPublication() throws IOException {
+  void testWithoutPublication() {
     AnalyserContext ctx = this.mockAnalyserContext();
 
     PublicationDirectory directory = mock();

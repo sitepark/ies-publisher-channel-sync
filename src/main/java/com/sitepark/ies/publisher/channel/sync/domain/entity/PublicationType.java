@@ -13,7 +13,7 @@ public enum PublicationType {
 
   private final Path path;
 
-  private PublicationType(String path) {
+  PublicationType(String path) {
     this.path = Path.of(path);
   }
 

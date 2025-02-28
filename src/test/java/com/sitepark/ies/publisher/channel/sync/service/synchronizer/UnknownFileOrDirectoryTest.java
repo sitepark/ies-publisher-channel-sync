@@ -10,21 +10,22 @@ import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultEntry;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultType;
 import com.sitepark.ies.publisher.channel.sync.port.Publisher;
 import com.sitepark.ies.publisher.channel.sync.port.SyncNotifier;
-import java.io.IOException;
 import java.nio.file.Path;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-@SuppressWarnings({"PMD.JUnitTestContainsTooManyAsserts", "PMD.AvoidDuplicateLiterals"})
+@SuppressWarnings({
+  "PMD.UnitTestContainsTooManyAsserts",
+  "PMD.AvoidDuplicateLiterals",
+  "DuplicateExpressions"
+})
 class UnknownFileOrDirectoryTest {
 
   private final Publisher publisher = mock();
 
   private final SyncNotifier notifier = mock();
-
-  private SyncronizeContext ctx;
-
-  private final Syncronizer syncronizer = new UnknownFileOrDirectory();
+  private final Synchronizer synchronize = new UnknownFileOrDirectory();
+  private SynchronizeContext ctx;
 
   @BeforeEach
   public void setup() {
@@ -34,30 +35,30 @@ class UnknownFileOrDirectoryTest {
   }
 
   @Test
-  void testWithInvalidResultType() throws IOException {
+  void testWithInvalidResultType() {
 
     ResultEntry entry = mock();
 
-    this.syncronizer.syncronize(this.ctx, entry);
+    this.synchronize.synchronize(this.ctx, entry);
 
     verify(this.notifier, never()).notify(any(), any());
   }
 
   @Test
-  void testWithTemporaryEntry() throws IOException {
+  void testWithTemporaryEntry() {
 
     ResultEntry entry = mock();
     when(entry.getResultType()).thenReturn(ResultType.UNKNOWN_FILE_OR_DIRECTORY);
     when(entry.isTemporary()).thenReturn(true);
     when(entry.getAbsolutePath()).thenReturn(Path.of("/a/b/c"));
 
-    this.syncronizer.syncronize(this.ctx, entry);
+    this.synchronize.synchronize(this.ctx, entry);
 
     verify(this.notifier).notify(entry, "deleted /a/b/c (ignored, is temporary)");
   }
 
   @Test
-  void testDeleteDirectoryNotForce() throws IOException {
+  void testDeleteDirectoryNotForce() {
 
     ResultEntry entry = mock();
     when(entry.getResultType()).thenReturn(ResultType.UNKNOWN_FILE_OR_DIRECTORY);
@@ -67,14 +68,14 @@ class UnknownFileOrDirectoryTest {
     when(this.ctx.isDeleteForce()).thenReturn(false);
     when(this.ctx.isDirectory(any())).thenReturn(true);
 
-    this.syncronizer.syncronize(this.ctx, entry);
+    this.synchronize.synchronize(this.ctx, entry);
 
     verify(this.notifier)
         .notify(entry, "deleted /a/b/c (ignore, is directory, use --force-delete)");
   }
 
   @Test
-  void testDeleteDirectoryForceDeleteByEntry() throws IOException {
+  void testDeleteDirectoryForceDeleteByEntry() {
 
     ResultEntry entry = mock();
     when(entry.getResultType()).thenReturn(ResultType.UNKNOWN_FILE_OR_DIRECTORY);
@@ -86,14 +87,14 @@ class UnknownFileOrDirectoryTest {
     when(this.ctx.isDirectory(any())).thenReturn(true);
     when(this.ctx.delete(any())).thenReturn(true);
 
-    this.syncronizer.syncronize(this.ctx, entry);
+    this.synchronize.synchronize(this.ctx, entry);
 
     verify(this.ctx).delete(Path.of("/a/b/c"));
     verify(this.notifier).notify(entry, "deleted /a/b/c");
   }
 
   @Test
-  void testDeleteDirectoryForceDeleteByContext() throws IOException {
+  void testDeleteDirectoryForceDeleteByContext() {
 
     ResultEntry entry = mock();
     when(entry.getResultType()).thenReturn(ResultType.UNKNOWN_FILE_OR_DIRECTORY);
@@ -105,14 +106,14 @@ class UnknownFileOrDirectoryTest {
     when(this.ctx.isDirectory(any())).thenReturn(true);
     when(this.ctx.delete(any())).thenReturn(true);
 
-    this.syncronizer.syncronize(this.ctx, entry);
+    this.synchronize.synchronize(this.ctx, entry);
 
     verify(this.ctx).delete(Path.of("/a/b/c"));
     verify(this.notifier).notify(entry, "deleted /a/b/c");
   }
 
   @Test
-  void testDeleteTest() throws IOException {
+  void testDeleteTest() {
 
     ResultEntry entry = mock();
     when(entry.getResultType()).thenReturn(ResultType.UNKNOWN_FILE_OR_DIRECTORY);
@@ -121,14 +122,14 @@ class UnknownFileOrDirectoryTest {
     when(this.ctx.isTest()).thenReturn(true);
     when(this.ctx.isDirectory(any())).thenReturn(false);
 
-    this.syncronizer.syncronize(this.ctx, entry);
+    this.synchronize.synchronize(this.ctx, entry);
 
     verify(this.ctx, never()).delete(Path.of("/a/b/c"));
     verify(this.notifier).notify(entry, "deleted /a/b/c (test)");
   }
 
   @Test
-  void testDeleteFailed() throws IOException {
+  void testDeleteFailed() {
 
     ResultEntry entry = mock();
     when(entry.getResultType()).thenReturn(ResultType.UNKNOWN_FILE_OR_DIRECTORY);
@@ -138,7 +139,7 @@ class UnknownFileOrDirectoryTest {
     when(this.ctx.isDirectory(any())).thenReturn(false);
     when(this.ctx.delete(any())).thenReturn(false);
 
-    this.syncronizer.syncronize(this.ctx, entry);
+    this.synchronize.synchronize(this.ctx, entry);
 
     verify(this.ctx).delete(Path.of("/a/b/c"));
     verify(this.notifier).notify(entry, "deleted /a/b/c (failed)");

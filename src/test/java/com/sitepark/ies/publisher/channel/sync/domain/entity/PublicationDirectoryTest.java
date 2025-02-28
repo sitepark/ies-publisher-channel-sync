@@ -15,7 +15,7 @@ import static org.mockito.Mockito.when;
 import com.jparams.verifier.tostring.NameStyle;
 import com.jparams.verifier.tostring.ToStringVerifier;
 import java.nio.file.Path;
-import java.util.Arrays;
+import java.util.List;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
 
@@ -35,7 +35,7 @@ class PublicationDirectoryTest {
 
   @Test
   @SuppressWarnings("PMD.JUnitTestsShouldIncludeAssert")
-  public void testToString() {
+  void testToString() {
     PublicationDirectory a = PublicationDirectory.builder().name("a").build();
     ToStringVerifier.forClass(PublicationDirectory.class)
         .withClassName(NameStyle.SIMPLE_NAME)
@@ -44,19 +44,19 @@ class PublicationDirectoryTest {
   }
 
   @Test
-  public void testName() {
+  void testName() {
     PublicationDirectory directory = PublicationDirectory.builder().name("a").build();
     assertEquals("a", directory.getName(), "unexpected name");
   }
 
   @Test
-  public void testNullName() {
+  void testNullName() {
     PublicationDirectory directory = PublicationDirectory.builder().name(null).build();
     assertNull(directory.getName(), "null should be allowed");
   }
 
   @Test
-  public void testBlankName() {
+  void testBlankName() {
     assertThrows(
         IllegalArgumentException.class,
         () -> PublicationDirectory.builder().name(""),
@@ -64,7 +64,7 @@ class PublicationDirectoryTest {
   }
 
   @Test
-  public void testNameStartsWithSlash() {
+  void testNameStartsWithSlash() {
     assertThrows(
         IllegalArgumentException.class,
         () -> PublicationDirectory.builder().name("/abc"),
@@ -72,7 +72,7 @@ class PublicationDirectoryTest {
   }
 
   @Test
-  public void testNameEndsWithSlash() {
+  void testNameEndsWithSlash() {
     assertThrows(
         IllegalArgumentException.class,
         () -> PublicationDirectory.builder().name("abc/"),
@@ -80,7 +80,7 @@ class PublicationDirectoryTest {
   }
 
   @Test
-  public void testNameEndsNull() {
+  void testNameEndsNull() {
     assertThrows(
         IllegalArgumentException.class,
         () -> PublicationDirectory.builder().name("abc/").build(),
@@ -88,14 +88,14 @@ class PublicationDirectoryTest {
   }
 
   @Test
-  public void testGetParent() {
+  void testGetParent() {
     PublicationDirectory child = PublicationDirectory.builder().build();
     PublicationDirectory parent = PublicationDirectory.builder().child(child).build();
     assertEquals(parent, child.getParent(), "Unexpected parent");
   }
 
   @Test
-  public void testGetPublications() {
+  void testGetPublications() {
 
     Publication publication = mock();
     when(publication.fileName()).thenReturn("fileName");
@@ -108,7 +108,7 @@ class PublicationDirectoryTest {
   }
 
   @Test
-  public void testGetPublicationsRecursive() {
+  void testGetPublicationsRecursive() {
 
     Publication b = mock();
     when(b.fileName()).thenReturn("b");
@@ -123,7 +123,7 @@ class PublicationDirectoryTest {
   }
 
   @Test
-  public void testGetPublicationFileNames() {
+  void testGetPublicationFileNames() {
 
     Publication publication = mock();
     when(publication.fileName()).thenReturn("fileName");
@@ -136,13 +136,13 @@ class PublicationDirectoryTest {
   }
 
   @Test
-  public void testGetPublicationFileNamesWithoutPublications() {
+  void testGetPublicationFileNamesWithoutPublications() {
     PublicationDirectory directory = PublicationDirectory.builder().build();
     assertThat("Unexpected publications", directory.getPublicationFileNames(), empty());
   }
 
   @Test
-  public void testGetPublicationsByFileNames() {
+  void testGetPublicationsByFileNames() {
     Publication publication = mock();
     when(publication.fileName()).thenReturn("fileName");
     PublicationDirectory directory =
@@ -154,13 +154,13 @@ class PublicationDirectoryTest {
   }
 
   @Test
-  public void testGetPublicationsByFileNamesWithoutPublications() {
+  void testGetPublicationsByFileNamesWithoutPublications() {
     PublicationDirectory directory = PublicationDirectory.builder().build();
     assertThat("Unexpected publications", directory.getPublications("fileName"), empty());
   }
 
   @Test
-  public void testHasPublication() {
+  void testHasPublication() {
     Publication publication = mock();
     when(publication.fileName()).thenReturn("fileName");
     PublicationDirectory directory =
@@ -169,17 +169,17 @@ class PublicationDirectoryTest {
   }
 
   @Test
-  public void testHasPublicationWithoutPublications() {
+  void testHasPublicationWithoutPublications() {
     PublicationDirectory directory = PublicationDirectory.builder().build();
     assertFalse(directory.hasPublications("fileName"), "should not have publication");
   }
 
   @Test
-  public void testPublications() {
+  void testPublications() {
     Publication publication = mock();
     when(publication.fileName()).thenReturn("fileName");
     PublicationDirectory directory =
-        PublicationDirectory.builder().publications(Arrays.asList(publication)).build();
+        PublicationDirectory.builder().publications(List.of(publication)).build();
     assertThat(
         "Unexpected publications",
         directory.getPublications("fileName"),
@@ -187,16 +187,16 @@ class PublicationDirectoryTest {
   }
 
   @Test
-  public void testGetChildrenSetByChildren() {
+  void testGetChildrenSetByChildren() {
     PublicationDirectory child = mock();
     when(child.getName()).thenReturn("name");
     PublicationDirectory directory =
-        PublicationDirectory.builder().children(Arrays.asList(child)).build();
+        PublicationDirectory.builder().children(List.of(child)).build();
     assertThat("Unexpected children", directory.getChildren(), containsInAnyOrder(child));
   }
 
   @Test
-  public void testGetChildrenSetByChild() {
+  void testGetChildrenSetByChild() {
     PublicationDirectory child = mock();
     when(child.getName()).thenReturn("name");
     PublicationDirectory directory = PublicationDirectory.builder().child(child).build();
@@ -204,7 +204,7 @@ class PublicationDirectoryTest {
   }
 
   @Test
-  public void testGetChild() {
+  void testGetChild() {
     PublicationDirectory child = mock();
     when(child.getName()).thenReturn("name");
     PublicationDirectory directory = PublicationDirectory.builder().child(child).build();
@@ -212,7 +212,7 @@ class PublicationDirectoryTest {
   }
 
   @Test
-  public void testFindChild() {
+  void testFindChild() {
     PublicationDirectory b = mock();
     when(b.getName()).thenReturn("b");
     PublicationDirectory a = mock();
@@ -223,7 +223,7 @@ class PublicationDirectoryTest {
   }
 
   @Test
-  public void testFindChildNotFound() {
+  void testFindChildNotFound() {
     PublicationDirectory a = mock();
     when(a.getName()).thenReturn("a");
     PublicationDirectory directory = PublicationDirectory.builder().child(a).build();
@@ -231,7 +231,7 @@ class PublicationDirectoryTest {
   }
 
   @Test
-  public void testGetCollision() {
+  void testGetCollision() {
     Publication publication = mock();
     when(publication.isCollision()).thenReturn(true);
     Ref object = new Ref("123");

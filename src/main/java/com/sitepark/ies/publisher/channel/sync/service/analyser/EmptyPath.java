@@ -7,20 +7,19 @@ import com.sitepark.ies.publisher.channel.sync.domain.entity.PublishedPath;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultEntry;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultEntryFactory;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultType;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EmptyPath implements PublishedPathAnalyser {
 
   @Override
-  public AnalyserResult analyse(AnalyserContext ctx, PublishedPath path) throws IOException {
+  public AnalyserResult analyse(AnalyserContext ctx, PublishedPath path) {
 
     if (path.isDirectory()) {
       return AnalyserResult.OK;
     }
 
-    List<ResultEntry> list = new ArrayList<ResultEntry>();
+    List<ResultEntry> list = new ArrayList<>();
 
     ResultEntryFactory resultEntryFactory = ctx.getResultEntryFactory();
 

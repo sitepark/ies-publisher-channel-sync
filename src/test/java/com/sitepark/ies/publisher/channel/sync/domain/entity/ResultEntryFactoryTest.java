@@ -56,7 +56,7 @@ class ResultEntryFactoryTest {
   }
 
   @Test
-  void testCcreateResultEntryDeleteForceWithPublishedPath() {
+  void testCreateResultEntryDeleteForceWithPublishedPath() {
 
     PublishedPath path = mock();
     ResultEntry entry =

@@ -7,7 +7,11 @@ import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResultFacto
 import com.sitepark.ies.publisher.channel.sync.domain.entity.PublicationDirectory;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultEntryFactory;
 
-public abstract class AnalyserTest {
+public class AnalyserTestBase {
+
+  protected AnalyserTestBase() {
+    super();
+  }
 
   protected AnalyserContext mockAnalyserContext() {
     AnalyserContext ctx = mock();

@@ -14,7 +14,7 @@ import com.sitepark.ies.publisher.channel.sync.domain.entity.PublicationType;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.PublishedPath;
 import com.sitepark.ies.publisher.channel.sync.service.Channel;
 import java.nio.file.Path;
-import java.util.Arrays;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings({"PMD.TooManyMethods", "PMD.AvoidDuplicateLiterals"})
@@ -74,7 +74,7 @@ class AnalyserContextTest {
     AnalyserContext ctx = AnalyserContext.builder().directoryEntry(directoryEntry).build();
     assertThat(
         "DirectoryEntries is not the same",
-        Arrays.asList(directoryEntry),
+        List.of(directoryEntry),
         containsInAnyOrder(ctx.getDirectoryEntries().toArray()));
   }
 
@@ -97,14 +97,12 @@ class AnalyserContextTest {
 
     assertThrows(
         IllegalArgumentException.class,
-        () -> {
-          AnalyserContext.builder().directoryEntry(a).directoryEntry(b);
-        });
+        () -> AnalyserContext.builder().directoryEntry(a).directoryEntry(b));
   }
 
   @Test
   void testIsRecursive() {
     AnalyserContext ctx = AnalyserContext.builder().recursive(true).build();
-    assertEquals(true, ctx.isRecursive(), "Recursive is not the same");
+    assertTrue(ctx.isRecursive(), "Recursive is not the same");
   }
 }

@@ -10,19 +10,18 @@ import com.sitepark.ies.publisher.channel.sync.domain.entity.Publication;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.PublicationDirectory;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.PublishedPath;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultType;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collections;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
-class ScaledImageDirectoryTest extends AnalyserTest {
+class ScaledImageDirectoryTest extends AnalyserTestBase {
 
   private final ScaledImageDirectory analyser = new ScaledImageDirectory();
 
   @Test
-  void testWhenPublishedPathIsFile() throws IOException {
+  void testWhenPublishedPathIsFile() {
     AnalyserContext ctx = this.mockAnalyserContext();
 
     PublishedPath path = mock();
@@ -32,7 +31,7 @@ class ScaledImageDirectoryTest extends AnalyserTest {
   }
 
   @Test
-  void testWithDirectoryNonScaledSuffix() throws IOException {
+  void testWithDirectoryNonScaledSuffix() {
     AnalyserContext ctx = this.mockAnalyserContext();
 
     PublishedPath path = mock();
@@ -43,7 +42,7 @@ class ScaledImageDirectoryTest extends AnalyserTest {
   }
 
   @Test
-  void testPublicationDirectoryWithoutParent() throws IOException {
+  void testPublicationDirectoryWithoutParent() {
     AnalyserContext ctx = this.mockAnalyserContext();
 
     PublishedPath path = mock();
@@ -51,15 +50,11 @@ class ScaledImageDirectoryTest extends AnalyserTest {
     when(path.baseName()).thenReturn("baseName.scaled");
     when(path.absolutePath()).thenReturn(Path.of("baseName.scaled"));
 
-    assertThrows(
-        IllegalArgumentException.class,
-        () -> {
-          this.analyser.analyse(ctx, path);
-        });
+    assertThrows(IllegalArgumentException.class, () -> this.analyser.analyse(ctx, path));
   }
 
   @Test
-  void testWithPublishedPublicationDirectory() throws IOException {
+  void testWithPublishedPublicationDirectory() {
     AnalyserContext ctx = this.mockAnalyserContext();
 
     PublicationDirectory directory = mock();
@@ -81,11 +76,11 @@ class ScaledImageDirectoryTest extends AnalyserTest {
     assertEquals(
         AnalyserResult.OK_AND_INTERRUPT,
         this.analyser.analyse(ctx, path),
-        "Should return OK and iterrupt");
+        "Should return OK and interrupt");
   }
 
   @Test
-  void testWithNonPublishedPublicationDirectory() throws IOException {
+  void testWithNonPublishedPublicationDirectory() {
     AnalyserContext ctx = this.mockAnalyserContext();
 
     PublicationDirectory directory = mock();

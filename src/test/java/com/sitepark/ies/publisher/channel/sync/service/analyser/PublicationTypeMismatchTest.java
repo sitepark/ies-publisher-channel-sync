@@ -12,16 +12,15 @@ import com.sitepark.ies.publisher.channel.sync.domain.entity.PublicationType;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.PublishedPath;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultType;
 import com.sitepark.ies.publisher.channel.sync.service.Channel;
-import java.io.IOException;
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
-class PublicationTypeMismatchTest extends AnalyserTest {
+class PublicationTypeMismatchTest extends AnalyserTestBase {
 
   private final PublicationTypeMismatch analyser = new PublicationTypeMismatch();
 
   @Test
-  void testWhenPublishedPathIsDirectory() throws IOException {
+  void testWhenPublishedPathIsDirectory() {
     AnalyserContext ctx = this.mockAnalyserContext();
 
     PublishedPath path = mock();
@@ -31,11 +30,11 @@ class PublicationTypeMismatchTest extends AnalyserTest {
   }
 
   @Test
-  void testWhenChannelLayoutIsNotResources() throws IOException {
+  void testWhenChannelLayoutIsNotResources() {
     AnalyserContext ctx = this.mockAnalyserContext();
     Channel channel = mock();
     when(ctx.getChannel()).thenReturn(channel);
-    when(channel.getLayout()).thenReturn(ChannelLayout.DOCUMENT_ROOT);
+    when(channel.layout()).thenReturn(ChannelLayout.DOCUMENT_ROOT);
 
     PublishedPath path = mock();
     when(path.isDirectory()).thenReturn(false);
@@ -44,11 +43,11 @@ class PublicationTypeMismatchTest extends AnalyserTest {
   }
 
   @Test
-  void testWithMismatch() throws IOException {
+  void testWithMismatch() {
     AnalyserContext ctx = this.mockAnalyserContext();
     Channel channel = mock();
     when(ctx.getChannel()).thenReturn(channel);
-    when(channel.getLayout()).thenReturn(ChannelLayout.RESOURCES);
+    when(channel.layout()).thenReturn(ChannelLayout.RESOURCES);
 
     PublicationDirectory directory = mock();
     when(ctx.getPublicationDirectory()).thenReturn(directory);

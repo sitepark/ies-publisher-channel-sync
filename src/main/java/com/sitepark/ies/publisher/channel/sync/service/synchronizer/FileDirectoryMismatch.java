@@ -3,10 +3,11 @@ package com.sitepark.ies.publisher.channel.sync.service.synchronizer;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultEntry;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultType;
 
-public class FileDirectoryMismatch implements Syncronizer {
+public class FileDirectoryMismatch implements Synchronizer {
 
   @Override
-  public void syncronize(SyncronizeContext ctx, ResultEntry entry) {
+  @SuppressWarnings("PMD.AvoidCatchingGenericException")
+  public void synchronize(SynchronizeContext ctx, ResultEntry entry) {
 
     if (entry.getResultType() != ResultType.FILE_DIRECTORY_MISMATCH) {
       return;
@@ -30,12 +31,12 @@ public class FileDirectoryMismatch implements Syncronizer {
       }
       ctx.getNotifier()
           .notify(entry, "republish " + entry.getAbsolutePath() + (ctx.isTest() ? " (test)" : ""));
-    } catch (Throwable t) {
+    } catch (Exception e) {
       ctx.getNotifier()
           .notify(
               entry,
-              "republish " + entry.getAbsolutePath() + " (failed: " + t.getMessage() + ")",
-              t);
+              "republish " + entry.getAbsolutePath() + " (failed: " + e.getMessage() + ")",
+              e);
     }
   }
 }

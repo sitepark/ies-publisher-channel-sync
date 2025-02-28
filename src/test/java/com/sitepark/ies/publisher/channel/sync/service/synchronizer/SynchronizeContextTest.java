@@ -17,9 +17,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings({"PMD.TooManyMethods", "PMD.AvoidDuplicateLiterals"})
-class SyncronizeContextTest {
+class SynchronizeContextTest {
 
-  private final Path workDir = Path.of("target/test/SyncronizeContextTest");
+  private final Path workDir = Path.of("target/test/SynchronizeContextTest");
 
   @BeforeEach
   public void setup() throws IOException {
@@ -31,56 +31,59 @@ class SyncronizeContextTest {
     if (!Files.isDirectory(this.workDir)) {
       return;
     }
-    Files.walk(this.workDir)
-        .forEach(
-            path -> {
-              try {
-                Files.setPosixFilePermissions(path, PosixFilePermissions.fromString("rwxrwxrwx"));
-              } catch (IOException e) {
-                throw new UncheckedIOException(e);
-              }
-            });
-    Files.walk(this.workDir)
-        .sorted(Comparator.reverseOrder())
-        .forEach(
-            path -> {
-              try {
-                Files.delete(path);
-              } catch (IOException e) {
-                throw new UncheckedIOException(e);
-              }
-            });
+    try (var paths = Files.walk(this.workDir)) {
+      paths.forEach(
+          path -> {
+            try {
+              Files.setPosixFilePermissions(path, PosixFilePermissions.fromString("rwxrwxrwx"));
+            } catch (IOException e) {
+              throw new UncheckedIOException(e);
+            }
+          });
+    }
+    try (var paths = Files.walk(this.workDir)) {
+      paths
+          .sorted(Comparator.reverseOrder())
+          .forEach(
+              path -> {
+                try {
+                  Files.delete(path);
+                } catch (IOException e) {
+                  throw new UncheckedIOException(e);
+                }
+              });
+    }
   }
 
   @Test
   void testIsTest() {
-    assertTrue(SyncronizeContext.builder().test(true).build().isTest(), "isTest should be true");
+    assertTrue(SynchronizeContext.builder().test(true).build().isTest(), "isTest should be true");
   }
 
   @Test
   void testIsDeleteForce() {
     assertTrue(
-        SyncronizeContext.builder().deleteForce(true).build().isDeleteForce(),
+        SynchronizeContext.builder().deleteForce(true).build().isDeleteForce(),
         "isDeleteForce should be true");
   }
 
   @Test
   void testIsNotifyLegalCollisions() {
     assertTrue(
-        SyncronizeContext.builder().notifyLegalCollisions(true).build().isNotifyLegalCollisions(),
+        SynchronizeContext.builder().notifyLegalCollisions(true).build().isNotifyLegalCollisions(),
         "isNotifyLegalCollisions should be true");
   }
 
   @Test
-  void testGetPublihser() {
+  void testGetPublisher() {
     assertInstanceOf(
-        Publisher.class, SyncronizeContext.builder().publisher(mock()).build().getPublisher());
+        Publisher.class, SynchronizeContext.builder().publisher(mock()).build().getPublisher());
   }
 
   @Test
   void testGetNotifier() {
     assertInstanceOf(
-        SyncNotifier.class, SyncronizeContext.builder().notifier(mock()).build().getNotifier());
+        SyncNotifier.class, SynchronizeContext.builder().notifier(mock()).build().getNotifier());
   }
 
   @Test
@@ -92,7 +95,7 @@ class SyncronizeContextTest {
     Path path = workDir.resolve("test.txt");
     Files.createFile(path);
 
-    SyncronizeContext.builder().build().delete(path);
+    SynchronizeContext.builder().build().delete(path);
 
     assertFalse(Files.exists(path), "File should be deleted");
   }
@@ -108,9 +111,9 @@ class SyncronizeContextTest {
 
     Files.setPosixFilePermissions(workDir, PosixFilePermissions.fromString("r--r--r--"));
 
-    SyncronizeContext.builder().build().delete(path);
+    SynchronizeContext.builder().build().delete(path);
 
-    assertFalse(Files.exists(path), "File should't be deleted");
+    assertFalse(Files.exists(path), "File should not be deleted");
   }
 
   @Test
@@ -124,7 +127,7 @@ class SyncronizeContextTest {
     Path path = subdir.resolve("test.txt");
     Files.createFile(path);
 
-    SyncronizeContext.builder().build().delete(workDir);
+    SynchronizeContext.builder().build().delete(workDir);
 
     assertFalse(Files.exists(workDir), "Directory should be deleted");
   }
@@ -143,9 +146,9 @@ class SyncronizeContextTest {
 
     Files.setPosixFilePermissions(subdir, PosixFilePermissions.fromString("r--r--r--"));
 
-    SyncronizeContext.builder().build().delete(workDir);
+    SynchronizeContext.builder().build().delete(workDir);
 
-    assertTrue(Files.exists(workDir), "Directory should't deleted");
+    assertTrue(Files.exists(workDir), "Directory should not deleted");
   }
 
   @Test
@@ -155,7 +158,8 @@ class SyncronizeContextTest {
     Files.createDirectories(workDir);
 
     assertTrue(
-        SyncronizeContext.builder().build().isDirectory(workDir), "Directory check should be true");
+        SynchronizeContext.builder().build().isDirectory(workDir),
+        "Directory check should be true");
   }
 
   @Test
@@ -167,6 +171,6 @@ class SyncronizeContextTest {
     Path path = workDir.resolve("test.txt");
     Files.createFile(path);
 
-    assertTrue(SyncronizeContext.builder().build().exists(path), "should be exists");
+    assertTrue(SynchronizeContext.builder().build().exists(path), "should be exists");
   }
 }

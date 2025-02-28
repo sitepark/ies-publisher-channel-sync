@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
-import java.util.Arrays;
 import java.util.Collections;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +18,7 @@ class AnalyserResultTest {
   }
 
   @Test
-  void testOkAndInterupt() {
+  void testOkAndInterrupt() {
     assertEquals(
         new AnalyserResult(Collections.emptyList(), true),
         AnalyserResult.OK_AND_INTERRUPT,
@@ -30,7 +29,7 @@ class AnalyserResultTest {
   void testUnmodifiedList() {
 
     ResultEntry a = mock();
-    AnalyserResult result = new AnalyserResult(Arrays.asList(a), false);
+    AnalyserResult result = new AnalyserResult(Collections.singletonList(a), false);
 
     ResultEntry b = mock();
     assertThrows(UnsupportedOperationException.class, () -> result.entries().add(b));

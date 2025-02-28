@@ -7,14 +7,13 @@ import com.sitepark.ies.publisher.channel.sync.domain.entity.PublicationDirector
 import com.sitepark.ies.publisher.channel.sync.domain.entity.PublishedPath;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultType;
 import com.sitepark.ies.publisher.channel.sync.service.Channel;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class Collision implements PublishedPathAnalyser {
 
   @Override
-  public AnalyserResult analyse(AnalyserContext ctx, PublishedPath path) throws IOException {
+  public AnalyserResult analyse(AnalyserContext ctx, PublishedPath path) {
 
     if (!path.isDirectory()) {
       return AnalyserResult.OK;

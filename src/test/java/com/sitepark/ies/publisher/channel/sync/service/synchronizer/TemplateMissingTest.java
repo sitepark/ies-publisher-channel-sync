@@ -11,7 +11,6 @@ import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultEntry;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultType;
 import com.sitepark.ies.publisher.channel.sync.port.Publisher;
 import com.sitepark.ies.publisher.channel.sync.port.SyncNotifier;
-import java.io.IOException;
 import java.nio.file.Path;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,10 +20,8 @@ class TemplateMissingTest {
   private final Publisher publisher = mock();
 
   private final SyncNotifier notifier = mock();
-
-  private SyncronizeContext ctx;
-
-  private final Syncronizer syncronizer = new TemplateMissing();
+  private final Synchronizer synchronize = new TemplateMissing();
+  private SynchronizeContext ctx;
 
   @BeforeEach
   public void setup() {
@@ -34,23 +31,23 @@ class TemplateMissingTest {
   }
 
   @Test
-  void testWithInvalidResultType() throws IOException {
+  void testWithInvalidResultType() {
 
     ResultEntry entry = mock();
 
-    this.syncronizer.syncronize(this.ctx, entry);
+    this.synchronize.synchronize(this.ctx, entry);
 
     verify(this.notifier, never()).notify(any(), any());
   }
 
   @Test
-  void testTemporaryEntry() throws IOException {
+  void testTemporaryEntry() {
 
     ResultEntry entry = mock();
     when(entry.getResultType()).thenReturn(ResultType.TEMPLATE_MISSING);
     when(entry.getAbsolutePath()).thenReturn(Path.of("/a/b/c"));
 
-    this.syncronizer.syncronize(this.ctx, entry);
+    this.synchronize.synchronize(this.ctx, entry);
 
     verify(this.notifier, times(1)).notify(entry, "published /a/b/c (ignored, template missing)");
   }

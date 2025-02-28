@@ -12,18 +12,17 @@ import com.sitepark.ies.publisher.channel.sync.domain.entity.PublicationType;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.PublishedPath;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultType;
 import com.sitepark.ies.publisher.channel.sync.service.Channel;
-import java.io.IOException;
 import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 
-class CollisionTest extends AnalyserTest {
+class CollisionTest extends AnalyserTestBase {
 
   private final Path resourceDir = Path.of("src/test/resources/service/analyser/CollisionTest");
 
   private final Collision analyser = new Collision();
 
   @Test
-  void testWhenPublishedPathIsNotADirectory() throws IOException {
+  void testWhenPublishedPathIsNotADirectory() {
     AnalyserContext ctx = this.mockAnalyserContext();
     PublishedPath path = mock();
     when(path.isDirectory()).thenReturn(false);
@@ -32,7 +31,7 @@ class CollisionTest extends AnalyserTest {
   }
 
   @Test
-  void testWithoutCollision() throws IOException {
+  void testWithoutCollision() {
     AnalyserContext ctx = this.mockAnalyserContext();
 
     PublicationDirectory directory = mock();
@@ -45,10 +44,10 @@ class CollisionTest extends AnalyserTest {
   }
 
   @Test
-  void testWithExistsCollision() throws IOException {
+  void testWithExistsCollision() {
     AnalyserContext ctx = this.mockAnalyserContext();
 
-    Path collisionFile = this.resourceDir.resolve("collisionfile");
+    Path collisionFile = this.resourceDir.resolve("collision-file");
 
     Channel channel = mock();
     when(channel.resolve(any(PublicationType.class), any(Path.class))).thenReturn(collisionFile);
@@ -76,10 +75,10 @@ class CollisionTest extends AnalyserTest {
   }
 
   @Test
-  void testWithNonExistsCollision() throws IOException {
+  void testWithNonExistsCollision() {
     AnalyserContext ctx = this.mockAnalyserContext();
 
-    Path collisionFile = this.resourceDir.resolve("non-exists-collisionfile");
+    Path collisionFile = this.resourceDir.resolve("non-exists-collision-file");
 
     Channel channel = mock();
     when(channel.resolve(any(PublicationType.class), any(Path.class))).thenReturn(collisionFile);

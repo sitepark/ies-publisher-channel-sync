@@ -12,14 +12,10 @@ import java.util.Objects;
 public final class PublicationDirectory {
 
   private final String name;
-
-  private PublicationDirectory parent;
-
   private final Map<String, PublicationDirectory> children;
-
   private final Map<String, List<Publication>> publications;
-
   private final Map<String, Publication> collisions;
+  private PublicationDirectory parent;
 
   private PublicationDirectory(
       String name,
@@ -35,6 +31,10 @@ public final class PublicationDirectory {
     this.collisions = Collections.unmodifiableMap(collisions);
   }
 
+  public static Builder builder() {
+    return new Builder();
+  }
+
   public String getName() {
     return this.name;
   }
@@ -44,7 +44,7 @@ public final class PublicationDirectory {
   }
 
   public List<Publication> getPublications(boolean recursive) {
-    List<Publication> list = new ArrayList<Publication>();
+    List<Publication> list = new ArrayList<>();
 
     for (List<Publication> l : this.publications.values()) {
       list.addAll(l);
@@ -98,21 +98,17 @@ public final class PublicationDirectory {
   }
 
   @Override
-  public final int hashCode() {
+  public int hashCode() {
     return Objects.hash(this.name, this.children, this.publications, this.collisions);
   }
 
   @Override
-  public final boolean equals(Object o) {
+  public boolean equals(Object o) {
     return (o instanceof PublicationDirectory PublicationDirectory)
         && Objects.equals(this.name, PublicationDirectory.name)
         && Objects.equals(this.children, PublicationDirectory.children)
         && Objects.equals(this.publications, PublicationDirectory.publications)
         && Objects.equals(this.collisions, PublicationDirectory.collisions);
-  }
-
-  public static Builder builder() {
-    return new Builder();
   }
 
   @Override
@@ -133,15 +129,13 @@ public final class PublicationDirectory {
   @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
   public static final class Builder {
 
+    @SuppressWarnings("PMD.UseConcurrentHashMap")
+    private final Map<String, PublicationDirectory> children = new HashMap<>();
+
+    @SuppressWarnings("PMD.UseConcurrentHashMap")
+    private final Map<String, List<Publication>> publications = new HashMap<>();
+
     private String name;
-
-    @SuppressWarnings("PMD.UseConcurrentHashMap")
-    private final Map<String, PublicationDirectory> children =
-        new HashMap<String, PublicationDirectory>();
-
-    @SuppressWarnings("PMD.UseConcurrentHashMap")
-    private final Map<String, List<Publication>> publications =
-        new HashMap<String, List<Publication>>();
 
     public Builder name(String name) {
 
@@ -164,9 +158,9 @@ public final class PublicationDirectory {
       return this;
     }
 
-    public Builder publications(Collection<Publication> publicatios) {
-      Objects.requireNonNull(publicatios, "Publications must not be null");
-      for (Publication publication : publicatios) {
+    public Builder publications(Collection<Publication> publications) {
+      Objects.requireNonNull(publications, "Publications must not be null");
+      for (Publication publication : publications) {
         this.publication(publication);
       }
       return this;
@@ -175,11 +169,7 @@ public final class PublicationDirectory {
     public Builder publication(Publication publication) {
       Objects.requireNonNull(publication, "Publication must not be null");
       String fileName = publication.fileName();
-      List<Publication> list = this.publications.get(fileName);
-      if (list == null) {
-        list = new ArrayList<Publication>();
-        this.publications.put(fileName, list);
-      }
+      List<Publication> list = this.publications.computeIfAbsent(fileName, k -> new ArrayList<>());
       list.add(publication);
       this.publications.put(fileName, list);
       return this;
@@ -202,15 +192,12 @@ public final class PublicationDirectory {
     public PublicationDirectory build() {
 
       @SuppressWarnings("PMD.UseConcurrentHashMap")
-      Map<String, Publication> collisions = new HashMap<String, Publication>();
+      Map<String, Publication> collisions = new HashMap<>();
 
       this.publications.values().stream()
-          .flatMap(list -> list.stream())
-          .filter(p -> p.isCollision())
-          .forEach(
-              p -> {
-                collisions.put("_" + p.object().id(), p);
-              });
+          .flatMap(Collection::stream)
+          .filter(Publication::isCollision)
+          .forEach(p -> collisions.put("_" + p.object().id(), p));
 
       return new PublicationDirectory(this.name, this.children, this.publications, collisions);
     }

@@ -1,34 +1,17 @@
 package com.sitepark.ies.publisher.channel.sync.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
-import com.jparams.verifier.tostring.NameStyle;
-import com.jparams.verifier.tostring.ToStringVerifier;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ChannelLayout;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.PublicationType;
 import java.io.IOException;
 import java.nio.file.Path;
-import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("PMD.TooManyMethods")
 class ChannelTest {
 
   private final Path root = Path.of("src/test/resources/service/ChannelTest").toAbsolutePath();
-
-  @Test
-  @SuppressWarnings("PMD.JUnitTestsShouldIncludeAssert")
-  void testEquals() {
-    EqualsVerifier.forClass(Channel.class).verify();
-  }
-
-  @Test
-  @SuppressWarnings("PMD.JUnitTestsShouldIncludeAssert")
-  public void testToString() {
-    ToStringVerifier.forClass(Channel.class).withClassName(NameStyle.SIMPLE_NAME).verify();
-  }
 
   @Test
   void testNonAbsoluteRoot() {
@@ -42,13 +25,13 @@ class ChannelTest {
   @Test
   void testGetRoot() {
     Channel channel = new Channel(ChannelLayout.RESOURCES, this.root);
-    assertEquals(this.root, channel.getRoot(), "The root path should be equal");
+    assertEquals(this.root, channel.root(), "The root path should be equal");
   }
 
   @Test
   void testGetLayout() {
     Channel channel = new Channel(ChannelLayout.RESOURCES, this.root);
-    assertEquals(ChannelLayout.RESOURCES, channel.getLayout(), "The layout should be equal");
+    assertEquals(ChannelLayout.RESOURCES, channel.layout(), "The layout should be equal");
   }
 
   @Test
@@ -92,7 +75,7 @@ class ChannelTest {
   void testExists() {
     Channel channel = new Channel(ChannelLayout.RESOURCES, this.root);
     Path path = this.root.resolve("testExists");
-    assertEquals(true, channel.exists(PublicationType.OBJECT, path), "The path should exist");
+    assertTrue(channel.exists(PublicationType.OBJECT, path), "The path should exist");
   }
 
   @Test

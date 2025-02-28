@@ -50,7 +50,7 @@ class PublicationDirectoryTreeBuilderTest {
   @Test
   void testBuildWithCollision() {
 
-    Ref collistionWith = new Ref("123");
+    Ref collisionWith = new Ref("123");
     Ref object = new Ref("456");
 
     Publication b =
@@ -58,7 +58,7 @@ class PublicationDirectoryTreeBuilderTest {
             .type(PublicationType.OBJECT)
             .path(Path.of("a/_456/b"))
             .object(object)
-            .collidesWith(collistionWith)
+            .collidesWith(collisionWith)
             .build();
 
     PublicationDirectoryTreeBuilder builder = new PublicationDirectoryTreeBuilder();
@@ -77,7 +77,7 @@ class PublicationDirectoryTreeBuilderTest {
   @Test
   void testBuildWithCollisionWithoutParent() {
 
-    Ref collistionWith = new Ref("123");
+    Ref collisionWith = new Ref("123");
     Ref object = new Ref("456");
 
     Publication b =
@@ -85,7 +85,7 @@ class PublicationDirectoryTreeBuilderTest {
             .type(PublicationType.OBJECT)
             .path(Path.of("a"))
             .object(object)
-            .collidesWith(collistionWith)
+            .collidesWith(collisionWith)
             .build();
 
     PublicationDirectoryTreeBuilder builder = new PublicationDirectoryTreeBuilder();
@@ -99,9 +99,9 @@ class PublicationDirectoryTreeBuilderTest {
   }
 
   @Test
-  void testBuildWithCollisionWithInvalidCollistionDirectoryName() {
+  void testBuildWithCollisionWithInvalidCollisionDirectoryName() {
 
-    Ref collistionWith = new Ref("123");
+    Ref collisionWith = new Ref("123");
     Ref object = new Ref("456");
 
     Publication b =
@@ -109,7 +109,7 @@ class PublicationDirectoryTreeBuilderTest {
             .type(PublicationType.OBJECT)
             .path(Path.of("a/_abc/b"))
             .object(object)
-            .collidesWith(collistionWith)
+            .collidesWith(collisionWith)
             .build();
 
     PublicationDirectoryTreeBuilder builder = new PublicationDirectoryTreeBuilder();
@@ -132,7 +132,7 @@ class PublicationDirectoryTreeBuilderTest {
   @Test
   void testBuildWithCollisionInBaseDirectory() {
 
-    Ref collistionWith = new Ref("123");
+    Ref collisionWith = new Ref("123");
     Ref object = new Ref("456");
 
     Publication b =
@@ -140,7 +140,7 @@ class PublicationDirectoryTreeBuilderTest {
             .type(PublicationType.OBJECT)
             .path(Path.of("_456/b"))
             .object(object)
-            .collidesWith(collistionWith)
+            .collidesWith(collisionWith)
             .build();
 
     PublicationDirectoryTreeBuilder builder = new PublicationDirectoryTreeBuilder();

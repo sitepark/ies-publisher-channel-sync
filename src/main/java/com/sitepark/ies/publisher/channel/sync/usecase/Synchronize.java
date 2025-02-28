@@ -8,30 +8,29 @@ import com.sitepark.ies.publisher.channel.sync.service.synchronizer.FileDirector
 import com.sitepark.ies.publisher.channel.sync.service.synchronizer.IllegalFileCollisions;
 import com.sitepark.ies.publisher.channel.sync.service.synchronizer.LegalFileCollisions;
 import com.sitepark.ies.publisher.channel.sync.service.synchronizer.MissingOrInvalidFile;
-import com.sitepark.ies.publisher.channel.sync.service.synchronizer.SyncronizeContext;
-import com.sitepark.ies.publisher.channel.sync.service.synchronizer.Syncronizer;
+import com.sitepark.ies.publisher.channel.sync.service.synchronizer.SynchronizeContext;
+import com.sitepark.ies.publisher.channel.sync.service.synchronizer.Synchronizer;
 import com.sitepark.ies.publisher.channel.sync.service.synchronizer.TemplateMissing;
 import com.sitepark.ies.publisher.channel.sync.service.synchronizer.UnknownFileOrDirectory;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 @SuppressWarnings("PMD.CyclomaticComplexity")
-public class Syncronize {
+public class Synchronize {
 
-  private final SyncronizeContext ctx;
+  private final SynchronizeContext ctx;
 
-  private final List<Syncronizer> syncronizers = new ArrayList<>();
+  private final List<Synchronizer> synchronizer = new ArrayList<>();
 
-  public Syncronize(
+  public Synchronize(
       boolean test,
       boolean deleteForce,
       boolean notifyLegalCollisions,
       Publisher publisher,
       SyncNotifier notifier) {
     this(
-        SyncronizeContext.builder()
+        SynchronizeContext.builder()
             .test(test)
             .deleteForce(deleteForce)
             .notifyLegalCollisions(notifyLegalCollisions)
@@ -40,7 +39,7 @@ public class Syncronize {
             .build());
   }
 
-  protected Syncronize(SyncronizeContext ctx) {
+  protected Synchronize(SynchronizeContext ctx) {
     this(
         ctx,
         Arrays.asList(
@@ -52,16 +51,16 @@ public class Syncronize {
             new TemplateMissing()));
   }
 
-  protected Syncronize(SyncronizeContext ctx, List<Syncronizer> syncronizers) {
+  protected Synchronize(SynchronizeContext ctx, List<Synchronizer> synchronizer) {
     this.ctx = ctx;
-    this.syncronizers.addAll(syncronizers);
+    this.synchronizer.addAll(synchronizer);
   }
 
-  public void syncronize(AnalyserResult result) throws IOException {
-    result.entries().forEach(this::syncronize);
+  public void synchronize(AnalyserResult result) {
+    result.entries().forEach(this::synchronize);
   }
 
-  private void syncronize(ResultEntry entry) {
-    this.syncronizers.forEach(syncronizer -> syncronizer.syncronize(this.ctx, entry));
+  private void synchronize(ResultEntry entry) {
+    this.synchronizer.forEach(synchronize -> synchronize.synchronize(this.ctx, entry));
   }
 }

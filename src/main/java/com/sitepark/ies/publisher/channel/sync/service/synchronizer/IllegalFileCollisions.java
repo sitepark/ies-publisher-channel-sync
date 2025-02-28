@@ -3,10 +3,11 @@ package com.sitepark.ies.publisher.channel.sync.service.synchronizer;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultEntry;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultType;
 
-public class IllegalFileCollisions implements Syncronizer {
+public class IllegalFileCollisions implements Synchronizer {
 
+  @SuppressWarnings("PMD.AvoidCatchingGenericException")
   @Override
-  public void syncronize(SyncronizeContext ctx, ResultEntry entry) {
+  public void synchronize(SynchronizeContext ctx, ResultEntry entry) {
     if (entry.getResultType() != ResultType.ILLEGAL_FILENAME_COLLISION) {
       return;
     }
@@ -17,12 +18,12 @@ public class IllegalFileCollisions implements Syncronizer {
       }
       ctx.getNotifier()
           .notify(entry, "depublish " + entry.getAbsolutePath() + (ctx.isTest() ? " (test)" : ""));
-    } catch (Throwable t) {
+    } catch (Exception e) {
       ctx.getNotifier()
           .notify(
               entry,
-              "depublish " + entry.getAbsolutePath() + " (failed: " + t.getMessage() + ")",
-              t);
+              "depublish " + entry.getAbsolutePath() + " (failed: " + e.getMessage() + ")",
+              e);
     }
   }
 }

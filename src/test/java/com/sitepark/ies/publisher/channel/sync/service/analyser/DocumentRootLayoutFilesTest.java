@@ -8,21 +8,20 @@ import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResult;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ChannelLayout;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.PublishedPath;
 import com.sitepark.ies.publisher.channel.sync.service.Channel;
-import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
-class DocumentRootLayoutFilesTest extends AnalyserTest {
+class DocumentRootLayoutFilesTest extends AnalyserTestBase {
 
   private final DocumentRootLayoutFiles analyser = new DocumentRootLayoutFiles();
 
   @Test
-  void testNonDocumentRootLayout() throws IOException {
+  void testNonDocumentRootLayout() {
 
     AnalyserContext ctx = this.mockAnalyserContext();
     Channel channel = mock();
     when(ctx.getChannel()).thenReturn(channel);
 
-    when(channel.getLayout()).thenReturn(ChannelLayout.RESOURCES);
+    when(channel.layout()).thenReturn(ChannelLayout.RESOURCES);
 
     PublishedPath path = mock();
 
@@ -30,13 +29,13 @@ class DocumentRootLayoutFilesTest extends AnalyserTest {
   }
 
   @Test
-  void testWEBIES() throws IOException {
+  void testWEBIES() {
 
     AnalyserContext ctx = this.mockAnalyserContext();
     Channel channel = mock();
     when(ctx.getChannel()).thenReturn(channel);
 
-    when(channel.getLayout()).thenReturn(ChannelLayout.DOCUMENT_ROOT);
+    when(channel.layout()).thenReturn(ChannelLayout.DOCUMENT_ROOT);
 
     PublishedPath path = mock();
     when(path.isDirectory()).thenReturn(true);
@@ -45,17 +44,17 @@ class DocumentRootLayoutFilesTest extends AnalyserTest {
     assertEquals(
         AnalyserResult.OK_AND_INTERRUPT,
         this.analyser.analyse(ctx, path),
-        "Should return OK and iterrupt");
+        "Should return OK and interrupt");
   }
 
   @Test
-  void testAliasMap() throws IOException {
+  void testAliasMap() {
 
     AnalyserContext ctx = this.mockAnalyserContext();
     Channel channel = mock();
     when(ctx.getChannel()).thenReturn(channel);
 
-    when(channel.getLayout()).thenReturn(ChannelLayout.DOCUMENT_ROOT);
+    when(channel.layout()).thenReturn(ChannelLayout.DOCUMENT_ROOT);
 
     PublishedPath path = mock();
     when(path.isDirectory()).thenReturn(false);
@@ -64,17 +63,17 @@ class DocumentRootLayoutFilesTest extends AnalyserTest {
     assertEquals(
         AnalyserResult.OK_AND_INTERRUPT,
         this.analyser.analyse(ctx, path),
-        "Should return OK and iterrupt");
+        "Should return OK and interrupt");
   }
 
   @Test
-  void testRedirectMap() throws IOException {
+  void testRedirectMap() {
 
     AnalyserContext ctx = this.mockAnalyserContext();
     Channel channel = mock();
     when(ctx.getChannel()).thenReturn(channel);
 
-    when(channel.getLayout()).thenReturn(ChannelLayout.DOCUMENT_ROOT);
+    when(channel.layout()).thenReturn(ChannelLayout.DOCUMENT_ROOT);
 
     PublishedPath path = mock();
     when(path.isDirectory()).thenReturn(false);
@@ -83,17 +82,17 @@ class DocumentRootLayoutFilesTest extends AnalyserTest {
     assertEquals(
         AnalyserResult.OK_AND_INTERRUPT,
         this.analyser.analyse(ctx, path),
-        "Should return OK and iterrupt");
+        "Should return OK and interrupt");
   }
 
   @Test
-  void testOtherFile() throws IOException {
+  void testOtherFile() {
 
     AnalyserContext ctx = this.mockAnalyserContext();
     Channel channel = mock();
     when(ctx.getChannel()).thenReturn(channel);
 
-    when(channel.getLayout()).thenReturn(ChannelLayout.DOCUMENT_ROOT);
+    when(channel.layout()).thenReturn(ChannelLayout.DOCUMENT_ROOT);
 
     PublishedPath path = mock();
     when(path.isDirectory()).thenReturn(false);
@@ -103,13 +102,13 @@ class DocumentRootLayoutFilesTest extends AnalyserTest {
   }
 
   @Test
-  void testOtherDirectory() throws IOException {
+  void testOtherDirectory() {
 
     AnalyserContext ctx = this.mockAnalyserContext();
     Channel channel = mock();
     when(ctx.getChannel()).thenReturn(channel);
 
-    when(channel.getLayout()).thenReturn(ChannelLayout.DOCUMENT_ROOT);
+    when(channel.layout()).thenReturn(ChannelLayout.DOCUMENT_ROOT);
 
     PublishedPath path = mock();
     when(path.isDirectory()).thenReturn(true);

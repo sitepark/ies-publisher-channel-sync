@@ -84,13 +84,13 @@ public class Analyse {
     PublicationDirectory publicationDirectory = this.buildPublicationDirectory(base);
 
     List<PublicationType> types = new ArrayList<>();
-    if (this.channel.getLayout() == ChannelLayout.DOCUMENT_ROOT) {
+    if (this.channel.layout() == ChannelLayout.DOCUMENT_ROOT) {
       types.add(PublicationType.OBJECT);
     } else {
       types.addAll(Arrays.asList(PublicationType.values()));
     }
 
-    List<ResultEntry> list = new ArrayList<ResultEntry>();
+    List<ResultEntry> list = new ArrayList<>();
     for (PublicationType type : types) {
       AnalyserResult result = this.analyseByType(publicationDirectory, type, base, recursive);
       list.addAll(result.entries());
@@ -180,20 +180,13 @@ public class Analyse {
       return directoriesResult;
     }
 
-    List<ResultEntry> list = new ArrayList<ResultEntry>();
-    list.addAll(directoriesResult.entries());
-
-    /*
-    AnalyserResult publicationsResult = this.analysePublications(ctx);
-    list.addAll(publicationsResult.entries());
-    */
-
+    List<ResultEntry> list = new ArrayList<>(directoriesResult.entries());
     return resultFactory.createResult(list);
   }
 
   private AnalyserResult analyseDirectories(AnalyserContext ctx) throws IOException {
 
-    List<ResultEntry> list = new ArrayList<ResultEntry>();
+    List<ResultEntry> list = new ArrayList<>();
 
     for (PublishedPath path : ctx.getDirectoryEntries()) {
 
@@ -217,7 +210,7 @@ public class Analyse {
 
     AnalyserResultFactory resultFactory = ctx.getAnalyserResultFactory();
 
-    List<ResultEntry> list = new ArrayList<ResultEntry>();
+    List<ResultEntry> list = new ArrayList<>();
 
     for (PublishedPathAnalyser publishedPathAnalyser : this.publishedPathAnalysers) {
       AnalyserResult result = publishedPathAnalyser.analyse(ctx, path);
@@ -250,11 +243,11 @@ public class Analyse {
   private AnalyserResult analysePublications(AnalyserContext ctx) throws IOException {
 
     AnalyserResultFactory resultFactory = ctx.getAnalyserResultFactory();
-    List<ResultEntry> list = new ArrayList<ResultEntry>();
+    List<ResultEntry> list = new ArrayList<>();
 
     for (Publication publication : ctx.getPublicationDirectory().getPublications(false)) {
 
-      if (ctx.getChannel().getLayout() == ChannelLayout.RESOURCES
+      if (ctx.getChannel().layout() == ChannelLayout.RESOURCES
           && ctx.getPublicationType() != publication.type()) {
         continue;
       }
@@ -281,11 +274,10 @@ public class Analyse {
     return resultFactory.createResult(list);
   }
 
-  private AnalyserResult analysePublication(AnalyserContext ctx, Publication publication)
-      throws IOException {
+  private AnalyserResult analysePublication(AnalyserContext ctx, Publication publication) {
 
     AnalyserResultFactory resultFactory = ctx.getAnalyserResultFactory();
-    List<ResultEntry> list = new ArrayList<ResultEntry>();
+    List<ResultEntry> list = new ArrayList<>();
     for (PublicationAnalyser pathAnalyser : this.publicationAnalysers) {
       AnalyserResult result = pathAnalyser.analyse(ctx, publication);
       list.addAll(result.entries());

@@ -9,12 +9,11 @@ import com.sitepark.ies.publisher.channel.sync.domain.entity.Publication;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.PublicationDirectory;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.PublishedPath;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultType;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
-class TranslationsDirectoryTest extends AnalyserTest {
+class TranslationsDirectoryTest extends AnalyserTestBase {
 
   private final TranslationsDirectory analyser = new TranslationsDirectory();
 
@@ -22,7 +21,7 @@ class TranslationsDirectoryTest extends AnalyserTest {
       Path.of("src/test/resources/service/analyser/TranslationsDirectoryTest");
 
   @Test
-  void testWhenPublishedPathIsFile() throws IOException {
+  void testWhenPublishedPathIsFile() {
     AnalyserContext ctx = this.mockAnalyserContext();
 
     PublishedPath path = mock();
@@ -32,7 +31,7 @@ class TranslationsDirectoryTest extends AnalyserTest {
   }
 
   @Test
-  void testWithDirectoryNonTranslationsSuffix() throws IOException {
+  void testWithDirectoryNonTranslationsSuffix() {
     AnalyserContext ctx = this.mockAnalyserContext();
 
     PublicationDirectory directory = mock();
@@ -53,7 +52,7 @@ class TranslationsDirectoryTest extends AnalyserTest {
   }
 
   @Test
-  void testWithExistsPublicationDirectory() throws IOException {
+  void testWithExistsPublicationDirectory() {
     AnalyserContext ctx = this.mockAnalyserContext();
 
     PublicationDirectory directory = mock();
@@ -73,11 +72,11 @@ class TranslationsDirectoryTest extends AnalyserTest {
     assertEquals(
         AnalyserResult.OK_AND_INTERRUPT,
         this.analyser.analyse(ctx, path),
-        "Should return OK and iterrupt");
+        "Should return OK and interrupt");
   }
 
   @Test
-  void testWithNonExistsPublicationDirectory() throws IOException {
+  void testWithNonExistsPublicationDirectory() {
     AnalyserContext ctx = this.mockAnalyserContext();
 
     PublishedPath path = mock();

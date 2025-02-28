@@ -2,10 +2,17 @@
 .classpath
 .project
 .settings/
-.ruleset
+.fbExcludeFilterFile
 .pmd
+.ruleset
+.pmdruleset.xml
+
+# IntelliJ
+.idea/
+*.iml
 
 # ? validate
 reports/
 
 target/
+pom.xml.versionsBackup

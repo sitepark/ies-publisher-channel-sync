@@ -10,19 +10,18 @@ import com.sitepark.ies.publisher.channel.sync.domain.entity.Publication;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.PublicationDirectory;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.PublishedPath;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultType;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collections;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
-class MediaMetaFileTest extends AnalyserTest {
+class MediaMetaFileTest extends AnalyserTestBase {
 
   private final MediaMetaFile analyser = new MediaMetaFile();
 
   @Test
-  void testWhenPublishedPathIsDirectory() throws IOException {
+  void testWhenPublishedPathIsDirectory() {
     AnalyserContext ctx = this.mockAnalyserContext();
 
     PublishedPath path = mock();
@@ -32,7 +31,7 @@ class MediaMetaFileTest extends AnalyserTest {
   }
 
   @Test
-  void testWithDirectoryNonMetaPhpSuffix() throws IOException {
+  void testWithDirectoryNonMetaPhpSuffix() {
     AnalyserContext ctx = this.mockAnalyserContext();
 
     PublishedPath path = mock();
@@ -43,7 +42,7 @@ class MediaMetaFileTest extends AnalyserTest {
   }
 
   @Test
-  void testPublicationDirectoryWithoutParent() throws IOException {
+  void testPublicationDirectoryWithoutParent() {
     AnalyserContext ctx = this.mockAnalyserContext();
 
     PublishedPath path = mock();
@@ -51,15 +50,11 @@ class MediaMetaFileTest extends AnalyserTest {
     when(path.baseName()).thenReturn("baseName.meta.php");
     when(path.absolutePath()).thenReturn(Path.of("baseName.meta.php"));
 
-    assertThrows(
-        IllegalArgumentException.class,
-        () -> {
-          this.analyser.analyse(ctx, path);
-        });
+    assertThrows(IllegalArgumentException.class, () -> this.analyser.analyse(ctx, path));
   }
 
   @Test
-  void testWithPublishedPublicationDirectory() throws IOException {
+  void testWithPublishedPublicationDirectory() {
     AnalyserContext ctx = this.mockAnalyserContext();
 
     PublicationDirectory directory = mock();
@@ -81,11 +76,11 @@ class MediaMetaFileTest extends AnalyserTest {
     assertEquals(
         AnalyserResult.OK_AND_INTERRUPT,
         this.analyser.analyse(ctx, path),
-        "Should return OK and iterrupt");
+        "Should return OK and interrupt");
   }
 
   @Test
-  void testWithNonPublishedPublicationDirectory() throws IOException {
+  void testWithNonPublishedPublicationDirectory() {
     AnalyserContext ctx = this.mockAnalyserContext();
 
     PublicationDirectory directory = mock();

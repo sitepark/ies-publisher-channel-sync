@@ -5,7 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.Arrays;
+import java.util.Collections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -36,7 +36,7 @@ class AnalyserResultFactoryTest {
         .thenReturn(entry);
 
     AnalyserResult result = this.factory.createResult(ResultType.MISSING_FILE, this.publication);
-    AnalyserResult expected = new AnalyserResult(Arrays.asList(entry), false);
+    AnalyserResult expected = new AnalyserResult(Collections.singletonList(entry), false);
     assertEquals(expected, result, "unexpected result");
   }
 
@@ -48,7 +48,7 @@ class AnalyserResultFactoryTest {
         .thenReturn(entry);
 
     AnalyserResult result = this.factory.createResult(ResultType.MISSING_FILE, this.path);
-    AnalyserResult expected = new AnalyserResult(Arrays.asList(entry), false);
+    AnalyserResult expected = new AnalyserResult(Collections.singletonList(entry), false);
     assertEquals(expected, result, "unexpected result");
   }
 
@@ -61,7 +61,7 @@ class AnalyserResultFactoryTest {
 
     AnalyserResult result =
         this.factory.createInterruptResult(ResultType.MISSING_FILE, this.publication);
-    AnalyserResult expected = new AnalyserResult(Arrays.asList(entry), true);
+    AnalyserResult expected = new AnalyserResult(Collections.singletonList(entry), true);
     assertEquals(expected, result, "unexpected result");
   }
 
@@ -73,7 +73,7 @@ class AnalyserResultFactoryTest {
         .thenReturn(entry);
 
     AnalyserResult result = this.factory.createInterruptResult(ResultType.MISSING_FILE, this.path);
-    AnalyserResult expected = new AnalyserResult(Arrays.asList(entry), true);
+    AnalyserResult expected = new AnalyserResult(Collections.singletonList(entry), true);
     assertEquals(expected, result, "unexpected result");
   }
 
@@ -86,7 +86,7 @@ class AnalyserResultFactoryTest {
 
     AnalyserResult result =
         this.factory.createInterruptResultDeleteForce(ResultType.MISSING_FILE, this.path);
-    AnalyserResult expected = new AnalyserResult(Arrays.asList(entry), true);
+    AnalyserResult expected = new AnalyserResult(Collections.singletonList(entry), true);
     assertEquals(expected, result, "unexpected result");
   }
 
@@ -95,8 +95,8 @@ class AnalyserResultFactoryTest {
 
     ResultEntry entry = mock();
 
-    AnalyserResult result = this.factory.createResult(Arrays.asList(entry));
-    AnalyserResult expected = new AnalyserResult(Arrays.asList(entry), false);
+    AnalyserResult result = this.factory.createResult(Collections.singletonList(entry));
+    AnalyserResult expected = new AnalyserResult(Collections.singletonList(entry), false);
     assertEquals(expected, result, "unexpected result");
   }
 
@@ -105,8 +105,8 @@ class AnalyserResultFactoryTest {
 
     ResultEntry entry = mock();
 
-    AnalyserResult result = this.factory.createInterruptResult(Arrays.asList(entry));
-    AnalyserResult expected = new AnalyserResult(Arrays.asList(entry), true);
+    AnalyserResult result = this.factory.createInterruptResult(Collections.singletonList(entry));
+    AnalyserResult expected = new AnalyserResult(Collections.singletonList(entry), true);
     assertEquals(expected, result, "unexpected result");
   }
 }

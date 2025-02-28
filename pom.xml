@@ -47,6 +47,20 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-bom</artifactId>
+				<version>2.24.3</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson</groupId>
+				<artifactId>jackson-bom</artifactId>
+				<version>2.18.2</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
 				<groupId>org.junit</groupId>
 				<artifactId>junit-bom</artifactId>
 				<version>${junit.version}</version>
@@ -64,35 +78,20 @@
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>
-			<version>2.23.1</version>
 		</dependency>
 		<!--	Java 8 Datatypes	-->
 		<dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-jdk8</artifactId>
-			<version>2.17.2</version>
 		</dependency>
 		<!--	Java Time Module	-->
 		<dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-jsr310</artifactId>
-			<version>2.17.2</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>2.17.2</version>
-		</dependency>
-		<!--
-			hard decision, see:
-			https://stackoverflow.com/questions/4963300/which-notnull-java-annotation-should-i-use
-			https://www.beyondjava.net/getting-rid-of-the-nullpointerexception-in-2020#what_about_jsr305
-			https://github.com/spotbugs/spotbugs/issues/471#issuecomment-338806092
-		-->
-		<dependency>
-			<groupId>org.eclipse.jdt</groupId>
-			<artifactId>org.eclipse.jdt.annotation</artifactId>
-			<version>2.3.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.spotbugs</groupId>
@@ -141,23 +140,41 @@
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.13.0</version>
+				<configuration>
+					<compilerArgs>
+						<arg>-proc:none</arg>
+					</compilerArgs>
+				</configuration>
 			</plugin>
 			<plugin>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>3.4.2</version>
+				<version>3.4.1</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.4.0</version>
+				<version>3.2.5</version>
 				<configuration>
-					<argLine>@{argLine} -XX:+EnableDynamicAgentLoading</argLine>
+					<consoleOutputReporter>
+						<disable>true</disable>
+					</consoleOutputReporter>
+					<statelessTestsetInfoReporter implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5StatelessTestsetInfoTreeReporter">
+						<theme>UNICODE</theme>
+						<hideResultsOnSuccess>true</hideResultsOnSuccess>
+					</statelessTestsetInfoReporter>
 				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>me.fabriciorby</groupId>
+						<artifactId>maven-surefire-junit5-tree-reporter</artifactId>
+						<version>1.4.0</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>3.3.1</version>
+				<version>3.3.0</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
@@ -170,7 +187,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.8.0</version>
+				<version>3.6.3</version>
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>
@@ -183,7 +200,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
-				<version>3.2.5</version>
+				<version>3.2.4</version>
 				<executions>
 					<execution>
 						<id>sign-artifacts</id>
@@ -196,7 +213,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-release-plugin</artifactId>
-				<version>3.1.1</version>
+				<version>3.0.1</version>
 				<configuration>
 					<scmCommentPrefix>ci(release):</scmCommentPrefix>
 					<tagNameFormat>@{project.version}</tagNameFormat>
@@ -205,7 +222,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-enforcer-plugin</artifactId>
-				<version>3.5.0</version>
+				<version>3.4.1</version>
 				<dependencies>
 					<dependency>
 						<groupId>io.github.thefolle</groupId>
@@ -253,7 +270,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.12</version>
+				<version>0.8.11</version>
 				<executions>
 					<execution>
 						<goals>
@@ -299,6 +316,7 @@
 						<removeUnusedImports>
 							<engine>google-java-format</engine>
 						</removeUnusedImports>
+
 						<!-- apply a specific flavor of google-java-format and reflow long strings -->
 						<googleJavaFormat>
 							<version>1.19.2</version>
@@ -333,21 +351,21 @@
 			<plugin>
 				<groupId>com.github.spotbugs</groupId>
 				<artifactId>spotbugs-maven-plugin</artifactId>
-				<version>4.8.6.2</version>
+				<version>4.9.1.0</version>
 				<configuration>
 					<effort>Max</effort>
 					<threshold>Low</threshold>
 					<maxRank>20</maxRank>
-					<excludeFilterFile>.fbExcludeFilterFile</excludeFilterFile>
+					<excludeFilterFile>spotbug-exclude-filter.xml</excludeFilterFile>
 				</configuration>
 				<!-- https://spotbugs.readthedocs.io/en/latest/maven.html -->
 				<dependencies>
 					<!-- overwrite dependency on spotbugs if you want to specify the version of
-					spotbugs -->
+                    spotbugs -->
 					<dependency>
 						<groupId>com.github.spotbugs</groupId>
 						<artifactId>spotbugs</artifactId>
-						<version>${spotbugs.version}</version>
+						<version>4.9.1</version>
 					</dependency>
 				</dependencies>
 				<executions>
@@ -362,14 +380,14 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>
-				<version>3.24.0</version>
+				<version>3.26.0</version>
 				<configuration>
 					<rulesets>
-						<ruleset>.pmdruleset.xml</ruleset>
+						<ruleset>pmd-ruleset.xml</ruleset>
 					</rulesets>
 					<includeTests>true</includeTests>
 					<failOnViolation>true</failOnViolation>
-					<failurePriority>5</failurePriority>
+					<failurePriority>1</failurePriority>
 					<printFailingErrors>true</printFailingErrors>
 					<linkXRef>false</linkXRef>
 				</configuration>
@@ -382,28 +400,6 @@
 						<phase>verify</phase>
 					</execution>
 				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>versions-maven-plugin</artifactId>
-				<version>2.17.1</version>
-				<configuration>
-					<ruleSet>
-						<ignoreVersions>
-							<ignoreVersion>
-								<version>1.0.0</version>
-							</ignoreVersion>
-							<ignoreVersion>
-								<type>regex</type>
-								<version>.*(SNAPSHOT|M\d|MR)</version>
-							</ignoreVersion>
-							<ignoreVersion>
-								<type>regex</type>
-								<version>.*(alpha|beta|BETA).*</version>
-							</ignoreVersion>
-						</ignoreVersions>
-					</ruleSet>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>

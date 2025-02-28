@@ -6,11 +6,11 @@ import java.nio.file.Path;
 import java.util.List;
 
 public interface Publisher {
-  public List<Publication> getPublications(Path path);
+  List<Publication> getPublications(Path path);
 
-  public void republish(Ref object);
+  void republish(Ref object);
 
-  public void publish(Ref object);
+  void publish(Ref object);
 
-  public void depublish(Ref object);
+  void depublish(Ref object);
 }

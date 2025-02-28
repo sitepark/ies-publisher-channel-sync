@@ -7,29 +7,14 @@ import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Objects;
 
 @SuppressWarnings("PMD.TooManyMethods")
-public final class Channel {
+public record Channel(ChannelLayout layout, Path root) {
 
-  private final Path root;
-
-  private final ChannelLayout layout;
-
-  public Channel(ChannelLayout layout, Path root) {
+  public Channel {
     if (!root.isAbsolute()) {
       throw new IllegalArgumentException("Root path must be absolute");
     }
-    this.layout = layout;
-    this.root = root;
-  }
-
-  public Path getRoot() {
-    return this.root;
-  }
-
-  public ChannelLayout getLayout() {
-    return this.layout;
   }
 
   public Path resolve(PublicationType type, String path) {
@@ -55,7 +40,7 @@ public final class Channel {
 
   public Path toPublicationPath(Path path) {
 
-    if (this.getLayout() == ChannelLayout.DOCUMENT_ROOT) {
+    if (this.layout() == ChannelLayout.DOCUMENT_ROOT) {
       return this.relativize(PublicationType.OBJECT, path);
     }
 
@@ -83,22 +68,5 @@ public final class Channel {
       throws IOException {
     Path absolutePath = this.resolve(type, path);
     return new ChannelDirectoryStream(type, Files.newDirectoryStream(absolutePath));
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(this.layout, this.root);
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    return (o instanceof Channel that)
-        && Objects.equals(this.layout, that.layout)
-        && Objects.equals(this.root, that.root);
-  }
-
-  @Override
-  public String toString() {
-    return "Channel [root=" + root + ", layout=" + layout + "]";
   }
 }

@@ -29,7 +29,7 @@ class ChannelDirectoryStreamTest {
     try (ChannelDirectoryStream channelDirectoryStream =
         new ChannelDirectoryStream(PublicationType.OBJECT, stream)) {
       channelDirectoryStream.iterator();
-      assertThrows(IllegalStateException.class, () -> channelDirectoryStream.iterator());
+      assertThrows(IllegalStateException.class, channelDirectoryStream::iterator);
     }
   }
 

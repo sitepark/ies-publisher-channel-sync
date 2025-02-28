@@ -12,21 +12,18 @@ import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultEntry;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultType;
 import com.sitepark.ies.publisher.channel.sync.port.Publisher;
 import com.sitepark.ies.publisher.channel.sync.port.SyncNotifier;
-import java.io.IOException;
 import java.nio.file.Path;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-@SuppressWarnings({"PMD.JUnitTestContainsTooManyAsserts", "PMD.AvoidDuplicateLiterals"})
+@SuppressWarnings({"PMD.UnitTestContainsTooManyAsserts", "PMD.AvoidDuplicateLiterals"})
 class FileDirectoryMismatchTest {
 
   private final Publisher publisher = mock();
 
   private final SyncNotifier notifier = mock();
-
-  private SyncronizeContext ctx;
-
-  private final Syncronizer syncronizer = new FileDirectoryMismatch();
+  private final Synchronizer synchronize = new FileDirectoryMismatch();
+  private SynchronizeContext ctx;
 
   @BeforeEach
   public void setup() {
@@ -36,37 +33,37 @@ class FileDirectoryMismatchTest {
   }
 
   @Test
-  void testWithInvalidResultType() throws IOException {
+  void testWithInvalidResultType() {
 
     ResultEntry entry = mock();
 
-    this.syncronizer.syncronize(this.ctx, entry);
+    this.synchronize.synchronize(this.ctx, entry);
 
     verify(this.notifier, never()).notify(any(), any());
   }
 
   @Test
-  void testWithDeleteNotSuccessfull() throws IOException {
+  void testWithDeleteNotSuccessfully() {
 
     ResultEntry entry = mock();
     when(entry.getResultType()).thenReturn(ResultType.FILE_DIRECTORY_MISMATCH);
     when(entry.getAbsolutePath()).thenReturn(Path.of("/a/b/c"));
     when(this.ctx.delete(any())).thenReturn(false);
 
-    this.syncronizer.syncronize(this.ctx, entry);
+    this.synchronize.synchronize(this.ctx, entry);
 
     verify(this.notifier, times(1)).notify(entry, "deleted /a/b/c (failed)");
   }
 
   @Test
-  void testWithDeleteAndRepublish() throws IOException {
+  void testWithDeleteAndRepublish() {
 
     ResultEntry entry = mock();
     when(entry.getResultType()).thenReturn(ResultType.FILE_DIRECTORY_MISMATCH);
     when(entry.getAbsolutePath()).thenReturn(Path.of("/a/b/c"));
     when(this.ctx.delete(any())).thenReturn(true);
 
-    this.syncronizer.syncronize(this.ctx, entry);
+    this.synchronize.synchronize(this.ctx, entry);
 
     verify(this.publisher).republish(any());
     verify(this.notifier, times(2)).notify(any(), any());
@@ -75,7 +72,7 @@ class FileDirectoryMismatchTest {
   }
 
   @Test
-  void testWithDeleteAndRepublishInTestMode() throws IOException {
+  void testWithDeleteAndRepublishInTestMode() {
 
     ResultEntry entry = mock();
     when(entry.getResultType()).thenReturn(ResultType.FILE_DIRECTORY_MISMATCH);
@@ -83,7 +80,7 @@ class FileDirectoryMismatchTest {
     when(this.ctx.delete(any())).thenReturn(true);
     when(this.ctx.isTest()).thenReturn(true);
 
-    this.syncronizer.syncronize(this.ctx, entry);
+    this.synchronize.synchronize(this.ctx, entry);
 
     verify(this.publisher, never()).republish(any());
     verify(this.notifier, times(2)).notify(any(), any());
@@ -92,7 +89,7 @@ class FileDirectoryMismatchTest {
   }
 
   @Test
-  void testWithDeleteAndRepublishFailed() throws IOException {
+  void testWithDeleteAndRepublishFailed() {
 
     ResultEntry entry = mock();
     when(entry.getResultType()).thenReturn(ResultType.FILE_DIRECTORY_MISMATCH);
@@ -102,7 +99,7 @@ class FileDirectoryMismatchTest {
     Throwable t = new RuntimeException("test");
     doThrow(t).when(this.publisher).republish(any());
 
-    this.syncronizer.syncronize(this.ctx, entry);
+    this.synchronize.synchronize(this.ctx, entry);
 
     verify(this.publisher, times(1)).republish(any());
     verify(this.notifier, times(1)).notify(any(), any());

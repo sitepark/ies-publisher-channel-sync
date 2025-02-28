@@ -5,7 +5,6 @@ import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResultFacto
 import com.sitepark.ies.publisher.channel.sync.domain.entity.Publication;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.PublishedPath;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultType;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -14,7 +13,7 @@ public class EmbeddedMediaDirectory implements PublishedPathAnalyser, Publicatio
   private static final String SUFFIX = ".media";
 
   @Override
-  public AnalyserResult analyse(AnalyserContext ctx, PublishedPath path) throws IOException {
+  public AnalyserResult analyse(AnalyserContext ctx, PublishedPath path) {
 
     if (!path.isDirectory()) {
       return AnalyserResult.OK;
@@ -44,7 +43,7 @@ public class EmbeddedMediaDirectory implements PublishedPathAnalyser, Publicatio
   }
 
   @Override
-  public AnalyserResult analyse(AnalyserContext ctx, Publication publication) throws IOException {
+  public AnalyserResult analyse(AnalyserContext ctx, Publication publication) {
 
     Path path = publication.absolutePath();
     Path mediaId = path.getParent();

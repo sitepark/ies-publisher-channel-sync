@@ -8,15 +8,14 @@ import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResult;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.PublicationDirectory;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.PublishedPath;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultType;
-import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
-class FileDirectoryMismatchTest extends AnalyserTest {
+class FileDirectoryMismatchTest extends AnalyserTestBase {
 
   private final FileDirectoryMismatch analyser = new FileDirectoryMismatch();
 
   @Test
-  void testWhenPublishedPathIsDirectory() throws IOException {
+  void testWhenPublishedPathIsDirectory() {
     AnalyserContext ctx = this.mockAnalyserContext();
 
     PublishedPath path = mock();
@@ -26,7 +25,7 @@ class FileDirectoryMismatchTest extends AnalyserTest {
   }
 
   @Test
-  void testWithoutMatchedPublicationDirectory() throws IOException {
+  void testWithoutMatchedPublicationDirectory() {
     AnalyserContext ctx = this.mockAnalyserContext();
 
     PublishedPath path = mock();
@@ -36,7 +35,7 @@ class FileDirectoryMismatchTest extends AnalyserTest {
   }
 
   @Test
-  void testWithMatchedPublicationDirectory() throws IOException {
+  void testWithMatchedPublicationDirectory() {
     AnalyserContext ctx = this.mockAnalyserContext();
 
     PublishedPath path = mock();

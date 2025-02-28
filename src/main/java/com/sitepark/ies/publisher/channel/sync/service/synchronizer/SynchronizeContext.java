@@ -9,7 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
 
-public final class SyncronizeContext {
+public final class SynchronizeContext {
 
   private final boolean test;
 
@@ -21,7 +21,7 @@ public final class SyncronizeContext {
 
   private final SyncNotifier notifier;
 
-  private SyncronizeContext(
+  private SynchronizeContext(
       boolean test,
       boolean deleteForce,
       boolean notifyLegalCollisions,
@@ -32,6 +32,10 @@ public final class SyncronizeContext {
     this.notifyLegalCollisions = notifyLegalCollisions;
     this.publisher = publisher;
     this.notifier = notifier;
+  }
+
+  public static Builder builder() {
+    return new Builder();
   }
 
   public boolean isTest() {
@@ -54,10 +58,20 @@ public final class SyncronizeContext {
     return this.notifier;
   }
 
+  @SuppressWarnings("PMD.ExceptionAsFlowControl")
   public boolean delete(Path path) {
-    try {
+    try (var paths = Files.walk(path)) {
       if (Files.isDirectory(path)) {
-        Files.walk(path).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+        paths
+            .sorted(Comparator.reverseOrder())
+            .forEach(
+                p -> {
+                  File file = p.toFile();
+                  if (!file.delete()) {
+                    throw new UncheckedIOException(
+                        new IOException("Failed to delete file: " + file));
+                  }
+                });
       } else {
         Files.delete(path);
       }
@@ -73,10 +87,6 @@ public final class SyncronizeContext {
 
   public boolean exists(Path path) {
     return Files.exists(path);
-  }
-
-  public static Builder builder() {
-    return new Builder();
   }
 
   @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
@@ -117,8 +127,8 @@ public final class SyncronizeContext {
       return this;
     }
 
-    public SyncronizeContext build() {
-      return new SyncronizeContext(
+    public SynchronizeContext build() {
+      return new SynchronizeContext(
           this.test, this.deleteForce, this.notifyLegalCollisions, this.publisher, this.notifier);
     }
   }
