@@ -30,7 +30,6 @@ import com.sitepark.ies.publisher.channel.sync.service.analyser.ScaledImageDirec
 import com.sitepark.ies.publisher.channel.sync.service.analyser.TranslationsDirectory;
 import com.sitepark.ies.publisher.channel.sync.service.analyser.UnknownDirectory;
 import com.sitepark.ies.publisher.channel.sync.service.analyser.UnknownFile;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -56,7 +55,6 @@ public class Analyse {
     this(channel, publisher, Filter.ACCEPT_ALL, hasher);
   }
 
-  @SuppressFBWarnings("EI_EXPOSE_REP2")
   public Analyse(Channel channel, Publisher publisher, Filter filter, Hasher hasher) {
     this.channel = channel;
     this.publisher = publisher;
