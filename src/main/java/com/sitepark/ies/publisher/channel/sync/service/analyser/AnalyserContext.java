@@ -6,7 +6,6 @@ import com.sitepark.ies.publisher.channel.sync.domain.entity.PublicationType;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.PublishedPath;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultEntryFactory;
 import com.sitepark.ies.publisher.channel.sync.service.Channel;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
@@ -25,7 +24,6 @@ public final class AnalyserContext {
   private final ResultEntryFactory resultEntryFactory;
   private final AnalyserResultFactory analyserResultFactory;
 
-  @SuppressFBWarnings("EI_EXPOSE_REP2")
   private AnalyserContext(
       Channel channel,
       PublicationType publicationType,
@@ -45,7 +43,6 @@ public final class AnalyserContext {
     this.analyserResultFactory = new AnalyserResultFactory(this.resultEntryFactory);
   }
 
-  @SuppressFBWarnings("EI_EXPOSE_REP")
   public Channel getChannel() {
     return this.channel;
   }
@@ -103,7 +100,6 @@ public final class AnalyserContext {
 
     private boolean recursive;
 
-    @SuppressFBWarnings("EI_EXPOSE_REP2")
     public Builder channel(Channel channel) {
       this.channel = channel;
       return this;

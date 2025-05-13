@@ -1,6 +1,5 @@
 package com.sitepark.ies.publisher.channel.sync.domain.entity;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.nio.file.Path;
 import java.util.Objects;
 
@@ -88,7 +87,6 @@ public record Publication(
       return this;
     }
 
-    @SuppressFBWarnings("UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR")
     public Publication build() {
 
       Objects.requireNonNull(this.type, "type must not be null");
