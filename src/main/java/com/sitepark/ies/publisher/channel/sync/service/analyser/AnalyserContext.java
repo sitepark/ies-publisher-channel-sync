@@ -1,10 +1,10 @@
 package com.sitepark.ies.publisher.channel.sync.service.analyser;
 
 import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResultFactory;
-import com.sitepark.ies.publisher.channel.sync.domain.entity.PublicationDirectory;
-import com.sitepark.ies.publisher.channel.sync.domain.entity.PublicationType;
-import com.sitepark.ies.publisher.channel.sync.domain.entity.PublishedPath;
-import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultEntryFactory;
+import com.sitepark.ies.publisher.channel.sync.domain.value.PublicationDirectory;
+import com.sitepark.ies.publisher.channel.sync.domain.value.PublicationType;
+import com.sitepark.ies.publisher.channel.sync.domain.value.PublishedPath;
+import com.sitepark.ies.publisher.channel.sync.domain.value.ResultEntryFactory;
 import com.sitepark.ies.publisher.channel.sync.service.Channel;
 import java.nio.file.Path;
 import java.util.Collection;
@@ -41,6 +41,10 @@ public final class AnalyserContext {
     this.recursive = recursive;
     this.resultEntryFactory = new ResultEntryFactory(this);
     this.analyserResultFactory = new AnalyserResultFactory(this.resultEntryFactory);
+  }
+
+  public static Builder builder() {
+    return new Builder();
   }
 
   public Channel getChannel() {
@@ -83,21 +87,16 @@ public final class AnalyserContext {
     return this.analyserResultFactory;
   }
 
-  public static Builder builder() {
-    return new Builder();
-  }
-
   @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
   public static class Builder {
+    @SuppressWarnings("PMD.UseConcurrentHashMap")
+    private final Map<String, PublishedPath> directoryEntries = new HashMap<>();
+
     private Channel channel;
     private PublicationType publicationType;
     private Path base;
     private Path directory;
     private PublicationDirectory publicationDirectory;
-
-    @SuppressWarnings("PMD.UseConcurrentHashMap")
-    private final Map<String, PublishedPath> directoryEntries = new HashMap<>();
-
     private boolean recursive;
 
     public Builder channel(Channel channel) {

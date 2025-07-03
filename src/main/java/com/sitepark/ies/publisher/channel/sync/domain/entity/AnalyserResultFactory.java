@@ -1,5 +1,9 @@
 package com.sitepark.ies.publisher.channel.sync.domain.entity;
 
+import com.sitepark.ies.publisher.channel.sync.domain.value.PublishedPath;
+import com.sitepark.ies.publisher.channel.sync.domain.value.ResultEntry;
+import com.sitepark.ies.publisher.channel.sync.domain.value.ResultEntryFactory;
+import com.sitepark.ies.publisher.channel.sync.domain.value.ResultType;
 import java.util.Collections;
 import java.util.List;
 

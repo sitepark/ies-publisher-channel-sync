@@ -1,7 +1,7 @@
 package com.sitepark.ies.publisher.channel.sync.service;
 
 import com.sitepark.ies.publisher.channel.sync.domain.entity.Publication;
-import com.sitepark.ies.publisher.channel.sync.domain.entity.PublicationDirectory;
+import com.sitepark.ies.publisher.channel.sync.domain.value.PublicationDirectory;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;

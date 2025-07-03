@@ -3,8 +3,8 @@ package com.sitepark.ies.publisher.channel.sync.service.analyser;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResult;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResultFactory;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.Publication;
-import com.sitepark.ies.publisher.channel.sync.domain.entity.PublishedPath;
-import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultType;
+import com.sitepark.ies.publisher.channel.sync.domain.value.PublishedPath;
+import com.sitepark.ies.publisher.channel.sync.domain.value.ResultType;
 
 public class UnknownFile implements PublishedPathAnalyser {
 

@@ -4,7 +4,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResult;
-import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultEntry;
+import com.sitepark.ies.publisher.channel.sync.domain.value.ResultEntry;
 import com.sitepark.ies.publisher.channel.sync.service.synchronizer.SynchronizeContext;
 import com.sitepark.ies.publisher.channel.sync.service.synchronizer.Synchronizer;
 import java.util.Collections;

@@ -1,4 +1,4 @@
-package com.sitepark.ies.publisher.channel.sync.domain.entity;
+package com.sitepark.ies.publisher.channel.sync.domain.value;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

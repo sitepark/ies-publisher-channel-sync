@@ -1,10 +1,13 @@
-package com.sitepark.ies.publisher.channel.sync.domain.entity;
+package com.sitepark.ies.publisher.channel.sync.domain.value;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResult;
+import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResultFactory;
+import com.sitepark.ies.publisher.channel.sync.domain.entity.Publication;
 import java.util.Collections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

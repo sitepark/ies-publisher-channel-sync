@@ -6,7 +6,7 @@ import static org.mockito.Mockito.when;
 
 import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResult;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ChannelLayout;
-import com.sitepark.ies.publisher.channel.sync.domain.entity.PublishedPath;
+import com.sitepark.ies.publisher.channel.sync.domain.value.PublishedPath;
 import com.sitepark.ies.publisher.channel.sync.service.Channel;
 import org.junit.jupiter.api.Test;
 

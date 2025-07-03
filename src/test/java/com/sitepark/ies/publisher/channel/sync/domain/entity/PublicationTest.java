@@ -8,6 +8,8 @@ import static org.mockito.Mockito.mock;
 
 import com.jparams.verifier.tostring.NameStyle;
 import com.jparams.verifier.tostring.ToStringVerifier;
+import com.sitepark.ies.publisher.channel.sync.domain.value.PublicationType;
+import com.sitepark.ies.publisher.channel.sync.domain.value.Ref;
 import java.nio.file.Path;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;

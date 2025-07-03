@@ -5,9 +5,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResult;
-import com.sitepark.ies.publisher.channel.sync.domain.entity.PublicationDirectory;
-import com.sitepark.ies.publisher.channel.sync.domain.entity.PublishedPath;
-import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultType;
+import com.sitepark.ies.publisher.channel.sync.domain.value.PublicationDirectory;
+import com.sitepark.ies.publisher.channel.sync.domain.value.PublishedPath;
+import com.sitepark.ies.publisher.channel.sync.domain.value.ResultType;
 import org.junit.jupiter.api.Test;
 
 class FileDirectoryMismatchTest extends AnalyserTestBase {

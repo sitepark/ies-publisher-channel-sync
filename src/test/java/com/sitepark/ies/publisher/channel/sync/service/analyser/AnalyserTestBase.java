@@ -4,8 +4,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResultFactory;
-import com.sitepark.ies.publisher.channel.sync.domain.entity.PublicationDirectory;
-import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultEntryFactory;
+import com.sitepark.ies.publisher.channel.sync.domain.value.PublicationDirectory;
+import com.sitepark.ies.publisher.channel.sync.domain.value.ResultEntryFactory;
 
 public class AnalyserTestBase {
 

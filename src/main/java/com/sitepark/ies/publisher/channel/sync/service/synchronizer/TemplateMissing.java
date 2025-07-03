@@ -1,7 +1,7 @@
 package com.sitepark.ies.publisher.channel.sync.service.synchronizer;
 
-import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultEntry;
-import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultType;
+import com.sitepark.ies.publisher.channel.sync.domain.value.ResultEntry;
+import com.sitepark.ies.publisher.channel.sync.domain.value.ResultType;
 
 public class TemplateMissing implements Synchronizer {
 

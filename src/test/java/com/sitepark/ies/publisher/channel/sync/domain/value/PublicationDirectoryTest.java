@@ -1,4 +1,4 @@
-package com.sitepark.ies.publisher.channel.sync.domain.entity;
+package com.sitepark.ies.publisher.channel.sync.domain.value;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -14,6 +14,7 @@ import static org.mockito.Mockito.when;
 
 import com.jparams.verifier.tostring.NameStyle;
 import com.jparams.verifier.tostring.ToStringVerifier;
+import com.sitepark.ies.publisher.channel.sync.domain.entity.Publication;
 import java.nio.file.Path;
 import java.util.List;
 import nl.jqno.equalsverifier.EqualsVerifier;

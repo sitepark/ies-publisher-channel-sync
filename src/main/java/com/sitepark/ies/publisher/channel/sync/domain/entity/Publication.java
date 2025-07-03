@@ -1,5 +1,7 @@
 package com.sitepark.ies.publisher.channel.sync.domain.entity;
 
+import com.sitepark.ies.publisher.channel.sync.domain.value.PublicationType;
+import com.sitepark.ies.publisher.channel.sync.domain.value.Ref;
 import java.nio.file.Path;
 import java.util.Objects;
 
@@ -13,12 +15,12 @@ public record Publication(
     Path absolutePath,
     String hash) {
 
-  public boolean isCollision() {
-    return this.collidesWith != null;
-  }
-
   public static Builder builder() {
     return new Builder();
+  }
+
+  public boolean isCollision() {
+    return this.collidesWith != null;
   }
 
   @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")

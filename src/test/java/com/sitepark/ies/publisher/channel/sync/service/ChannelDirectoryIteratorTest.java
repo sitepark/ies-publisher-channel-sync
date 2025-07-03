@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.sitepark.ies.publisher.channel.sync.domain.entity.PublicationType;
-import com.sitepark.ies.publisher.channel.sync.domain.entity.PublishedPath;
+import com.sitepark.ies.publisher.channel.sync.domain.value.PublicationType;
+import com.sitepark.ies.publisher.channel.sync.domain.value.PublishedPath;
 import java.nio.file.Path;
 import java.util.Iterator;
 import org.junit.jupiter.api.Test;

@@ -3,9 +3,9 @@ package com.sitepark.ies.publisher.channel.sync.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.sitepark.ies.publisher.channel.sync.domain.entity.Publication;
-import com.sitepark.ies.publisher.channel.sync.domain.entity.PublicationDirectory;
-import com.sitepark.ies.publisher.channel.sync.domain.entity.PublicationType;
-import com.sitepark.ies.publisher.channel.sync.domain.entity.Ref;
+import com.sitepark.ies.publisher.channel.sync.domain.value.PublicationDirectory;
+import com.sitepark.ies.publisher.channel.sync.domain.value.PublicationType;
+import com.sitepark.ies.publisher.channel.sync.domain.value.Ref;
 import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 

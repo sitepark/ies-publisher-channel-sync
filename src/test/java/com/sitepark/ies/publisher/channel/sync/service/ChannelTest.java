@@ -3,7 +3,7 @@ package com.sitepark.ies.publisher.channel.sync.service;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ChannelLayout;
-import com.sitepark.ies.publisher.channel.sync.domain.entity.PublicationType;
+import com.sitepark.ies.publisher.channel.sync.domain.value.PublicationType;
 import java.io.IOException;
 import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
