@@ -6,7 +6,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import com.sitepark.ies.publisher.channel.sync.domain.entity.PublicationType;
+import com.sitepark.ies.publisher.channel.sync.domain.value.PublicationType;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Path;

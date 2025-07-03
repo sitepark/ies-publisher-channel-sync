@@ -8,8 +8,8 @@ import static org.mockito.Mockito.when;
 
 import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResult;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.Publication;
-import com.sitepark.ies.publisher.channel.sync.domain.entity.PublicationType;
-import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultType;
+import com.sitepark.ies.publisher.channel.sync.domain.value.PublicationType;
+import com.sitepark.ies.publisher.channel.sync.domain.value.ResultType;
 import com.sitepark.ies.publisher.channel.sync.service.Channel;
 import java.nio.file.Path;
 import org.junit.jupiter.api.Test;

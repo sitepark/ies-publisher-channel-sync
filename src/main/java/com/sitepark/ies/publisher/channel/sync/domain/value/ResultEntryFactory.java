@@ -1,5 +1,6 @@
-package com.sitepark.ies.publisher.channel.sync.domain.entity;
+package com.sitepark.ies.publisher.channel.sync.domain.value;
 
+import com.sitepark.ies.publisher.channel.sync.domain.entity.Publication;
 import com.sitepark.ies.publisher.channel.sync.service.analyser.AnalyserContext;
 
 public class ResultEntryFactory {

@@ -6,8 +6,8 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultEntry;
-import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultType;
+import com.sitepark.ies.publisher.channel.sync.domain.value.ResultEntry;
+import com.sitepark.ies.publisher.channel.sync.domain.value.ResultType;
 import com.sitepark.ies.publisher.channel.sync.port.Publisher;
 import com.sitepark.ies.publisher.channel.sync.port.SyncNotifier;
 import java.nio.file.Path;

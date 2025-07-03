@@ -3,8 +3,8 @@ package com.sitepark.ies.publisher.channel.sync.service;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
-import com.sitepark.ies.publisher.channel.sync.domain.entity.PublicationType;
-import com.sitepark.ies.publisher.channel.sync.domain.entity.PublishedPath;
+import com.sitepark.ies.publisher.channel.sync.domain.value.PublicationType;
+import com.sitepark.ies.publisher.channel.sync.domain.value.PublishedPath;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;

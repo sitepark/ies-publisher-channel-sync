@@ -1,5 +1,6 @@
-package com.sitepark.ies.publisher.channel.sync.domain.entity;
+package com.sitepark.ies.publisher.channel.sync.domain.value;
 
+import com.sitepark.ies.publisher.channel.sync.domain.entity.Publication;
 import java.nio.file.Path;
 import java.util.Objects;
 
@@ -34,6 +35,10 @@ public final class ResultEntry {
     this.deleteForce = deleteForce;
     this.temporary = temporary;
     this.absolutePath = absolutePath;
+  }
+
+  public static Builder builder() {
+    return new Builder();
   }
 
   public ResultType getResultType() {
@@ -122,10 +127,6 @@ public final class ResultEntry {
         + ", absolutePath="
         + absolutePath
         + "]";
-  }
-
-  public static Builder builder() {
-    return new Builder();
   }
 
   @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")

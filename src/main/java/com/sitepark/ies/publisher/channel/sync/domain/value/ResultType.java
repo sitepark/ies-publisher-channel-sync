@@ -1,4 +1,4 @@
-package com.sitepark.ies.publisher.channel.sync.domain.entity;
+package com.sitepark.ies.publisher.channel.sync.domain.value;
 
 public enum ResultType {
   UNKNOWN_FILE_OR_DIRECTORY('?', "Unknown file or directory"),

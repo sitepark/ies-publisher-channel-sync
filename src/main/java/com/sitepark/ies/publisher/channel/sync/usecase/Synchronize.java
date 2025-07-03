@@ -1,7 +1,7 @@
 package com.sitepark.ies.publisher.channel.sync.usecase;
 
 import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResult;
-import com.sitepark.ies.publisher.channel.sync.domain.entity.ResultEntry;
+import com.sitepark.ies.publisher.channel.sync.domain.value.ResultEntry;
 import com.sitepark.ies.publisher.channel.sync.port.Publisher;
 import com.sitepark.ies.publisher.channel.sync.port.SyncNotifier;
 import com.sitepark.ies.publisher.channel.sync.service.synchronizer.FileDirectoryMismatch;

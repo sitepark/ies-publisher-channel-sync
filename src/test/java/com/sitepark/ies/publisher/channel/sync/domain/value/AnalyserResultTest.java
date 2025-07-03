@@ -1,9 +1,10 @@
-package com.sitepark.ies.publisher.channel.sync.domain.entity;
+package com.sitepark.ies.publisher.channel.sync.domain.value;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
+import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResult;
 import java.util.Collections;
 import org.junit.jupiter.api.Test;
 
