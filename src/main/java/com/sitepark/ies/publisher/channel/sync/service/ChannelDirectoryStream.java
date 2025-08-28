@@ -33,15 +33,28 @@ public class ChannelDirectoryStream implements DirectoryStream<PublishedPath> {
 
   @Override
   public Iterator<PublishedPath> iterator() {
-    lock.lock();
-    try {
+    try (CloseableLock ignored = new CloseableLock(lock)) {
       if (this.iterator != null) {
         throw new IllegalStateException("Iterator already obtained");
       }
       this.iterator = new ChannelDirectoryIterator(this.type, stream.iterator());
       return this.iterator;
-    } finally {
-      lock.unlock();
+    }
+  }
+
+  final class CloseableLock implements AutoCloseable {
+    private final Lock lock;
+    private boolean locked;
+
+    CloseableLock(Lock lock) {
+      this.lock = lock;
+      lock.lock();
+      locked = true;
+    }
+
+    @Override
+    public void close() {
+      if (locked) lock.unlock();
     }
   }
 }
