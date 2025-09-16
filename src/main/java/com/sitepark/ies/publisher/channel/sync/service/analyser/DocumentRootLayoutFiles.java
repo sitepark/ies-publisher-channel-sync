@@ -2,7 +2,9 @@ package com.sitepark.ies.publisher.channel.sync.service.analyser;
 
 import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResult;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ChannelLayout;
+import com.sitepark.ies.publisher.channel.sync.domain.value.PublicationType;
 import com.sitepark.ies.publisher.channel.sync.domain.value.PublishedPath;
+import java.nio.file.Path;
 
 public class DocumentRootLayoutFiles implements PublishedPathAnalyser {
 
@@ -13,9 +15,11 @@ public class DocumentRootLayoutFiles implements PublishedPathAnalyser {
       return AnalyserResult.OK;
     }
 
-    String baseName = path.baseName();
+    Path fullPath = ctx.getChannel().relativize(PublicationType.OBJECT, path.absolutePath());
 
-    if (path.isDirectory() && "WEB-IES".equals(baseName)) {
+    String baseName = fullPath.getName(0).toString();
+
+    if ("WEB-IES".equals(baseName)) {
       return AnalyserResult.OK_AND_INTERRUPT;
     }
 

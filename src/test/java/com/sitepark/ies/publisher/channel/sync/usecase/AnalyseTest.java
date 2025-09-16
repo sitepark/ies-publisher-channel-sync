@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -533,6 +534,21 @@ class AnalyseTest {
             expectedLegalFilenameCollision, expectedMissingFile, expectedMissingEmbeddedImage),
         result,
         "Should return a legal filename collision, a missing file and a missing embedded image");
+  }
+
+  @Test
+  void testWithWEBIESPublications() throws IOException {
+
+    AnalyserBuilder analyseBuilder =
+        analyseBuilder()
+            .root(this.root.resolve("testWithWEBIESPublications"))
+            .layout(ChannelLayout.DOCUMENT_ROOT)
+            .publication("/WEB-IES/phplib/test.php");
+
+    PublicationDirectory publicationDirectory = analyseBuilder.buildPublicationDirectory();
+
+    List<ResultEntry> result = this.analyseRecursive(analyseBuilder.build(), Path.of("WEB-IES"));
+    assertTrue(result.isEmpty(), "Should return an empty list");
   }
 
   @Test

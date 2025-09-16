@@ -1,13 +1,17 @@
 package com.sitepark.ies.publisher.channel.sync.service.analyser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResult;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ChannelLayout;
+import com.sitepark.ies.publisher.channel.sync.domain.value.PublicationType;
 import com.sitepark.ies.publisher.channel.sync.domain.value.PublishedPath;
 import com.sitepark.ies.publisher.channel.sync.service.Channel;
+import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 
 class DocumentRootLayoutFilesTest extends AnalyserTestBase {
@@ -35,11 +39,13 @@ class DocumentRootLayoutFilesTest extends AnalyserTestBase {
     Channel channel = mock();
     when(ctx.getChannel()).thenReturn(channel);
 
-    when(channel.layout()).thenReturn(ChannelLayout.DOCUMENT_ROOT);
+    Path file = Path.of("/var/www/example.com/www/WEB-IES/modulea/ies-module.xml");
 
-    PublishedPath path = mock();
-    when(path.isDirectory()).thenReturn(true);
-    when(path.baseName()).thenReturn("WEB-IES");
+    when(channel.layout()).thenReturn(ChannelLayout.DOCUMENT_ROOT);
+    when(channel.relativize(any(), any())).thenReturn(Path.of("WEB-IES/modulea/ies-module.xml"));
+
+    PublishedPath path =
+        new PublishedPath(PublicationType.OBJECT, file, file.getFileName().toString());
 
     assertEquals(
         AnalyserResult.OK_AND_INTERRUPT,
@@ -54,11 +60,13 @@ class DocumentRootLayoutFilesTest extends AnalyserTestBase {
     Channel channel = mock();
     when(ctx.getChannel()).thenReturn(channel);
 
-    when(channel.layout()).thenReturn(ChannelLayout.DOCUMENT_ROOT);
+    Path file = Path.of("/var/www/example.com/www/aliases.map");
 
-    PublishedPath path = mock();
-    when(path.isDirectory()).thenReturn(false);
-    when(path.baseName()).thenReturn("aliases.map");
+    when(channel.layout()).thenReturn(ChannelLayout.DOCUMENT_ROOT);
+    when(channel.relativize(any(), any())).thenReturn(file.getFileName());
+
+    PublishedPath path =
+        new PublishedPath(PublicationType.OBJECT, file, file.getFileName().toString());
 
     assertEquals(
         AnalyserResult.OK_AND_INTERRUPT,
@@ -73,11 +81,13 @@ class DocumentRootLayoutFilesTest extends AnalyserTestBase {
     Channel channel = mock();
     when(ctx.getChannel()).thenReturn(channel);
 
-    when(channel.layout()).thenReturn(ChannelLayout.DOCUMENT_ROOT);
+    Path file = Path.of("/var/www/example.com/www/redirects.map");
 
-    PublishedPath path = mock();
-    when(path.isDirectory()).thenReturn(false);
-    when(path.baseName()).thenReturn("redirects.map");
+    when(channel.layout()).thenReturn(ChannelLayout.DOCUMENT_ROOT);
+    when(channel.relativize(any(), any())).thenReturn(file.getFileName());
+
+    PublishedPath path =
+        new PublishedPath(PublicationType.OBJECT, file, file.getFileName().toString());
 
     assertEquals(
         AnalyserResult.OK_AND_INTERRUPT,
@@ -92,11 +102,13 @@ class DocumentRootLayoutFilesTest extends AnalyserTestBase {
     Channel channel = mock();
     when(ctx.getChannel()).thenReturn(channel);
 
-    when(channel.layout()).thenReturn(ChannelLayout.DOCUMENT_ROOT);
+    Path file = Path.of("/var/www/example.com/www/abc");
 
-    PublishedPath path = mock();
-    when(path.isDirectory()).thenReturn(false);
-    when(path.baseName()).thenReturn("abc");
+    when(channel.layout()).thenReturn(ChannelLayout.DOCUMENT_ROOT);
+    when(channel.relativize(any(), any())).thenReturn(file.getFileName());
+
+    PublishedPath path =
+        new PublishedPath(PublicationType.OBJECT, file, file.getFileName().toString());
 
     assertEquals(AnalyserResult.OK, this.analyser.analyse(ctx, path), "Should return OK");
   }
@@ -108,11 +120,16 @@ class DocumentRootLayoutFilesTest extends AnalyserTestBase {
     Channel channel = mock();
     when(ctx.getChannel()).thenReturn(channel);
 
-    when(channel.layout()).thenReturn(ChannelLayout.DOCUMENT_ROOT);
+    Path file = Path.of("/var/www/example.com/www/abc");
 
-    PublishedPath path = mock();
-    when(path.isDirectory()).thenReturn(true);
-    when(path.baseName()).thenReturn("abc");
+    when(channel.layout()).thenReturn(ChannelLayout.DOCUMENT_ROOT);
+    when(channel.relativize(any(), any())).thenReturn(file.getFileName());
+
+    PublishedPath path =
+        new PublishedPath(PublicationType.OBJECT, file, file.getFileName().toString());
+
+    PublishedPath mockedPath = spy(path);
+    when(mockedPath.isDirectory()).thenReturn(true);
 
     assertEquals(AnalyserResult.OK, this.analyser.analyse(ctx, path), "Should return OK");
   }
