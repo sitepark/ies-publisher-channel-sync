@@ -39,7 +39,7 @@ class AnalyserResultFactoryTest {
         .thenReturn(entry);
 
     AnalyserResult result = this.factory.createResult(ResultType.MISSING_FILE, this.publication);
-    AnalyserResult expected = new AnalyserResult(Collections.singletonList(entry), false);
+    AnalyserResult expected = new AnalyserResult(Collections.singletonList(entry), false, false);
     assertEquals(expected, result, "unexpected result");
   }
 
@@ -51,7 +51,7 @@ class AnalyserResultFactoryTest {
         .thenReturn(entry);
 
     AnalyserResult result = this.factory.createResult(ResultType.MISSING_FILE, this.path);
-    AnalyserResult expected = new AnalyserResult(Collections.singletonList(entry), false);
+    AnalyserResult expected = new AnalyserResult(Collections.singletonList(entry), false, false);
     assertEquals(expected, result, "unexpected result");
   }
 
@@ -63,8 +63,8 @@ class AnalyserResultFactoryTest {
         .thenReturn(entry);
 
     AnalyserResult result =
-        this.factory.createInterruptResult(ResultType.MISSING_FILE, this.publication);
-    AnalyserResult expected = new AnalyserResult(Collections.singletonList(entry), true);
+        this.factory.createRecursiveInterruptResult(ResultType.MISSING_FILE, this.publication);
+    AnalyserResult expected = new AnalyserResult(Collections.singletonList(entry), true, true);
     assertEquals(expected, result, "unexpected result");
   }
 
@@ -75,8 +75,9 @@ class AnalyserResultFactoryTest {
     when(entryFactory.createResultEntry(any(ResultType.class), any(PublishedPath.class)))
         .thenReturn(entry);
 
-    AnalyserResult result = this.factory.createInterruptResult(ResultType.MISSING_FILE, this.path);
-    AnalyserResult expected = new AnalyserResult(Collections.singletonList(entry), true);
+    AnalyserResult result =
+        this.factory.createRecursiveInterruptResult(ResultType.MISSING_FILE, this.path);
+    AnalyserResult expected = new AnalyserResult(Collections.singletonList(entry), true, true);
     assertEquals(expected, result, "unexpected result");
   }
 
@@ -88,8 +89,8 @@ class AnalyserResultFactoryTest {
         .thenReturn(entry);
 
     AnalyserResult result =
-        this.factory.createInterruptResultDeleteForce(ResultType.MISSING_FILE, this.path);
-    AnalyserResult expected = new AnalyserResult(Collections.singletonList(entry), true);
+        this.factory.createRecursiveInterruptResultDeleteForce(ResultType.MISSING_FILE, this.path);
+    AnalyserResult expected = new AnalyserResult(Collections.singletonList(entry), true, true);
     assertEquals(expected, result, "unexpected result");
   }
 
@@ -99,7 +100,7 @@ class AnalyserResultFactoryTest {
     ResultEntry entry = mock();
 
     AnalyserResult result = this.factory.createResult(Collections.singletonList(entry));
-    AnalyserResult expected = new AnalyserResult(Collections.singletonList(entry), false);
+    AnalyserResult expected = new AnalyserResult(Collections.singletonList(entry), false, false);
     assertEquals(expected, result, "unexpected result");
   }
 
@@ -108,8 +109,9 @@ class AnalyserResultFactoryTest {
 
     ResultEntry entry = mock();
 
-    AnalyserResult result = this.factory.createInterruptResult(Collections.singletonList(entry));
-    AnalyserResult expected = new AnalyserResult(Collections.singletonList(entry), true);
+    AnalyserResult result =
+        this.factory.createRecursiveInterruptResult(Collections.singletonList(entry));
+    AnalyserResult expected = new AnalyserResult(Collections.singletonList(entry), true, true);
     assertEquals(expected, result, "unexpected result");
   }
 }

@@ -101,7 +101,7 @@ public class Analyse {
       list.addAll(publicationsResult.entries());
     }
 
-    return new AnalyserResult(list, false);
+    return new AnalyserResult(list, false, false);
   }
 
   public AnalyserResult analyseByType(
@@ -213,8 +213,10 @@ public class Analyse {
     for (PublishedPathAnalyser publishedPathAnalyser : this.publishedPathAnalysers) {
       AnalyserResult result = publishedPathAnalyser.analyse(ctx, path);
       list.addAll(result.entries());
-      if (result.interrupt()) {
+      if (result.recursiveInterrupt()) {
         return resultFactory.createResult(list);
+      } else if (result.interrupt()) {
+        break;
       }
     }
 
@@ -223,6 +225,9 @@ public class Analyse {
     }
 
     PublicationDirectory child = ctx.getPublicationDirectory().getChild(path.baseName());
+    if (child == null && path.isDirectory()) {
+      child = PublicationDirectory.builder().name(path.baseName()).build();
+    }
     if (child != null) {
       AnalyserContext childCtx =
           this.createAnalyserContext(

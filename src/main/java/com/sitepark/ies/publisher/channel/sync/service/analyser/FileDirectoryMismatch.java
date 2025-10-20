@@ -21,6 +21,6 @@ public class FileDirectoryMismatch implements PublishedPathAnalyser {
     }
 
     AnalyserResultFactory resultFactory = ctx.getAnalyserResultFactory();
-    return resultFactory.createInterruptResult(ResultType.FILE_DIRECTORY_MISMATCH, path);
+    return resultFactory.createRecursiveInterruptResult(ResultType.FILE_DIRECTORY_MISMATCH, path);
   }
 }

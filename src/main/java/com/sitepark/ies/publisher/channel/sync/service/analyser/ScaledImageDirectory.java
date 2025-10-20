@@ -32,12 +32,12 @@ public class ScaledImageDirectory implements PublishedPathAnalyser {
 
     for (Publication p : ctx.getPublicationDirectory().getPublications(imageFileName)) {
       if (p.isPublished()) {
-        return AnalyserResult.OK_AND_INTERRUPT;
+        return AnalyserResult.OK_AND_RECURSIVE_INTERRUPT;
       }
     }
 
     AnalyserResultFactory resultFactory = ctx.getAnalyserResultFactory();
-    return resultFactory.createInterruptResultDeleteForce(
+    return resultFactory.createRecursiveInterruptResultDeleteForce(
         ResultType.UNKNOWN_FILE_OR_DIRECTORY, path);
   }
 }

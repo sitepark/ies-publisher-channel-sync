@@ -38,7 +38,7 @@ public class EmbeddedMediaDirectory implements PublishedPathAnalyser, Publicatio
     }
 
     AnalyserResultFactory resultFactory = ctx.getAnalyserResultFactory();
-    return resultFactory.createInterruptResultDeleteForce(
+    return resultFactory.createRecursiveInterruptResultDeleteForce(
         ResultType.UNKNOWN_FILE_OR_DIRECTORY, path);
   }
 
@@ -60,10 +60,10 @@ public class EmbeddedMediaDirectory implements PublishedPathAnalyser, Publicatio
     }
 
     if (Files.exists(path)) {
-      return AnalyserResult.OK_AND_INTERRUPT;
+      return AnalyserResult.OK_AND_RECURSIVE_INTERRUPT;
     }
 
     AnalyserResultFactory resultFactory = ctx.getAnalyserResultFactory();
-    return resultFactory.createInterruptResult(ResultType.MISSING_FILE, publication);
+    return resultFactory.createRecursiveInterruptResult(ResultType.MISSING_FILE, publication);
   }
 }
