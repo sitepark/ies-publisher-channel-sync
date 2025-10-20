@@ -20,12 +20,12 @@ public class DocumentRootLayoutFiles implements PublishedPathAnalyser {
     String baseName = fullPath.getName(0).toString();
 
     if ("WEB-IES".equals(baseName)) {
-      return AnalyserResult.OK_AND_INTERRUPT;
+      return AnalyserResult.OK_AND_RECURSIVE_INTERRUPT;
     }
 
     if (!path.isDirectory()
         && ("aliases.map".equals(baseName) || "redirects.map".equals(baseName))) {
-      return AnalyserResult.OK_AND_INTERRUPT;
+      return AnalyserResult.OK_AND_RECURSIVE_INTERRUPT;
     }
 
     return AnalyserResult.OK;

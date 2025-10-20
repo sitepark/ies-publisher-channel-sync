@@ -85,7 +85,7 @@ class MissingFileTest extends AnalyserTestBase {
 
     AnalyserResult expected =
         ctx.getAnalyserResultFactory()
-            .createInterruptResult(ResultType.LOST_PUBLICATION, publication);
+            .createRecursiveInterruptResult(ResultType.LOST_PUBLICATION, publication);
     assertEquals(expected, this.analyser.analyse(ctx, publication), "Unexpected result");
   }
 
@@ -127,7 +127,8 @@ class MissingFileTest extends AnalyserTestBase {
     when(publication.path()).thenReturn(Path.of("missing-file-file"));
 
     AnalyserResult expected =
-        ctx.getAnalyserResultFactory().createInterruptResult(ResultType.MISSING_FILE, publication);
+        ctx.getAnalyserResultFactory()
+            .createRecursiveInterruptResult(ResultType.MISSING_FILE, publication);
     assertEquals(expected, this.analyser.analyse(ctx, publication), "Unexpected result");
   }
 }
