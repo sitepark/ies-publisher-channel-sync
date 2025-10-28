@@ -74,7 +74,7 @@ class MediaMetaFileTest extends AnalyserTestBase {
     when(directory.getPublications("baseName")).thenReturn(Arrays.asList(a, b));
 
     assertEquals(
-        AnalyserResult.OK_AND_INTERRUPT,
+        AnalyserResult.OK_AND_RECURSIVE_INTERRUPT,
         this.analyser.analyse(ctx, path),
         "Should return OK and interrupt");
   }
@@ -95,7 +95,7 @@ class MediaMetaFileTest extends AnalyserTestBase {
 
     AnalyserResult expected =
         ctx.getAnalyserResultFactory()
-            .createInterruptResultDeleteForce(ResultType.UNKNOWN_FILE_OR_DIRECTORY, path);
+            .createRecursiveInterruptResultDeleteForce(ResultType.UNKNOWN_FILE_OR_DIRECTORY, path);
     assertEquals(expected, this.analyser.analyse(ctx, path), "Unexpected result");
   }
 }

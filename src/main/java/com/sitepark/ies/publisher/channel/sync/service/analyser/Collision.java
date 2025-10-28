@@ -30,9 +30,10 @@ public class Collision implements PublishedPathAnalyser {
     Channel channel = ctx.getChannel();
     Path collisionFile = channel.resolve(collision.type(), collision.path());
     if (Files.exists(collisionFile)) {
-      return resultFactory.createInterruptResult(ResultType.LEGAL_FILENAME_COLLISION, collision);
+      return resultFactory.createRecursiveInterruptResult(
+          ResultType.LEGAL_FILENAME_COLLISION, collision);
     } else {
-      return resultFactory.createInterruptResult(ResultType.MISSING_FILE, collision);
+      return resultFactory.createRecursiveInterruptResult(ResultType.MISSING_FILE, collision);
     }
   }
 }

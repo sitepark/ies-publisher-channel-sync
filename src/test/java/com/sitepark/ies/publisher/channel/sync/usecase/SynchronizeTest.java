@@ -21,7 +21,7 @@ class SynchronizeTest {
     Synchronize synchronize = new Synchronize(ctx, Collections.singletonList(synchronizer));
 
     ResultEntry entry = mock();
-    AnalyserResult result = new AnalyserResult(Collections.singletonList(entry), false);
+    AnalyserResult result = new AnalyserResult(Collections.singletonList(entry), false, false);
 
     synchronize.synchronize(result);
 
