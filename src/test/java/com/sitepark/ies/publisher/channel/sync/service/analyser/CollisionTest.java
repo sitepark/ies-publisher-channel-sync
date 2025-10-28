@@ -69,7 +69,7 @@ class CollisionTest extends AnalyserTestBase {
 
     AnalyserResult expected =
         ctx.getAnalyserResultFactory()
-            .createInterruptResult(ResultType.LEGAL_FILENAME_COLLISION, collision);
+            .createRecursiveInterruptResult(ResultType.LEGAL_FILENAME_COLLISION, collision);
 
     assertEquals(expected, this.analyser.analyse(ctx, path), "Unexpected result");
   }
@@ -99,7 +99,8 @@ class CollisionTest extends AnalyserTestBase {
     when(collision.path()).thenReturn(mock());
 
     AnalyserResult expected =
-        ctx.getAnalyserResultFactory().createInterruptResult(ResultType.MISSING_FILE, collision);
+        ctx.getAnalyserResultFactory()
+            .createRecursiveInterruptResult(ResultType.MISSING_FILE, collision);
 
     assertEquals(expected, this.analyser.analyse(ctx, path), "Unexpected result");
   }

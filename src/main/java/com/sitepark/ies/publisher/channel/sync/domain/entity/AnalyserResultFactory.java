@@ -16,34 +16,35 @@ public class AnalyserResultFactory {
 
   public AnalyserResult createResult(ResultType type, Publication publication) {
     ResultEntry entry = this.resultEntryFactory.createResultEntry(type, publication);
-    return new AnalyserResult(Collections.singletonList(entry), false);
+    return new AnalyserResult(Collections.singletonList(entry), false, false);
   }
 
   public AnalyserResult createResult(ResultType type, PublishedPath path) {
     ResultEntry entry = this.resultEntryFactory.createResultEntry(type, path);
-    return new AnalyserResult(Collections.singletonList(entry), false);
+    return new AnalyserResult(Collections.singletonList(entry), false, false);
   }
 
-  public AnalyserResult createInterruptResult(ResultType type, Publication publication) {
+  public AnalyserResult createRecursiveInterruptResult(ResultType type, Publication publication) {
     ResultEntry entry = this.resultEntryFactory.createResultEntry(type, publication);
-    return new AnalyserResult(Collections.singletonList(entry), true);
+    return new AnalyserResult(Collections.singletonList(entry), true, true);
   }
 
-  public AnalyserResult createInterruptResult(ResultType type, PublishedPath path) {
+  public AnalyserResult createRecursiveInterruptResult(ResultType type, PublishedPath path) {
     ResultEntry entry = this.resultEntryFactory.createResultEntry(type, path);
-    return new AnalyserResult(Collections.singletonList(entry), true);
+    return new AnalyserResult(Collections.singletonList(entry), true, true);
   }
 
-  public AnalyserResult createInterruptResultDeleteForce(ResultType type, PublishedPath path) {
+  public AnalyserResult createRecursiveInterruptResultDeleteForce(
+      ResultType type, PublishedPath path) {
     ResultEntry entry = this.resultEntryFactory.createResultEntryDeleteForce(type, path);
-    return new AnalyserResult(Collections.singletonList(entry), true);
+    return new AnalyserResult(Collections.singletonList(entry), true, true);
   }
 
   public AnalyserResult createResult(List<ResultEntry> entries) {
-    return new AnalyserResult(entries, false);
+    return new AnalyserResult(entries, false, false);
   }
 
-  public AnalyserResult createInterruptResult(List<ResultEntry> entries) {
-    return new AnalyserResult(entries, true);
+  public AnalyserResult createRecursiveInterruptResult(List<ResultEntry> entries) {
+    return new AnalyserResult(entries, true, true);
   }
 }

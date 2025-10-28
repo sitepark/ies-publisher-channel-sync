@@ -90,7 +90,7 @@ class EmbeddedMediaDirectoryTest extends AnalyserTestBase {
 
     AnalyserResult expected =
         ctx.getAnalyserResultFactory()
-            .createInterruptResultDeleteForce(ResultType.UNKNOWN_FILE_OR_DIRECTORY, path);
+            .createRecursiveInterruptResultDeleteForce(ResultType.UNKNOWN_FILE_OR_DIRECTORY, path);
 
     assertEquals(expected, result, "Unexpected result");
   }
@@ -130,7 +130,7 @@ class EmbeddedMediaDirectoryTest extends AnalyserTestBase {
         .thenReturn(this.resourceDir.resolve("test.php.media/123/image.png").toAbsolutePath());
 
     assertEquals(
-        AnalyserResult.OK_AND_INTERRUPT,
+        AnalyserResult.OK_AND_RECURSIVE_INTERRUPT,
         this.analyser.analyse(ctx, publication),
         "Should return OK_AND_INTERRUPT");
   }
@@ -146,7 +146,8 @@ class EmbeddedMediaDirectoryTest extends AnalyserTestBase {
     AnalyserResult result = this.analyser.analyse(ctx, publication);
 
     AnalyserResult expected =
-        ctx.getAnalyserResultFactory().createInterruptResult(ResultType.MISSING_FILE, publication);
+        ctx.getAnalyserResultFactory()
+            .createRecursiveInterruptResult(ResultType.MISSING_FILE, publication);
 
     assertEquals(expected, result, "Unexpected result");
   }

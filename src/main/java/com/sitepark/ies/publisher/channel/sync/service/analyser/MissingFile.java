@@ -31,7 +31,7 @@ public class MissingFile implements PublicationAnalyser {
     AnalyserResultFactory resultFactory = ctx.getAnalyserResultFactory();
 
     if (publication.path().toString().isEmpty()) {
-      return resultFactory.createInterruptResult(ResultType.LOST_PUBLICATION, publication);
+      return resultFactory.createRecursiveInterruptResult(ResultType.LOST_PUBLICATION, publication);
     }
 
     Path path = ctx.getChannel().resolve(publication.type(), publication.path());
@@ -39,6 +39,6 @@ public class MissingFile implements PublicationAnalyser {
       return AnalyserResult.OK;
     }
 
-    return resultFactory.createInterruptResult(ResultType.MISSING_FILE, publication);
+    return resultFactory.createRecursiveInterruptResult(ResultType.MISSING_FILE, publication);
   }
 }

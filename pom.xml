@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.sitepark.ies</groupId>
 	<artifactId>ies-publisher-channel-sync</artifactId>
-	<version>1.4.0-SNAPSHOT</version>
+	<version>1.5.0-SNAPSHOT</version>
 	<name>IES Publisher Channel Sync</name>
 	<description>Determines whether the files contained in the publisher channel directory are identical to the publication statuses of the IES.</description>
 	<url>https://github.com/sitepark/ies-publisher-channel-sync</url>
@@ -39,7 +39,7 @@
 	</scm>
 	<properties>
 		<junit.version>5.13.4</junit.version>
-		<spotbugs.version>4.9.6</spotbugs.version>
+		<spotbugs.version>4.9.8</spotbugs.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.release>21</maven.compiler.release>
 		<gpg.skip>true</gpg.skip>
@@ -135,6 +135,19 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	<repositories>
+		<repository>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<id>central-portal-snapshots</id>
+			<name>Central Portal Snapshots</name>
+			<url>https://central.sonatype.com/repository/maven-snapshots/</url>
+		</repository>
+	</repositories>
 	<build>
 		<plugins>
 			<plugin>
@@ -364,7 +377,7 @@
 					<dependency>
 						<groupId>com.github.spotbugs</groupId>
 						<artifactId>spotbugs</artifactId>
-						<version>4.9.5</version>
+						<version>4.9.8</version>
 					</dependency>
 				</dependencies>
 				<executions>
@@ -379,7 +392,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>
-				<version>3.27.0</version>
+				<version>3.28.0</version>
 				<configuration>
 					<rulesets>
 						<ruleset>pmd-ruleset.xml</ruleset>
