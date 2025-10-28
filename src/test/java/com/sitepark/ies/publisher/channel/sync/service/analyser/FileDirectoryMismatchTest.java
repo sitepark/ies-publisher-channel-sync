@@ -52,7 +52,7 @@ class FileDirectoryMismatchTest extends AnalyserTestBase {
 
     AnalyserResult expected =
         ctx.getAnalyserResultFactory()
-            .createInterruptResult(ResultType.FILE_DIRECTORY_MISMATCH, path);
+            .createRecursiveInterruptResult(ResultType.FILE_DIRECTORY_MISMATCH, path);
 
     assertEquals(expected, result, "Unexpected result");
   }

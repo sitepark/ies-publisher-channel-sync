@@ -254,15 +254,25 @@ class AnalyseTest {
             .publicationDirectory(publicationDirectory)
             .publication(a)
             .build();
-    ResultEntry expectedUnknown =
+    ResultEntry expectedUnknownDir =
         ResultEntry.builder()
             .resultType(ResultType.UNKNOWN_FILE_OR_DIRECTORY)
             .publicationDirectory(publicationDirectory)
             .publishedPath(this.createPublishedPath(testRoot, "a"))
             .build();
+    ResultEntry expectedUnknownFile =
+        ResultEntry.builder()
+            .resultType(ResultType.UNKNOWN_FILE_OR_DIRECTORY)
+            .publicationDirectory(PublicationDirectory.builder().name("a").build())
+            .publishedPath(this.createPublishedPath(testRoot, "a/dummy"))
+            .build();
+
+    assertEquals(expectedMismatch, result.get(0), "a Should return a file directory mismatch");
+    assertEquals(expectedUnknownDir, result.get(1), "b Should return a file directory mismatch");
+    assertEquals(expectedUnknownFile, result.get(2), "c Should return a file directory mismatch");
 
     assertEquals(
-        Arrays.asList(expectedMismatch, expectedUnknown),
+        Arrays.asList(expectedMismatch, expectedUnknownDir, expectedUnknownFile),
         result,
         "Should return a file directory mismatch");
   }
@@ -602,6 +612,24 @@ class AnalyseTest {
         "Should return a legal filename collision, a missing file and a missing embedded image");
   }
 
+  @Test
+  void testWithUnknownEmbeddedMedia() throws IOException {
+
+    AnalyserBuilder analyseBuilder =
+        analyseBuilder()
+            .root(this.root.resolve("testWithUnknownEmbeddedMedia"))
+            .layout(ChannelLayout.DOCUMENT_ROOT)
+            .publication("/subdir/article.php");
+
+    // PublicationDirectory publicationDirectory = analyseBuilder.buildPublicationDirectory();
+
+    List<ResultEntry> result = this.analyseRecursive(analyseBuilder.build());
+    for (ResultEntry entry : result) {
+      System.out.println(entry);
+    }
+    // assertTrue(result.isEmpty(), "Should return an empty list");
+  }
+
   private void buildPublicationTestTree(AnalyserBuilder builder) {
 
     Ref object = new Ref("123");
@@ -652,7 +680,7 @@ class AnalyseTest {
       throws IOException {
     AnalyserResult result = analyse.analyse(path, recursive);
 
-    boolean debug = false;
+    boolean debug = true;
     if (debug) {
       result
           .entries()

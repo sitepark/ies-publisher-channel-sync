@@ -48,7 +48,7 @@ class DocumentRootLayoutFilesTest extends AnalyserTestBase {
         new PublishedPath(PublicationType.OBJECT, file, file.getFileName().toString());
 
     assertEquals(
-        AnalyserResult.OK_AND_INTERRUPT,
+        AnalyserResult.OK_AND_RECURSIVE_INTERRUPT,
         this.analyser.analyse(ctx, path),
         "Should return OK and interrupt");
   }
@@ -69,7 +69,7 @@ class DocumentRootLayoutFilesTest extends AnalyserTestBase {
         new PublishedPath(PublicationType.OBJECT, file, file.getFileName().toString());
 
     assertEquals(
-        AnalyserResult.OK_AND_INTERRUPT,
+        AnalyserResult.OK_AND_RECURSIVE_INTERRUPT,
         this.analyser.analyse(ctx, path),
         "Should return OK and interrupt");
   }
@@ -90,7 +90,7 @@ class DocumentRootLayoutFilesTest extends AnalyserTestBase {
         new PublishedPath(PublicationType.OBJECT, file, file.getFileName().toString());
 
     assertEquals(
-        AnalyserResult.OK_AND_INTERRUPT,
+        AnalyserResult.OK_AND_RECURSIVE_INTERRUPT,
         this.analyser.analyse(ctx, path),
         "Should return OK and interrupt");
   }
