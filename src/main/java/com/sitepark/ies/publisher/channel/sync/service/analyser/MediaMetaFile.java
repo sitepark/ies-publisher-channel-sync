@@ -2,6 +2,7 @@ package com.sitepark.ies.publisher.channel.sync.service.analyser;
 
 import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResult;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResultFactory;
+import com.sitepark.ies.publisher.channel.sync.domain.entity.ChannelLayout;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.Publication;
 import com.sitepark.ies.publisher.channel.sync.domain.value.PublishedPath;
 import com.sitepark.ies.publisher.channel.sync.domain.value.ResultType;
@@ -21,6 +22,12 @@ public class MediaMetaFile implements PublishedPathAnalyser {
     String name = path.baseName();
     if (!name.endsWith(SUFFIX)) {
       return AnalyserResult.OK;
+    }
+
+    if (ctx.getChannel().layout() == ChannelLayout.ID_BASED_RESOURCES) {
+      AnalyserResultFactory resultFactory = ctx.getAnalyserResultFactory();
+
+      return resultFactory.createResult(ResultType.UNKNOWN_FILE_OR_DIRECTORY, path);
     }
 
     Path parent = path.absolutePath().getParent();

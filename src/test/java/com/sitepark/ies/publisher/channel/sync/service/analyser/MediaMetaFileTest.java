@@ -6,10 +6,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResult;
+import com.sitepark.ies.publisher.channel.sync.domain.entity.ChannelLayout;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.Publication;
 import com.sitepark.ies.publisher.channel.sync.domain.value.PublicationDirectory;
 import com.sitepark.ies.publisher.channel.sync.domain.value.PublishedPath;
 import com.sitepark.ies.publisher.channel.sync.domain.value.ResultType;
+import com.sitepark.ies.publisher.channel.sync.service.Channel;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collections;
@@ -44,6 +46,9 @@ class MediaMetaFileTest extends AnalyserTestBase {
   @Test
   void testPublicationDirectoryWithoutParent() {
     AnalyserContext ctx = this.mockAnalyserContext();
+    Channel channel = mock();
+    when(ctx.getChannel()).thenReturn(channel);
+    when(channel.layout()).thenReturn(ChannelLayout.URL_BASED_RESOURCES);
 
     PublishedPath path = mock();
     when(path.isDirectory()).thenReturn(false);
@@ -54,8 +59,11 @@ class MediaMetaFileTest extends AnalyserTestBase {
   }
 
   @Test
-  void testWithPublishedPublicationDirectory() {
+  void testWithPublishedPublicationDirectoryWithUrlBasedResourcesLayout() {
     AnalyserContext ctx = this.mockAnalyserContext();
+    Channel channel = mock();
+    when(ctx.getChannel()).thenReturn(channel);
+    when(channel.layout()).thenReturn(ChannelLayout.URL_BASED_RESOURCES);
 
     PublicationDirectory directory = mock();
     when(ctx.getPublicationDirectory()).thenReturn(directory);
@@ -80,8 +88,30 @@ class MediaMetaFileTest extends AnalyserTestBase {
   }
 
   @Test
+  void testWithPublishedPublicationDirectoryWithIdBasedResourcesLayout() {
+
+    AnalyserContext ctx = this.mockAnalyserContext();
+    Channel channel = mock();
+    when(ctx.getChannel()).thenReturn(channel);
+    when(channel.layout()).thenReturn(ChannelLayout.ID_BASED_RESOURCES);
+
+    PublishedPath path = mock();
+    when(path.isDirectory()).thenReturn(false);
+    when(path.baseName()).thenReturn("baseName.meta.php");
+    when(path.absolutePath()).thenReturn(Path.of("/root/baseName.meta.php"));
+
+    AnalyserResult expected =
+        ctx.getAnalyserResultFactory().createResult(ResultType.UNKNOWN_FILE_OR_DIRECTORY, path);
+
+    assertEquals(expected, this.analyser.analyse(ctx, path), "Should be an unknown file");
+  }
+
+  @Test
   void testWithNonPublishedPublicationDirectory() {
     AnalyserContext ctx = this.mockAnalyserContext();
+    Channel channel = mock();
+    when(ctx.getChannel()).thenReturn(channel);
+    when(channel.layout()).thenReturn(ChannelLayout.URL_BASED_RESOURCES);
 
     PublicationDirectory directory = mock();
     when(ctx.getPublicationDirectory()).thenReturn(directory);

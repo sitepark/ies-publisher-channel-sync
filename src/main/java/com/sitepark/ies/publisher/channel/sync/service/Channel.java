@@ -7,14 +7,46 @@ import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 
 @SuppressWarnings("PMD.TooManyMethods")
-public record Channel(ChannelLayout layout, Path root) {
+public final class Channel {
 
-  public Channel {
+  private final ChannelLayout layout;
+  private final Path root;
+  private final IdPathMapper idPathMapper;
+
+  private Channel(ChannelLayout layout, Path root, IdPathMapper idPathMapper) {
+    this.layout = layout;
+    this.root = root;
+    this.idPathMapper = idPathMapper;
+  }
+
+  public static Channel of(ChannelLayout layout, Path root) {
     if (!root.isAbsolute()) {
       throw new IllegalArgumentException("Root path must be absolute");
     }
+
+    IdPathMapper idPathMapper;
+    if (layout == ChannelLayout.ID_BASED_RESOURCES) {
+      idPathMapper = new IdPathMapper(new FixedDecimalGroupingStrategy(2, 3));
+    } else {
+      idPathMapper = null;
+    }
+
+    return new Channel(layout, root, idPathMapper);
+  }
+
+  public ChannelLayout layout() {
+    return this.layout;
+  }
+
+  public Path root() {
+    return this.root;
+  }
+
+  public Path pathFor(long id) {
+    return idPathMapper.pathFor(id);
   }
 
   public Path resolve(PublicationType type, String path) {
@@ -27,6 +59,33 @@ public record Channel(ChannelLayout layout, Path root) {
 
   public boolean exists(PublicationType type, Path path) {
     return Files.exists(this.resolve(type, path));
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(this.layout, this.root, this.idPathMapper);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (!(o instanceof Channel that)) {
+      return false;
+    }
+    return Objects.equals(this.layout, that.layout)
+        && Objects.equals(this.root, that.root)
+        && Objects.equals(this.idPathMapper, that.idPathMapper);
+  }
+
+  @Override
+  public String toString() {
+    return "Channel{"
+        + "layout="
+        + layout
+        + ", root="
+        + root
+        + ", idPathMapper="
+        + idPathMapper
+        + '}';
   }
 
   private Path toPublisherTypeBase(PublicationType type) {

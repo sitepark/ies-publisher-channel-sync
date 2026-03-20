@@ -138,7 +138,7 @@ class AnalyseTest {
         analyseBuilder()
             .root(this.root.resolve("testWithAppendageSuffixDir"))
             .layout(ChannelLayout.DOCUMENT_ROOT)
-            .publication("a");
+            .publication("a.php");
 
     List<ResultEntry> result = this.analyseRecursive(analyseBuilder.build());
 
@@ -567,7 +567,7 @@ class AnalyseTest {
     AnalyserBuilder builder =
         analyseBuilder()
             .root(this.root.resolve("testWithResourcesLayout"))
-            .layout(ChannelLayout.RESOURCES);
+            .layout(ChannelLayout.URL_BASED_RESOURCES);
 
     this.buildPublicationTestTree(builder);
 
@@ -769,7 +769,7 @@ class AnalyseTest {
       if (this.root == null) {
         throw new IllegalStateException("root must be set");
       }
-      this.channel = new Channel(this.layout, this.root);
+      this.channel = Channel.of(this.layout, this.root);
       return this.channel;
     }
 

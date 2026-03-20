@@ -24,7 +24,7 @@ class ChannelFactoryTest {
     Channel channel = factory.create(this.documentRootLayoutBase);
 
     Channel expected =
-        new Channel(ChannelLayout.DOCUMENT_ROOT, this.resourceBase.resolve("documentRootLayout"));
+        Channel.of(ChannelLayout.DOCUMENT_ROOT, this.resourceBase.resolve("documentRootLayout"));
 
     assertEquals(expected, channel, "unexpected channel");
   }
@@ -36,7 +36,7 @@ class ChannelFactoryTest {
     Channel channel = factory.create(this.documentRootLayoutBase.resolve("a/b"));
 
     Channel expected =
-        new Channel(ChannelLayout.DOCUMENT_ROOT, this.resourceBase.resolve("documentRootLayout"));
+        Channel.of(ChannelLayout.DOCUMENT_ROOT, this.resourceBase.resolve("documentRootLayout"));
 
     assertEquals(expected, channel, "unexpected channel");
   }
@@ -47,7 +47,7 @@ class ChannelFactoryTest {
     ChannelFactory factory = new ChannelFactory();
     Channel channel = factory.create(this.resourcesLayoutBase.resolve("valid"));
     Channel expected =
-        new Channel(ChannelLayout.RESOURCES, this.resourcesLayoutBase.resolve("valid"));
+        Channel.of(ChannelLayout.URL_BASED_RESOURCES, this.resourcesLayoutBase.resolve("valid"));
 
     assertEquals(expected, channel, "unexpected channel");
   }
@@ -70,7 +70,7 @@ class ChannelFactoryTest {
     Channel channel =
         factory.create(this.resourcesLayoutBase.resolve("valid").resolve("objects/a/b"));
     Channel expected =
-        new Channel(ChannelLayout.RESOURCES, this.resourcesLayoutBase.resolve("valid"));
+        Channel.of(ChannelLayout.URL_BASED_RESOURCES, this.resourcesLayoutBase.resolve("valid"));
 
     assertEquals(expected, channel, "unexpected channel");
   }
