@@ -98,7 +98,13 @@ public class EmbeddedMediaDirectory implements PublishedPathAnalyser, Publicatio
           ResultType.UNKNOWN_FILE_OR_DIRECTORY, path);
     }
 
-    Path mediaOwnerIdPath = ctx.getChannel().pathFor(id);
+    Path mediaOwnerIdPath;
+    try {
+      mediaOwnerIdPath = ctx.getChannel().pathFor(id);
+    } catch (IllegalArgumentException e) {
+      return resultFactory.createRecursiveInterruptResultDeleteForce(
+          ResultType.UNKNOWN_FILE_OR_DIRECTORY, path);
+    }
     Path mediaOwnerPath =
         ctx.getChannel()
             .resolve(
