@@ -2,14 +2,18 @@ package com.sitepark.ies.publisher.channel.sync.service.analyser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResult;
+import com.sitepark.ies.publisher.channel.sync.domain.entity.ChannelLayout;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.Publication;
 import com.sitepark.ies.publisher.channel.sync.domain.value.PublicationDirectory;
+import com.sitepark.ies.publisher.channel.sync.domain.value.PublicationType;
 import com.sitepark.ies.publisher.channel.sync.domain.value.PublishedPath;
 import com.sitepark.ies.publisher.channel.sync.domain.value.ResultType;
+import com.sitepark.ies.publisher.channel.sync.service.Channel;
 import java.nio.file.Path;
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;
@@ -34,6 +38,10 @@ class EmbeddedMediaDirectoryTest extends AnalyserTestBase {
   @Test
   void testNoDotMediaSuffix() {
     AnalyserContext ctx = this.mockAnalyserContext();
+    Channel channel = mock();
+    when(ctx.getChannel()).thenReturn(channel);
+    when(channel.layout()).thenReturn(ChannelLayout.URL_BASED_RESOURCES);
+
     PublishedPath path = mock();
     when(path.isDirectory()).thenReturn(true);
     when(path.baseName()).thenReturn("normal-directory");
@@ -44,6 +52,10 @@ class EmbeddedMediaDirectoryTest extends AnalyserTestBase {
   @Test
   void testInvalidParentPath() {
     AnalyserContext ctx = this.mockAnalyserContext();
+    Channel channel = mock();
+    when(ctx.getChannel()).thenReturn(channel);
+    when(channel.layout()).thenReturn(ChannelLayout.URL_BASED_RESOURCES);
+
     PublishedPath path = mock();
     when(path.isDirectory()).thenReturn(true);
     when(path.baseName()).thenReturn("test.php.media");
@@ -53,9 +65,13 @@ class EmbeddedMediaDirectoryTest extends AnalyserTestBase {
   }
 
   @Test
-  void testWithPublication() {
+  void testWithPublicationUrlBased() {
     AnalyserContext ctx = this.mockAnalyserContext();
     PublishedPath path = mock();
+    Channel channel = mock();
+    when(ctx.getChannel()).thenReturn(channel);
+    when(channel.layout()).thenReturn(ChannelLayout.URL_BASED_RESOURCES);
+
     when(path.isDirectory()).thenReturn(true);
     when(path.baseName()).thenReturn("test.php.media");
     when(path.absolutePath()).thenReturn(Path.of("/root/test.php.media"));
@@ -76,9 +92,79 @@ class EmbeddedMediaDirectoryTest extends AnalyserTestBase {
   }
 
   @Test
+  void testWithPublicationIdBasedAndObjectOwner() {
+    AnalyserContext ctx = this.mockAnalyserContext();
+    Channel channel = mock();
+    when(ctx.getChannel()).thenReturn(channel);
+    when(channel.layout()).thenReturn(ChannelLayout.ID_BASED_RESOURCES);
+
+    Path mediaOwnerIdPath = Path.of("000/001/123");
+
+    Path mediaOwnerPath =
+        this.resourceDir.resolve(
+            mediaOwnerIdPath.resolveSibling(mediaOwnerIdPath.getFileName() + ".php"));
+
+    when(channel.pathFor(anyLong())).thenReturn(mediaOwnerIdPath);
+    when(channel.resolve(
+            PublicationType.OBJECT,
+            mediaOwnerIdPath.resolveSibling(mediaOwnerIdPath.getFileName() + ".php")))
+        .thenReturn(mediaOwnerPath);
+
+    PublishedPath path = mock();
+    when(path.isDirectory()).thenReturn(true);
+    when(path.baseName()).thenReturn("1234-123");
+    when(path.absolutePath()).thenReturn(Path.of("/root/urlpath.media/1234-123"));
+
+    PublicationDirectory directory = mock();
+    when(ctx.getPublicationDirectory()).thenReturn(directory);
+
+    assertEquals(
+        AnalyserResult.OK_AND_INTERRUPT,
+        this.analyser.analyse(ctx, path),
+        "Should return OK_AND_INTERRUPT");
+  }
+
+  @Test
+  void testWithPublicationIdBasedAndMediaOwner() {
+    AnalyserContext ctx = this.mockAnalyserContext();
+    Channel channel = mock();
+    when(ctx.getChannel()).thenReturn(channel);
+    when(channel.layout()).thenReturn(ChannelLayout.ID_BASED_RESOURCES);
+
+    Path mediaOwnerIdPath = Path.of("000/001/345");
+
+    Path mediaOwnerPath =
+        this.resourceDir.resolve(
+            mediaOwnerIdPath.resolveSibling(mediaOwnerIdPath.getFileName() + ".php"));
+
+    when(channel.pathFor(anyLong())).thenReturn(mediaOwnerIdPath);
+    when(channel.resolve(
+            PublicationType.OBJECT,
+            mediaOwnerIdPath.resolveSibling(mediaOwnerIdPath.getFileName() + ".php")))
+        .thenReturn(mediaOwnerPath);
+
+    PublishedPath path = mock();
+    when(path.isDirectory()).thenReturn(true);
+    when(path.baseName()).thenReturn("1234-123");
+    when(path.absolutePath()).thenReturn(this.resourceDir.resolve("urlpath.css.media/1234-123"));
+
+    PublicationDirectory directory = mock();
+    when(ctx.getPublicationDirectory()).thenReturn(directory);
+
+    assertEquals(
+        AnalyserResult.OK_AND_INTERRUPT,
+        this.analyser.analyse(ctx, path),
+        "Should return OK_AND_INTERRUPT");
+  }
+
+  @Test
   void testWithoutPublication() {
     AnalyserContext ctx = this.mockAnalyserContext();
     PublishedPath path = mock();
+    Channel channel = mock();
+    when(ctx.getChannel()).thenReturn(channel);
+    when(channel.layout()).thenReturn(ChannelLayout.URL_BASED_RESOURCES);
+
     when(path.isDirectory()).thenReturn(true);
     when(path.baseName()).thenReturn("test.php.media");
     when(path.absolutePath()).thenReturn(Path.of("/root/test.php.media"));
@@ -123,11 +209,24 @@ class EmbeddedMediaDirectoryTest extends AnalyserTestBase {
   }
 
   @Test
-  void testWithExistsPublication() {
+  void testWithExistsPublicationUrlBased() {
     AnalyserContext ctx = this.mockAnalyserContext();
     Publication publication = mock();
     when(publication.absolutePath())
         .thenReturn(this.resourceDir.resolve("test.php.media/123/image.png").toAbsolutePath());
+
+    assertEquals(
+        AnalyserResult.OK_AND_RECURSIVE_INTERRUPT,
+        this.analyser.analyse(ctx, publication),
+        "Should return OK_AND_INTERRUPT");
+  }
+
+  @Test
+  void testWithExistsPublicationIdBased() {
+    AnalyserContext ctx = this.mockAnalyserContext();
+    Publication publication = mock();
+    when(publication.absolutePath())
+        .thenReturn(this.resourceDir.resolve("test-id-based.media/123/image.png").toAbsolutePath());
 
     assertEquals(
         AnalyserResult.OK_AND_RECURSIVE_INTERRUPT,

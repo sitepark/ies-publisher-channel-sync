@@ -3,6 +3,7 @@ package com.sitepark.ies.publisher.channel.sync.service.analyser;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResult;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResultFactory;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.Publication;
+import com.sitepark.ies.publisher.channel.sync.domain.value.PublicationType;
 import com.sitepark.ies.publisher.channel.sync.domain.value.PublishedPath;
 import com.sitepark.ies.publisher.channel.sync.domain.value.ResultEntry;
 import com.sitepark.ies.publisher.channel.sync.domain.value.ResultEntryFactory;
@@ -35,6 +36,11 @@ public class HashMismatch implements PublishedPathAnalyser {
     for (Publication p : ctx.getPublicationDirectory().getPublications(path.baseName())) {
 
       if (!p.isPublished()) {
+        continue;
+      }
+
+      // no hash for media-metafile available
+      if (p.type() == PublicationType.OBJECT && p.mediaId() != 0) {
         continue;
       }
 

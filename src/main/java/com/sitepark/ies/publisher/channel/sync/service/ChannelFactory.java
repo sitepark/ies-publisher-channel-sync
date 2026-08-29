@@ -10,7 +10,7 @@ public class ChannelFactory {
     do {
       ChannelLayout layout = identifyLayout(channelRoot);
       if (layout != null) {
-        return new Channel(layout, channelRoot);
+        return Channel.of(layout, channelRoot);
       }
     } while ((channelRoot = channelRoot.getParent()) != null);
 
@@ -22,7 +22,10 @@ public class ChannelFactory {
       return ChannelLayout.DOCUMENT_ROOT;
     }
     if (this.isResourcesLayout(path)) {
-      return ChannelLayout.RESOURCES;
+      if (this.isIdBasedResourcesLayout(path)) {
+        return ChannelLayout.ID_BASED_RESOURCES;
+      }
+      return ChannelLayout.URL_BASED_RESOURCES;
     }
     return null;
   }
@@ -33,5 +36,9 @@ public class ChannelFactory {
 
   private boolean isResourcesLayout(Path path) {
     return Files.exists(path.resolve("context.php")) && Files.isDirectory(path.resolve("objects"));
+  }
+
+  private boolean isIdBasedResourcesLayout(Path path) {
+    return Files.isRegularFile(path.resolve("configs/manifest.php"));
   }
 }
