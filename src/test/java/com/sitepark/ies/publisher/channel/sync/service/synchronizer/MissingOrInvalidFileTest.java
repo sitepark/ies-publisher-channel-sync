@@ -31,7 +31,7 @@ class MissingOrInvalidFileTest {
   private SynchronizeContext ctx;
 
   @BeforeEach
-  public void setup() {
+  void setup() {
     this.ctx = mock();
     when(this.ctx.getNotifier()).thenReturn(this.notifier);
     when(this.ctx.getPublisher()).thenReturn(this.publisher);
@@ -53,6 +53,7 @@ class MissingOrInvalidFileTest {
     ResultEntry entry = mock();
     when(entry.getResultType()).thenReturn(ResultType.MISSING_FILE);
     when(entry.getAbsolutePath()).thenReturn(Path.of("/a/b/c"));
+    when(entry.getObject()).thenReturn(new Ref("1"));
     when(entry.isTemporary()).thenReturn(true);
 
     this.synchronize.synchronize(this.ctx, entry);
@@ -66,6 +67,7 @@ class MissingOrInvalidFileTest {
     ResultEntry entry = mock();
     when(entry.getResultType()).thenReturn(ResultType.MISSING_FILE);
     when(entry.getAbsolutePath()).thenReturn(Path.of("/a/b/c"));
+    when(entry.getObject()).thenReturn(new Ref("1"));
 
     this.synchronize.synchronize(this.ctx, entry);
 
@@ -78,6 +80,7 @@ class MissingOrInvalidFileTest {
     ResultEntry entry = mock();
     when(entry.getResultType()).thenReturn(ResultType.HASH_MISMATCH);
     when(entry.getAbsolutePath()).thenReturn(Path.of("/a/b/c"));
+    when(entry.getObject()).thenReturn(new Ref("1"));
 
     this.synchronize.synchronize(this.ctx, entry);
 
@@ -90,6 +93,7 @@ class MissingOrInvalidFileTest {
     ResultEntry entry = mock();
     when(entry.getResultType()).thenReturn(ResultType.LOST_PUBLICATION);
     when(entry.getAbsolutePath()).thenReturn(Path.of("/a/b/c"));
+    when(entry.getObject()).thenReturn(new Ref("1"));
 
     this.synchronize.synchronize(this.ctx, entry);
 

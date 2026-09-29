@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.util.Iterator;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import org.jspecify.annotations.Nullable;
 
 public class ChannelDirectoryStream implements DirectoryStream<PublishedPath> {
 
@@ -18,6 +19,7 @@ public class ChannelDirectoryStream implements DirectoryStream<PublishedPath> {
   private final Lock lock = new ReentrantLock();
 
   @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
+  @Nullable
   private ChannelDirectoryIterator iterator;
 
   protected ChannelDirectoryStream(
@@ -42,19 +44,17 @@ public class ChannelDirectoryStream implements DirectoryStream<PublishedPath> {
     }
   }
 
-  final class CloseableLock implements AutoCloseable {
+  static final class CloseableLock implements AutoCloseable {
     private final Lock lock;
-    private boolean locked;
 
     CloseableLock(Lock lock) {
       this.lock = lock;
       lock.lock();
-      locked = true;
     }
 
     @Override
     public void close() {
-      if (locked) lock.unlock();
+      lock.unlock();
     }
   }
 }

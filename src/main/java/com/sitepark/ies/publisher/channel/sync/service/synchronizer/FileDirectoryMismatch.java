@@ -2,6 +2,7 @@ package com.sitepark.ies.publisher.channel.sync.service.synchronizer;
 
 import com.sitepark.ies.publisher.channel.sync.domain.value.ResultEntry;
 import com.sitepark.ies.publisher.channel.sync.domain.value.ResultType;
+import java.util.Objects;
 
 public class FileDirectoryMismatch implements Synchronizer {
 
@@ -15,7 +16,9 @@ public class FileDirectoryMismatch implements Synchronizer {
 
     boolean success = true;
     if (!ctx.isTest()) {
-      success = ctx.delete(entry.getAbsolutePath());
+      success =
+          ctx.delete(
+              Objects.requireNonNull(entry.getAbsolutePath(), "absolutePath of the entry is null"));
     }
 
     if (!success) {
@@ -27,7 +30,8 @@ public class FileDirectoryMismatch implements Synchronizer {
         .notify(entry, "deleted " + entry.getAbsolutePath() + (ctx.isTest() ? " (test)" : ""));
     try {
       if (!ctx.isTest()) {
-        ctx.getPublisher().republish(entry.getObject());
+        ctx.getPublisher()
+            .republish(Objects.requireNonNull(entry.getObject(), "object of the entry is null"));
       }
       ctx.getNotifier()
           .notify(entry, "republish " + entry.getAbsolutePath() + (ctx.isTest() ? " (test)" : ""));

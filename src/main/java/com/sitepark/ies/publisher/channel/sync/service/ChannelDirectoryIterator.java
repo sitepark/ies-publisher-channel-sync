@@ -4,6 +4,7 @@ import com.sitepark.ies.publisher.channel.sync.domain.value.PublicationType;
 import com.sitepark.ies.publisher.channel.sync.domain.value.PublishedPath;
 import java.nio.file.Path;
 import java.util.Iterator;
+import org.jspecify.annotations.Nullable;
 
 public class ChannelDirectoryIterator implements Iterator<PublishedPath> {
 
@@ -21,6 +22,9 @@ public class ChannelDirectoryIterator implements Iterator<PublishedPath> {
     return this.iterator.hasNext();
   }
 
+  // A directory entry always has a non-blank file name, null is only possible for a path without
+  // name elements.
+  @SuppressWarnings("NullAway")
   @Override
   public PublishedPath next() {
     Path path = this.iterator.next();
@@ -28,7 +32,7 @@ public class ChannelDirectoryIterator implements Iterator<PublishedPath> {
     return new PublishedPath(this.type, path.toAbsolutePath(), fileName);
   }
 
-  private String fileName(Path path) {
+  private @Nullable String fileName(Path path) {
     Path fileName = path.getFileName();
     if (fileName == null) {
       return null;

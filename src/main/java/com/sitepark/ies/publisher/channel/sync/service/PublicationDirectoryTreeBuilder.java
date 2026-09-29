@@ -104,7 +104,7 @@ public class PublicationDirectoryTreeBuilder {
 
     private final List<Publication> publications = new ArrayList<>();
 
-    public Node(String name) {
+    private Node(String name) {
       Objects.requireNonNull(name, "name is required");
       this.name = name;
     }

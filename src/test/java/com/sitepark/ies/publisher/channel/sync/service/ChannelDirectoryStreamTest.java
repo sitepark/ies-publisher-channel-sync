@@ -10,6 +10,7 @@ import com.sitepark.ies.publisher.channel.sync.domain.value.PublicationType;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Path;
+import java.util.Objects;
 import org.junit.jupiter.api.Test;
 
 class ChannelDirectoryStreamTest {
@@ -28,7 +29,7 @@ class ChannelDirectoryStreamTest {
     DirectoryStream<Path> stream = mock();
     try (ChannelDirectoryStream channelDirectoryStream =
         new ChannelDirectoryStream(PublicationType.OBJECT, stream)) {
-      channelDirectoryStream.iterator();
+      Objects.requireNonNull(channelDirectoryStream.iterator());
       assertThrows(IllegalStateException.class, channelDirectoryStream::iterator);
     }
   }

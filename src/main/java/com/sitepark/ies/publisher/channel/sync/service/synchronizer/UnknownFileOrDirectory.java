@@ -3,6 +3,7 @@ package com.sitepark.ies.publisher.channel.sync.service.synchronizer;
 import com.sitepark.ies.publisher.channel.sync.domain.value.ResultEntry;
 import com.sitepark.ies.publisher.channel.sync.domain.value.ResultType;
 import java.nio.file.Path;
+import java.util.Objects;
 
 public class UnknownFileOrDirectory implements Synchronizer {
 
@@ -20,7 +21,8 @@ public class UnknownFileOrDirectory implements Synchronizer {
       return;
     }
 
-    Path entryFile = entry.getAbsolutePath();
+    Path entryFile =
+        Objects.requireNonNull(entry.getAbsolutePath(), "absolutePath of the entry is null");
 
     boolean deleteDirectoryForce = entry.isDeleteForce() || ctx.isDeleteForce();
     if (ctx.isDirectory(entryFile) && !deleteDirectoryForce) {
