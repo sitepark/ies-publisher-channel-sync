@@ -95,7 +95,7 @@ public class PublicationDirectoryTreeBuilder {
     return node;
   }
 
-  private static class Node {
+  private static final class Node {
 
     private final String name;
 
