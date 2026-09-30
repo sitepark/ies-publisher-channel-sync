@@ -89,7 +89,8 @@ public final class SynchronizeContext {
     return Files.exists(path);
   }
 
-  @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
+  // callers are expected to set the required fields, as before
+  @SuppressWarnings({"PMD.AvoidFieldNameMatchingMethodName", "NullAway.Init"})
   public static class Builder {
 
     private boolean test;

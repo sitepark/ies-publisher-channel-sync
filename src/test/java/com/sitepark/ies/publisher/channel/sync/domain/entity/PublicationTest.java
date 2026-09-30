@@ -18,13 +18,11 @@ import org.junit.jupiter.api.Test;
 class PublicationTest {
 
   @Test
-  @SuppressWarnings("PMD.JUnitTestsShouldIncludeAssert")
   void testEquals() {
     EqualsVerifier.forClass(Publication.class).verify();
   }
 
   @Test
-  @SuppressWarnings("PMD.JUnitTestsShouldIncludeAssert")
   void testToString() {
     ToStringVerifier.forClass(Publication.class).withClassName(NameStyle.SIMPLE_NAME).verify();
   }

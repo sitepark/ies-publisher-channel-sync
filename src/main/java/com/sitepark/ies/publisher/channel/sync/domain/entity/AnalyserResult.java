@@ -15,7 +15,6 @@ public record AnalyserResult(
   public static final AnalyserResult OK_AND_INTERRUPT =
       new AnalyserResult(Collections.emptyList(), true, false);
 
-  @SuppressWarnings("PMD.UnusedAssignment")
   public AnalyserResult {
     entries = Collections.unmodifiableList(entries);
   }

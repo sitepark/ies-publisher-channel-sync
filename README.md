@@ -1,6 +1,6 @@
 [![codecov](https://codecov.io/gh/sitepark/ies-publisher-channel-sync/graph/badge.svg?token=hp7owyVaQ7)](https://codecov.io/gh/sitepark/ies-publisher-channel-sync)
 [![Known Vulnerabilities](https://snyk.io/test/github/sitepark/ies-publisher-channel-sync/badge.svg)](https://snyk.io/test/github/sitepark/ies-publisher-channel-sync/)
-[![java-21](https://img.shields.io/badge/java_21-%23ED8B00.svg?style=flat&logo=openjdk&logoColor=white)](https://openjdk.org/projects/jdk/21/)
+[![java-25](https://img.shields.io/badge/java_25-%23ED8B00.svg?style=flat&logo=openjdk&logoColor=white)](https://openjdk.org/projects/jdk/25/)
 
 # Publisher Channel Sync
 

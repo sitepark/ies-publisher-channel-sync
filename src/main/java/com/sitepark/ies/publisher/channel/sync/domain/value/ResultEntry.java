@@ -3,6 +3,7 @@ package com.sitepark.ies.publisher.channel.sync.domain.value;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.Publication;
 import java.nio.file.Path;
 import java.util.Objects;
+import org.jspecify.annotations.Nullable;
 
 public final class ResultEntry {
 
@@ -10,24 +11,24 @@ public final class ResultEntry {
 
   final PublicationDirectory publicationDirectory;
 
-  final Publication publication;
+  @Nullable final Publication publication;
 
-  final PublishedPath publishedPath;
+  @Nullable final PublishedPath publishedPath;
 
   final boolean deleteForce;
 
   final boolean temporary;
 
-  final Path absolutePath;
+  @Nullable final Path absolutePath;
 
   private ResultEntry(
       ResultType resultType,
       PublicationDirectory publicationDirectory,
-      Publication publication,
-      PublishedPath publishedPath,
+      @Nullable Publication publication,
+      @Nullable PublishedPath publishedPath,
       boolean deleteForce,
       boolean temporary,
-      Path absolutePath) {
+      @Nullable Path absolutePath) {
     this.resultType = resultType;
     this.publicationDirectory = publicationDirectory;
     this.publication = publication;
@@ -49,11 +50,11 @@ public final class ResultEntry {
     return this.publicationDirectory;
   }
 
-  public Publication getPublication() {
+  public @Nullable Publication getPublication() {
     return this.publication;
   }
 
-  public PublishedPath getPublishedPath() {
+  public @Nullable PublishedPath getPublishedPath() {
     return this.publishedPath;
   }
 
@@ -61,11 +62,11 @@ public final class ResultEntry {
     return this.deleteForce;
   }
 
-  public Path getAbsolutePath() {
+  public @Nullable Path getAbsolutePath() {
     return this.absolutePath;
   }
 
-  public Ref getObject() {
+  public @Nullable Ref getObject() {
     if (this.publication == null) {
       return null;
     } else {
@@ -73,7 +74,7 @@ public final class ResultEntry {
     }
   }
 
-  public String getName() {
+  public @Nullable String getName() {
     if (this.publication != null) {
       return this.publication.fileName();
     } else if (this.publishedPath != null) {
@@ -129,12 +130,13 @@ public final class ResultEntry {
         + "]";
   }
 
-  @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
+  // callers are expected to set the required fields, as before
+  @SuppressWarnings({"PMD.AvoidFieldNameMatchingMethodName", "NullAway.Init"})
   public static final class Builder {
 
     private PublicationDirectory publicationDirectory;
-    private Publication publication;
-    private PublishedPath publishedPath;
+    @Nullable private Publication publication;
+    @Nullable private PublishedPath publishedPath;
     private ResultType resultType;
     private boolean deleteForce;
     private boolean temporary;
@@ -144,12 +146,12 @@ public final class ResultEntry {
       return this;
     }
 
-    public Builder publication(Publication publication) {
+    public Builder publication(@Nullable Publication publication) {
       this.publication = publication;
       return this;
     }
 
-    public Builder publishedPath(PublishedPath publishedPath) {
+    public Builder publishedPath(@Nullable PublishedPath publishedPath) {
       this.publishedPath = publishedPath;
       return this;
     }
@@ -169,7 +171,7 @@ public final class ResultEntry {
       return this;
     }
 
-    private Path getAbsolutePath() {
+    private @Nullable Path getAbsolutePath() {
 
       if (this.publication != null) {
         return this.publication.absolutePath();
@@ -183,7 +185,7 @@ public final class ResultEntry {
 
     public ResultEntry build() {
 
-      Path absolutePath = this.getAbsolutePath();
+      @Nullable Path absolutePath = this.getAbsolutePath();
 
       return new ResultEntry(
           this.resultType,

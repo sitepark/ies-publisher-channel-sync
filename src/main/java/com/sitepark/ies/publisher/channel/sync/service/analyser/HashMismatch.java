@@ -50,7 +50,7 @@ public class HashMismatch implements PublishedPathAnalyser {
       }
 
       String hash = this.hasher.hash(pf);
-      if (!hash.equals(p.hash())) {
+      if (hash == null || !hash.equals(p.hash())) {
         list.add(resultEntryFactory.createResultEntry(ResultType.HASH_MISMATCH, p));
       }
     }

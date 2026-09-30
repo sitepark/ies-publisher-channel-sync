@@ -2,6 +2,7 @@ package com.sitepark.ies.publisher.channel.sync.service.synchronizer;
 
 import com.sitepark.ies.publisher.channel.sync.domain.value.ResultEntry;
 import com.sitepark.ies.publisher.channel.sync.domain.value.ResultType;
+import java.util.Objects;
 
 public class IllegalFileCollisions implements Synchronizer {
 
@@ -14,7 +15,8 @@ public class IllegalFileCollisions implements Synchronizer {
 
     try {
       if (!ctx.isTest()) {
-        ctx.getPublisher().depublish(entry.getObject());
+        ctx.getPublisher()
+            .depublish(Objects.requireNonNull(entry.getObject(), "object of the entry is null"));
       }
       ctx.getNotifier()
           .notify(entry, "depublish " + entry.getAbsolutePath() + (ctx.isTest() ? " (test)" : ""));

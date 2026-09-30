@@ -22,7 +22,7 @@ class SynchronizeContextTest {
   private final Path workDir = Path.of("target/test/SynchronizeContextTest");
 
   @BeforeEach
-  public void setup() throws IOException {
+  void setup() throws IOException {
     this.deleteWorkDir();
     Files.createDirectories(this.workDir);
   }

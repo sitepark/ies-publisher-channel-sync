@@ -8,6 +8,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.sitepark.ies.publisher.channel.sync.domain.value.Ref;
 import com.sitepark.ies.publisher.channel.sync.domain.value.ResultEntry;
 import com.sitepark.ies.publisher.channel.sync.domain.value.ResultType;
 import com.sitepark.ies.publisher.channel.sync.port.Publisher;
@@ -26,7 +27,7 @@ class FileDirectoryMismatchTest {
   private SynchronizeContext ctx;
 
   @BeforeEach
-  public void setup() {
+  void setup() {
     this.ctx = mock();
     when(this.ctx.getNotifier()).thenReturn(this.notifier);
     when(this.ctx.getPublisher()).thenReturn(this.publisher);
@@ -61,6 +62,7 @@ class FileDirectoryMismatchTest {
     ResultEntry entry = mock();
     when(entry.getResultType()).thenReturn(ResultType.FILE_DIRECTORY_MISMATCH);
     when(entry.getAbsolutePath()).thenReturn(Path.of("/a/b/c"));
+    when(entry.getObject()).thenReturn(new Ref("1"));
     when(this.ctx.delete(any())).thenReturn(true);
 
     this.synchronize.synchronize(this.ctx, entry);
@@ -77,6 +79,7 @@ class FileDirectoryMismatchTest {
     ResultEntry entry = mock();
     when(entry.getResultType()).thenReturn(ResultType.FILE_DIRECTORY_MISMATCH);
     when(entry.getAbsolutePath()).thenReturn(Path.of("/a/b/c"));
+    when(entry.getObject()).thenReturn(new Ref("1"));
     when(this.ctx.delete(any())).thenReturn(true);
     when(this.ctx.isTest()).thenReturn(true);
 
@@ -94,6 +97,7 @@ class FileDirectoryMismatchTest {
     ResultEntry entry = mock();
     when(entry.getResultType()).thenReturn(ResultType.FILE_DIRECTORY_MISMATCH);
     when(entry.getAbsolutePath()).thenReturn(Path.of("/a/b/c"));
+    when(entry.getObject()).thenReturn(new Ref("1"));
     when(this.ctx.delete(any())).thenReturn(true);
     when(this.ctx.isTest()).thenReturn(false);
     Throwable t = new RuntimeException("test");

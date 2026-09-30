@@ -8,6 +8,8 @@ import java.nio.file.Path;
 
 public class DocumentRootLayoutFiles implements PublishedPathAnalyser {
 
+  private static final String WEB_IES = "WEB-IES";
+
   @Override
   public AnalyserResult analyse(AnalyserContext ctx, PublishedPath path) {
 
@@ -19,7 +21,7 @@ public class DocumentRootLayoutFiles implements PublishedPathAnalyser {
 
     String baseName = fullPath.getName(0).toString();
 
-    if ("WEB-IES".equals(baseName)) {
+    if (WEB_IES.equals(baseName)) {
       return AnalyserResult.OK_AND_RECURSIVE_INTERRUPT;
     }
 

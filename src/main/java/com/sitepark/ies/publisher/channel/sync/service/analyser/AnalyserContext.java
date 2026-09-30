@@ -87,7 +87,8 @@ public final class AnalyserContext {
     return this.analyserResultFactory;
   }
 
-  @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
+  // callers are expected to set the required fields, as before
+  @SuppressWarnings({"PMD.AvoidFieldNameMatchingMethodName", "NullAway.Init"})
   public static class Builder {
     @SuppressWarnings("PMD.UseConcurrentHashMap")
     private final Map<String, PublishedPath> directoryEntries = new HashMap<>();

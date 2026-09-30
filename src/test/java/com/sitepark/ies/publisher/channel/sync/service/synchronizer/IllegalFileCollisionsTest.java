@@ -26,7 +26,7 @@ class IllegalFileCollisionsTest {
   private SynchronizeContext ctx;
 
   @BeforeEach
-  public void setup() {
+  void setup() {
     this.ctx = mock();
     when(this.ctx.getNotifier()).thenReturn(this.notifier);
     when(this.ctx.getPublisher()).thenReturn(this.publisher);
