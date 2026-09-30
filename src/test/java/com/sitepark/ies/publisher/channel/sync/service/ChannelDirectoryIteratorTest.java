@@ -1,6 +1,7 @@
 package com.sitepark.ies.publisher.channel.sync.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -43,20 +44,19 @@ class ChannelDirectoryIteratorTest {
   }
 
   @Test
-  void testNextWithNullFileName() {
+  void testNextWithoutFileNameFails() {
 
-    Path a = Path.of("/");
+    Path root = Path.of("/");
 
     Iterator<Path> pathIterator = mock();
     when(pathIterator.hasNext()).thenReturn(true);
-    when(pathIterator.next()).thenReturn(a);
+    when(pathIterator.next()).thenReturn(root);
 
     ChannelDirectoryIterator iterator =
         new ChannelDirectoryIterator(PublicationType.OBJECT, pathIterator);
 
-    PublishedPath expected = new PublishedPath(PublicationType.OBJECT, a.toAbsolutePath(), null);
-
-    assertEquals(expected, iterator.next(), "Unexpected next");
+    assertThrows(
+        IllegalStateException.class, iterator::next, "A path without file name is no entry");
   }
 
   @Test
@@ -71,8 +71,8 @@ class ChannelDirectoryIteratorTest {
     ChannelDirectoryIterator iterator =
         new ChannelDirectoryIterator(PublicationType.OBJECT, pathIterator);
 
-    PublishedPath expected = new PublishedPath(PublicationType.OBJECT, a.toAbsolutePath(), null);
+    PublishedPath expected = new PublishedPath(PublicationType.OBJECT, a.toAbsolutePath(), " ");
 
-    assertEquals(expected, iterator.next(), "Unexpected next");
+    assertEquals(expected, iterator.next(), "A blank file name is kept");
   }
 }
