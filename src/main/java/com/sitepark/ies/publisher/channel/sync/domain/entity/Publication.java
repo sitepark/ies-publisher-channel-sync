@@ -28,7 +28,7 @@ public record Publication(
   }
 
   // required fields are validated in build()
-  @SuppressWarnings({"PMD.AvoidFieldNameMatchingMethodName", "NullAway.Init"})
+  @SuppressWarnings({"PMD.AvoidFieldNameMatchingMethodName", "PMD.TooManyMethods", "NullAway.Init"})
   public static final class Builder {
     private long id;
     private long mediaId;

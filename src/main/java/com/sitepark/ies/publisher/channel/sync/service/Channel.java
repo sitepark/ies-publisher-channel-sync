@@ -8,15 +8,17 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
+import org.jspecify.annotations.Nullable;
 
-@SuppressWarnings("PMD.TooManyMethods")
+// record-style accessors of an immutable value
+@SuppressWarnings({"PMD.TooManyMethods", "PMD.AvoidFieldNameMatchingMethodName"})
 public final class Channel {
 
   private final ChannelLayout layout;
   private final Path root;
-  private final IdPathMapper idPathMapper;
+  private final @Nullable IdPathMapper idPathMapper;
 
-  private Channel(ChannelLayout layout, Path root, IdPathMapper idPathMapper) {
+  private Channel(ChannelLayout layout, Path root, @Nullable IdPathMapper idPathMapper) {
     this.layout = layout;
     this.root = root;
     this.idPathMapper = idPathMapper;
@@ -27,7 +29,7 @@ public final class Channel {
       throw new IllegalArgumentException("Root path must be absolute");
     }
 
-    IdPathMapper idPathMapper;
+    @Nullable IdPathMapper idPathMapper;
     if (layout == ChannelLayout.ID_BASED_RESOURCES) {
       idPathMapper = new IdPathMapper(new FixedDecimalGroupingStrategy(2, 3));
     } else {
@@ -46,7 +48,10 @@ public final class Channel {
   }
 
   public Path pathFor(long id) {
-    return idPathMapper.pathFor(id);
+    if (this.idPathMapper == null) {
+      throw new IllegalStateException("Layout " + this.layout + " has no id based paths");
+    }
+    return this.idPathMapper.pathFor(id);
   }
 
   public Path resolve(PublicationType type, String path) {
@@ -67,7 +72,7 @@ public final class Channel {
   }
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(@Nullable Object o) {
     if (!(o instanceof Channel that)) {
       return false;
     }

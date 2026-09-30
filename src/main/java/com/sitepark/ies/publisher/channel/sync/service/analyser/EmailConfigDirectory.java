@@ -13,7 +13,7 @@ public class EmailConfigDirectory implements PublishedPathAnalyser {
       return AnalyserResult.OK;
     }
 
-    if (!path.baseName().equals("email")) {
+    if (!"email".equals(path.baseName())) {
       return AnalyserResult.OK;
     }
 

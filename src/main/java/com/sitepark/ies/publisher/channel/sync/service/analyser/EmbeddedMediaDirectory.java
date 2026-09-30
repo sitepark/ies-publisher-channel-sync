@@ -12,6 +12,9 @@ import java.nio.file.Path;
 
 public class EmbeddedMediaDirectory implements PublishedPathAnalyser, PublicationAnalyser {
 
+  // a media owner directory is named <id>-<media id>
+  private static final int ID_PARTS = 2;
+
   private static final String SUFFIX = ".media";
 
   @Override
@@ -70,7 +73,7 @@ public class EmbeddedMediaDirectory implements PublishedPathAnalyser, Publicatio
     }
 
     AnalyserResult interimResult = ifMediaOwnerAObjectAndExists(ctx, path);
-    if (interimResult != AnalyserResult.OK) {
+    if (!AnalyserResult.OK.equals(interimResult)) {
       return interimResult;
     }
 
@@ -82,8 +85,8 @@ public class EmbeddedMediaDirectory implements PublishedPathAnalyser, Publicatio
     AnalyserResultFactory resultFactory = ctx.getAnalyserResultFactory();
 
     // expect a format dir.media/1234-5677
-    String[] parts = path.baseName().split("-");
-    if (parts.length != 2) {
+    String[] parts = path.baseName().split("-", -1);
+    if (parts.length != ID_PARTS) {
       return resultFactory.createRecursiveInterruptResultDeleteForce(
           ResultType.UNKNOWN_FILE_OR_DIRECTORY, path);
     }

@@ -10,7 +10,6 @@ import com.sitepark.ies.publisher.channel.sync.domain.value.ResultEntryFactory;
 import com.sitepark.ies.publisher.channel.sync.domain.value.ResultType;
 import com.sitepark.ies.publisher.channel.sync.port.Hasher;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,27 +34,11 @@ public class HashMismatch implements PublishedPathAnalyser {
 
     for (Publication p : ctx.getPublicationDirectory().getPublications(path.baseName())) {
 
-      if (!p.isPublished()) {
+      if (!hasComparableFile(p)) {
         continue;
       }
 
-      // no hash for media-metafile available
-      if (p.type() == PublicationType.OBJECT && p.mediaId() != 0) {
-        continue;
-      }
-
-      String publicationPath = p.path().toString();
-
-      if (publicationPath.isEmpty()) {
-        continue;
-      }
-
-      Path pf = p.absolutePath();
-      if (!Files.exists(pf)) {
-        continue;
-      }
-
-      String hash = this.hasher.hash(pf);
+      String hash = this.hasher.hash(p.absolutePath());
       if (hash == null || !hash.equals(p.hash())) {
         list.add(resultEntryFactory.createResultEntry(ResultType.HASH_MISMATCH, p));
       }
@@ -63,5 +46,16 @@ public class HashMismatch implements PublishedPathAnalyser {
 
     AnalyserResultFactory resultFactory = ctx.getAnalyserResultFactory();
     return resultFactory.createResult(list);
+  }
+
+  private static boolean hasComparableFile(Publication p) {
+    if (!p.isPublished()) {
+      return false;
+    }
+    // no hash for media-metafile available
+    if (p.type() == PublicationType.OBJECT && p.mediaId() != 0) {
+      return false;
+    }
+    return !p.path().toString().isEmpty() && Files.exists(p.absolutePath());
   }
 }
