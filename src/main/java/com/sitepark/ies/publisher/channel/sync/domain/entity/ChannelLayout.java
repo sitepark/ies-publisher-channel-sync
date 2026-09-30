@@ -2,5 +2,6 @@ package com.sitepark.ies.publisher.channel.sync.domain.entity;
 
 public enum ChannelLayout {
   DOCUMENT_ROOT,
-  RESOURCES
+  URL_BASED_RESOURCES,
+  ID_BASED_RESOURCES
 }

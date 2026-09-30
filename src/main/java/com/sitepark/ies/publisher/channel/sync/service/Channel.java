@@ -7,13 +7,51 @@ import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
+import org.jspecify.annotations.Nullable;
 
-public record Channel(ChannelLayout layout, Path root) {
+// record-style accessors of an immutable value
+@SuppressWarnings({"PMD.TooManyMethods", "PMD.AvoidFieldNameMatchingMethodName"})
+public final class Channel {
 
-  public Channel {
+  private final ChannelLayout layout;
+  private final Path root;
+  private final @Nullable IdPathMapper idPathMapper;
+
+  private Channel(ChannelLayout layout, Path root, @Nullable IdPathMapper idPathMapper) {
+    this.layout = layout;
+    this.root = root;
+    this.idPathMapper = idPathMapper;
+  }
+
+  public static Channel of(ChannelLayout layout, Path root) {
     if (!root.isAbsolute()) {
       throw new IllegalArgumentException("Root path must be absolute");
     }
+
+    @Nullable IdPathMapper idPathMapper;
+    if (layout == ChannelLayout.ID_BASED_RESOURCES) {
+      idPathMapper = new IdPathMapper(new FixedDecimalGroupingStrategy(2, 3));
+    } else {
+      idPathMapper = null;
+    }
+
+    return new Channel(layout, root, idPathMapper);
+  }
+
+  public ChannelLayout layout() {
+    return this.layout;
+  }
+
+  public Path root() {
+    return this.root;
+  }
+
+  public Path pathFor(long id) {
+    if (this.idPathMapper == null) {
+      throw new IllegalStateException("Layout " + this.layout + " has no id based paths");
+    }
+    return this.idPathMapper.pathFor(id);
   }
 
   public Path resolve(PublicationType type, String path) {
@@ -26,6 +64,33 @@ public record Channel(ChannelLayout layout, Path root) {
 
   public boolean exists(PublicationType type, Path path) {
     return Files.exists(this.resolve(type, path));
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(this.layout, this.root, this.idPathMapper);
+  }
+
+  @Override
+  public boolean equals(@Nullable Object o) {
+    if (!(o instanceof Channel that)) {
+      return false;
+    }
+    return Objects.equals(this.layout, that.layout)
+        && Objects.equals(this.root, that.root)
+        && Objects.equals(this.idPathMapper, that.idPathMapper);
+  }
+
+  @Override
+  public String toString() {
+    return "Channel{"
+        + "layout="
+        + layout
+        + ", root="
+        + root
+        + ", idPathMapper="
+        + idPathMapper
+        + '}';
   }
 
   private Path toPublisherTypeBase(PublicationType type) {

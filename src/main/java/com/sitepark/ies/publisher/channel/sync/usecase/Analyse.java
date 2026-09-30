@@ -17,6 +17,7 @@ import com.sitepark.ies.publisher.channel.sync.service.analyser.AnalyserContext;
 import com.sitepark.ies.publisher.channel.sync.service.analyser.Collision;
 import com.sitepark.ies.publisher.channel.sync.service.analyser.DirectoryFileMismatch;
 import com.sitepark.ies.publisher.channel.sync.service.analyser.DocumentRootLayoutFiles;
+import com.sitepark.ies.publisher.channel.sync.service.analyser.EmailConfigDirectory;
 import com.sitepark.ies.publisher.channel.sync.service.analyser.EmbeddedMediaDirectory;
 import com.sitepark.ies.publisher.channel.sync.service.analyser.EmptyPath;
 import com.sitepark.ies.publisher.channel.sync.service.analyser.FileDirectoryMismatch;
@@ -63,6 +64,7 @@ public class Analyse {
     this.publishedPathAnalysers =
         Arrays.asList(
             new DocumentRootLayoutFiles(),
+            new EmailConfigDirectory(),
             new FileDirectoryMismatch(),
             new DirectoryFileMismatch(),
             new PublicationTypeMismatch(),
@@ -250,7 +252,8 @@ public class Analyse {
 
     for (Publication publication : ctx.getPublicationDirectory().getPublications(false)) {
 
-      if (ctx.getChannel().layout() == ChannelLayout.RESOURCES
+      if ((ctx.getChannel().layout() == ChannelLayout.URL_BASED_RESOURCES
+              || ctx.getChannel().layout() == ChannelLayout.ID_BASED_RESOURCES)
           && ctx.getPublicationType() != publication.type()) {
         continue;
       }

@@ -47,7 +47,7 @@ class PublicationTypeMismatchTest extends AnalyserTestBase {
     AnalyserContext ctx = this.mockAnalyserContext();
     Channel channel = mock();
     when(ctx.getChannel()).thenReturn(channel);
-    when(channel.layout()).thenReturn(ChannelLayout.RESOURCES);
+    when(channel.layout()).thenReturn(ChannelLayout.URL_BASED_RESOURCES);
 
     PublicationDirectory directory = mock();
     when(ctx.getPublicationDirectory()).thenReturn(directory);

@@ -25,7 +25,7 @@ class DocumentRootLayoutFilesTest extends AnalyserTestBase {
     Channel channel = mock();
     when(ctx.getChannel()).thenReturn(channel);
 
-    when(channel.layout()).thenReturn(ChannelLayout.RESOURCES);
+    when(channel.layout()).thenReturn(ChannelLayout.URL_BASED_RESOURCES);
 
     PublishedPath path = mock();
 

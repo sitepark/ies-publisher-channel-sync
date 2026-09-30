@@ -7,6 +7,8 @@ import java.util.Objects;
 import org.jspecify.annotations.Nullable;
 
 public record Publication(
+    long id,
+    long mediaId,
     PublicationType type,
     String fileName,
     Ref object,
@@ -14,6 +16,7 @@ public record Publication(
     boolean isPublished,
     @Nullable Ref collidesWith,
     Path absolutePath,
+    @Nullable Path absolutePathMediaOwner,
     @Nullable String hash) {
 
   public static Builder builder() {
@@ -25,8 +28,10 @@ public record Publication(
   }
 
   // required fields are validated in build()
-  @SuppressWarnings({"PMD.AvoidFieldNameMatchingMethodName", "NullAway.Init"})
+  @SuppressWarnings({"PMD.AvoidFieldNameMatchingMethodName", "PMD.TooManyMethods", "NullAway.Init"})
   public static final class Builder {
+    private long id;
+    private long mediaId;
     private PublicationType type;
     private Ref object;
     private Path path;
@@ -34,7 +39,18 @@ public record Publication(
     private boolean isPublished;
     @Nullable private Ref collidesWith;
     private Path absolutePath;
+    @Nullable private Path absolutePathMediaOwner;
     @Nullable private String hash;
+
+    public Builder id(long id) {
+      this.id = id;
+      return this;
+    }
+
+    public Builder mediaId(long mediaId) {
+      this.mediaId = mediaId;
+      return this;
+    }
 
     public Builder type(PublicationType type) {
       this.type = type;
@@ -86,6 +102,11 @@ public record Publication(
       return this;
     }
 
+    public Builder absolutePathMediaOwner(@Nullable Path absolutePathMediaOwner) {
+      this.absolutePathMediaOwner = absolutePathMediaOwner;
+      return this;
+    }
+
     public Builder hash(@Nullable String hash) {
       this.hash = hash;
       return this;
@@ -97,6 +118,8 @@ public record Publication(
       Objects.requireNonNull(this.path, "path must not be null");
 
       return new Publication(
+          this.id,
+          this.mediaId,
           this.type,
           this.fileName,
           this.object,
@@ -104,6 +127,7 @@ public record Publication(
           this.isPublished,
           this.collidesWith,
           this.absolutePath,
+          this.absolutePathMediaOwner,
           this.hash);
     }
   }
