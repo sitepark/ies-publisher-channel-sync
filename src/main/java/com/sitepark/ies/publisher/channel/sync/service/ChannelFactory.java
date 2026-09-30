@@ -3,21 +3,21 @@ package com.sitepark.ies.publisher.channel.sync.service;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ChannelLayout;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import org.jspecify.annotations.Nullable;
 
 public class ChannelFactory {
   public Channel create(Path path) {
-    Path channelRoot = path;
-    do {
+    for (Path channelRoot = path; channelRoot != null; channelRoot = channelRoot.getParent()) {
       ChannelLayout layout = identifyLayout(channelRoot);
       if (layout != null) {
         return Channel.of(layout, channelRoot);
       }
-    } while ((channelRoot = channelRoot.getParent()) != null);
+    }
 
     throw new IllegalArgumentException("Cannot identify channel for path: " + path);
   }
 
-  private ChannelLayout identifyLayout(Path path) {
+  private @Nullable ChannelLayout identifyLayout(Path path) {
     if (this.isDocumentRootLayout(path)) {
       return ChannelLayout.DOCUMENT_ROOT;
     }

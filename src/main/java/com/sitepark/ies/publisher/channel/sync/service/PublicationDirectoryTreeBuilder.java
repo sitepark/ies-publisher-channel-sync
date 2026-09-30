@@ -95,7 +95,7 @@ public class PublicationDirectoryTreeBuilder {
     return node;
   }
 
-  private static class Node {
+  private static final class Node {
 
     private final String name;
 
@@ -104,7 +104,7 @@ public class PublicationDirectoryTreeBuilder {
 
     private final List<Publication> publications = new ArrayList<>();
 
-    public Node(String name) {
+    private Node(String name) {
       Objects.requireNonNull(name, "name is required");
       this.name = name;
     }

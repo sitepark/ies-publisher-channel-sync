@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@SuppressWarnings("PMD.CyclomaticComplexity")
 public class Synchronize {
 
   private final SynchronizeContext ctx;

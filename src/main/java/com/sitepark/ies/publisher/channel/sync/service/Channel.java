@@ -123,6 +123,8 @@ public final class Channel {
     return this.toPublisherTypeBase(type).relativize(path);
   }
 
+  // the returned stream owns the wrapped stream and closes it
+  @SuppressWarnings("StreamResourceLeak")
   public DirectoryStream<PublishedPath> newDirectoryStream(PublicationType type, Path path)
       throws IOException {
     Path absolutePath = this.resolve(type, path);

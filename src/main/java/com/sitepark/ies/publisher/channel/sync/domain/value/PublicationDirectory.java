@@ -9,17 +9,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.jspecify.annotations.Nullable;
 
 public final class PublicationDirectory {
 
-  private final String name;
+  @Nullable private final String name;
   private final Map<String, PublicationDirectory> children;
   private final Map<String, List<Publication>> publications;
   private final Map<String, Publication> collisions;
-  private PublicationDirectory parent;
+  @Nullable private PublicationDirectory parent;
 
   private PublicationDirectory(
-      String name,
+      @Nullable String name,
       Map<String, PublicationDirectory> children,
       Map<String, List<Publication>> publications,
       Map<String, Publication> collisions) {
@@ -36,11 +37,11 @@ public final class PublicationDirectory {
     return new Builder();
   }
 
-  public String getName() {
+  public @Nullable String getName() {
     return this.name;
   }
 
-  public PublicationDirectory getParent() {
+  public @Nullable PublicationDirectory getParent() {
     return this.parent;
   }
 
@@ -79,11 +80,11 @@ public final class PublicationDirectory {
     return this.children.values();
   }
 
-  public PublicationDirectory getChild(String name) {
+  public @Nullable PublicationDirectory getChild(String name) {
     return this.children.get(name);
   }
 
-  public PublicationDirectory findChild(Path path) {
+  public @Nullable PublicationDirectory findChild(Path path) {
     PublicationDirectory directory = this;
     for (Path name : path) {
       directory = directory.getChild(name.toString());
@@ -94,7 +95,7 @@ public final class PublicationDirectory {
     return directory;
   }
 
-  public Publication getCollision(String name) {
+  public @Nullable Publication getCollision(String name) {
     return this.collisions.get(name);
   }
 
@@ -105,11 +106,11 @@ public final class PublicationDirectory {
 
   @Override
   public boolean equals(Object o) {
-    return (o instanceof PublicationDirectory PublicationDirectory)
-        && Objects.equals(this.name, PublicationDirectory.name)
-        && Objects.equals(this.children, PublicationDirectory.children)
-        && Objects.equals(this.publications, PublicationDirectory.publications)
-        && Objects.equals(this.collisions, PublicationDirectory.collisions);
+    return (o instanceof PublicationDirectory that)
+        && Objects.equals(this.name, that.name)
+        && Objects.equals(this.children, that.children)
+        && Objects.equals(this.publications, that.publications)
+        && Objects.equals(this.collisions, that.collisions);
   }
 
   @Override
@@ -136,7 +137,7 @@ public final class PublicationDirectory {
     @SuppressWarnings("PMD.UseConcurrentHashMap")
     private final Map<String, List<Publication>> publications = new HashMap<>();
 
-    private String name;
+    @Nullable private String name;
 
     public Builder name(String name) {
 
@@ -148,7 +149,7 @@ public final class PublicationDirectory {
         throw new IllegalArgumentException("PublicationDirectory name must not be blank");
       }
 
-      if ((name.startsWith("/"))) {
+      if (name.startsWith("/")) {
         throw new IllegalArgumentException(
             "PublicationDirectory name must not start with '/': " + name);
       } else if (name.endsWith("/")) {

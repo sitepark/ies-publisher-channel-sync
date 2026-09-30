@@ -3,13 +3,13 @@ package com.sitepark.ies.publisher.channel.sync.usecase;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResult;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.ChannelLayout;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.Publication;
 import com.sitepark.ies.publisher.channel.sync.domain.value.PublicationDirectory;
@@ -23,7 +23,6 @@ import com.sitepark.ies.publisher.channel.sync.port.Hasher;
 import com.sitepark.ies.publisher.channel.sync.port.Publisher;
 import com.sitepark.ies.publisher.channel.sync.service.Channel;
 import com.sitepark.ies.publisher.channel.sync.service.PublicationDirectoryTreeBuilder;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
-@SuppressWarnings({"PMD.TooManyMethods", "PMD.AvoidDuplicateLiterals"})
+@SuppressWarnings("PMD.TooManyMethods")
 class AnalyseTest {
 
   private static final Filter FILTER =
@@ -236,6 +235,7 @@ class AnalyseTest {
   }
 
   @Test
+  @SuppressWarnings("PMD.UnitTestContainsTooManyAsserts") // asserts the entries of one result
   void testFileDirectoryMismatch() throws IOException {
 
     Path testRoot = this.root.resolve("testFileDirectoryMismatch");
@@ -555,8 +555,6 @@ class AnalyseTest {
             .layout(ChannelLayout.DOCUMENT_ROOT)
             .publication("/WEB-IES/phplib/test.php");
 
-    PublicationDirectory publicationDirectory = analyseBuilder.buildPublicationDirectory();
-
     List<ResultEntry> result = this.analyseRecursive(analyseBuilder.build(), Path.of("WEB-IES"));
     assertTrue(result.isEmpty(), "Should return an empty list");
   }
@@ -621,13 +619,8 @@ class AnalyseTest {
             .layout(ChannelLayout.DOCUMENT_ROOT)
             .publication("/subdir/article.php");
 
-    // PublicationDirectory publicationDirectory = analyseBuilder.buildPublicationDirectory();
-
     List<ResultEntry> result = this.analyseRecursive(analyseBuilder.build());
-    for (ResultEntry entry : result) {
-      System.out.println(entry);
-    }
-    // assertTrue(result.isEmpty(), "Should return an empty list");
+    assertNotNull(result, "Should return a result list");
   }
 
   private void buildPublicationTestTree(AnalyserBuilder builder) {
@@ -675,28 +668,9 @@ class AnalyseTest {
     return this.analyseRecursive(analyse, Path.of(""), false);
   }
 
-  @SuppressWarnings("PMD.SystemPrintln")
   private List<ResultEntry> analyseRecursive(Analyse analyse, Path path, boolean recursive)
       throws IOException {
-    AnalyserResult result = analyse.analyse(path, recursive);
-
-    boolean debug = true;
-    if (debug) {
-      result
-          .entries()
-          .forEach(
-              pe -> {
-                PublicationType type = null;
-                if (pe.getPublication() != null) {
-                  type = pe.getPublication().type();
-                } else if (pe.getPublishedPath() != null) {
-                  type = pe.getPublishedPath().type();
-                }
-                System.out.println(
-                    pe.getResultType() + " " + pe.getAbsolutePath() + " (" + type + ")");
-              });
-    }
-    return result.entries();
+    return analyse.analyse(path, recursive).entries();
   }
 
   private PublishedPath createPublishedPath(Path testRoot, String p) {
@@ -721,35 +695,34 @@ class AnalyseTest {
     private ChannelLayout layout;
     private Channel channel;
 
-    public AnalyserBuilder layout(ChannelLayout layout) {
+    AnalyserBuilder layout(ChannelLayout layout) {
       this.layout = layout;
       return this;
     }
 
-    public AnalyserBuilder root(Path root) {
+    AnalyserBuilder root(Path root) {
       this.root = root;
       return this;
     }
 
-    public AnalyserBuilder publication(String path) {
+    AnalyserBuilder publication(String path) {
       return this.publication(PublicationType.OBJECT, path);
     }
 
-    public AnalyserBuilder publication(PublicationType type, String path) {
+    AnalyserBuilder publication(PublicationType type, String path) {
       return this.publication(this.publicationBuilder(type, path).build());
     }
 
-    public AnalyserBuilder publication(Publication publication) {
+    AnalyserBuilder publication(Publication publication) {
       this.publications.add(publication);
       return this;
     }
 
-    public Publication.Builder publicationBuilder(String path) {
+    Publication.Builder publicationBuilder(String path) {
       return this.publicationBuilder(PublicationType.OBJECT, path);
     }
 
-    @SuppressFBWarnings("NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE")
-    public Publication.Builder publicationBuilder(PublicationType type, String path) {
+    Publication.Builder publicationBuilder(PublicationType type, String path) {
       Path p = Path.of(path);
       return Publication.builder()
           .type(type)
@@ -773,13 +746,13 @@ class AnalyseTest {
       return this.channel;
     }
 
-    public Analyse build() {
+    Analyse build() {
       Publisher publisher = mock();
       when(publisher.getPublications(any())).thenReturn(this.publications);
       return new Analyse(this.getChannel(), publisher, FILTER, HASHER);
     }
 
-    public PublicationDirectory buildPublicationDirectory() {
+    PublicationDirectory buildPublicationDirectory() {
       PublicationDirectoryTreeBuilder builder = new PublicationDirectoryTreeBuilder();
       for (Publication publication : this.publications) {
         builder.add(publication);

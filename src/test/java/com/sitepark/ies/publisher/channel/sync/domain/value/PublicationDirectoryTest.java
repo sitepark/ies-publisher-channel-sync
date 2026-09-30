@@ -24,7 +24,6 @@ import org.junit.jupiter.api.Test;
 class PublicationDirectoryTest {
 
   @Test
-  @SuppressWarnings("PMD.JUnitTestsShouldIncludeAssert")
   void testEquals() {
     PublicationDirectory b = PublicationDirectory.builder().name("b").build();
     PublicationDirectory a = PublicationDirectory.builder().name("a").child(b).build();
@@ -35,7 +34,6 @@ class PublicationDirectoryTest {
   }
 
   @Test
-  @SuppressWarnings("PMD.JUnitTestsShouldIncludeAssert")
   void testToString() {
     PublicationDirectory a = PublicationDirectory.builder().name("a").build();
     ToStringVerifier.forClass(PublicationDirectory.class)

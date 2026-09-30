@@ -24,19 +24,15 @@ public class ChannelDirectoryIterator implements Iterator<PublishedPath> {
   @Override
   public PublishedPath next() {
     Path path = this.iterator.next();
-    String fileName = this.fileName(path);
-    return new PublishedPath(this.type, path.toAbsolutePath(), fileName);
+    return new PublishedPath(this.type, path.toAbsolutePath(), fileName(path));
   }
 
-  private String fileName(Path path) {
+  // The entries of a directory stream always have a file name, only a root path has none.
+  private static String fileName(Path path) {
     Path fileName = path.getFileName();
     if (fileName == null) {
-      return null;
+      throw new IllegalStateException("Directory entry without file name: " + path);
     }
-    String fileNameString = fileName.toString();
-    if (fileNameString.isBlank()) {
-      return null;
-    }
-    return fileNameString;
+    return fileName.toString();
   }
 }

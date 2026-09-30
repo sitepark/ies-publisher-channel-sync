@@ -4,6 +4,7 @@ import com.sitepark.ies.publisher.channel.sync.domain.value.PublicationType;
 import com.sitepark.ies.publisher.channel.sync.domain.value.Ref;
 import java.nio.file.Path;
 import java.util.Objects;
+import org.jspecify.annotations.Nullable;
 
 public record Publication(
     long id,
@@ -13,10 +14,10 @@ public record Publication(
     Ref object,
     Path path,
     boolean isPublished,
-    Ref collidesWith,
+    @Nullable Ref collidesWith,
     Path absolutePath,
-    Path absolutePathMediaOwner,
-    String hash) {
+    @Nullable Path absolutePathMediaOwner,
+    @Nullable String hash) {
 
   public static Builder builder() {
     return new Builder();
@@ -26,7 +27,8 @@ public record Publication(
     return this.collidesWith != null;
   }
 
-  @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
+  // required fields are validated in build()
+  @SuppressWarnings({"PMD.AvoidFieldNameMatchingMethodName", "NullAway.Init"})
   public static final class Builder {
     private long id;
     private long mediaId;
@@ -35,10 +37,10 @@ public record Publication(
     private Path path;
     private String fileName;
     private boolean isPublished;
-    private Ref collidesWith;
+    @Nullable private Ref collidesWith;
     private Path absolutePath;
-    private Path absolutePathMediaOwner;
-    private String hash;
+    @Nullable private Path absolutePathMediaOwner;
+    @Nullable private String hash;
 
     public Builder id(long id) {
       this.id = id;
@@ -90,7 +92,7 @@ public record Publication(
       return this;
     }
 
-    public Builder collidesWith(Ref collidesWith) {
+    public Builder collidesWith(@Nullable Ref collidesWith) {
       this.collidesWith = collidesWith;
       return this;
     }
@@ -100,12 +102,12 @@ public record Publication(
       return this;
     }
 
-    public Builder absolutePathMediaOwner(Path absolutePathMediaOwner) {
+    public Builder absolutePathMediaOwner(@Nullable Path absolutePathMediaOwner) {
       this.absolutePathMediaOwner = absolutePathMediaOwner;
       return this;
     }
 
-    public Builder hash(String hash) {
+    public Builder hash(@Nullable String hash) {
       this.hash = hash;
       return this;
     }

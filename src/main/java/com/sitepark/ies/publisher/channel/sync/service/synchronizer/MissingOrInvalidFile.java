@@ -2,6 +2,7 @@ package com.sitepark.ies.publisher.channel.sync.service.synchronizer;
 
 import com.sitepark.ies.publisher.channel.sync.domain.value.ResultEntry;
 import com.sitepark.ies.publisher.channel.sync.domain.value.ResultType;
+import java.util.Objects;
 
 public class MissingOrInvalidFile implements Synchronizer {
 
@@ -26,11 +27,14 @@ public class MissingOrInvalidFile implements Synchronizer {
 
   private void delete(SynchronizeContext ctx, ResultEntry entry) {
 
-    if (!ctx.exists(entry.getAbsolutePath())) {
+    if (!ctx.exists(
+        Objects.requireNonNull(entry.getAbsolutePath(), "absolutePath of the entry is null"))) {
       return;
     }
     if (!ctx.isTest()) {
-      boolean success = ctx.delete(entry.getAbsolutePath());
+      boolean success =
+          ctx.delete(
+              Objects.requireNonNull(entry.getAbsolutePath(), "absolutePath of the entry is null"));
       if (!success) {
         ctx.getNotifier().notify(entry, "deleted " + entry.getAbsolutePath() + " (failed)");
       }
@@ -43,7 +47,8 @@ public class MissingOrInvalidFile implements Synchronizer {
   private void publish(SynchronizeContext ctx, ResultEntry entry) {
     try {
       if (!ctx.isTest()) {
-        ctx.getPublisher().publish(entry.getObject());
+        ctx.getPublisher()
+            .publish(Objects.requireNonNull(entry.getObject(), "object of the entry is null"));
       }
       ctx.getNotifier()
           .notify(entry, "publish " + entry.getAbsolutePath() + (ctx.isTest() ? " (test)" : ""));
