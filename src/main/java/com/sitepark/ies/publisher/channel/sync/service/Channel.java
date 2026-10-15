@@ -68,7 +68,7 @@ public final class Channel {
 
   @Override
   public int hashCode() {
-    return Objects.hash(this.layout, this.root, this.idPathMapper);
+    return Objects.hash(this.layout, this.root);
   }
 
   @Override
@@ -76,21 +76,13 @@ public final class Channel {
     if (!(o instanceof Channel that)) {
       return false;
     }
-    return Objects.equals(this.layout, that.layout)
-        && Objects.equals(this.root, that.root)
-        && Objects.equals(this.idPathMapper, that.idPathMapper);
+    // the id path mapper is derived from the layout and therefore not part of the identity
+    return Objects.equals(this.layout, that.layout) && Objects.equals(this.root, that.root);
   }
 
   @Override
   public String toString() {
-    return "Channel{"
-        + "layout="
-        + layout
-        + ", root="
-        + root
-        + ", idPathMapper="
-        + idPathMapper
-        + '}';
+    return "Channel{" + "layout=" + layout + ", root=" + root + '}';
   }
 
   private Path toPublisherTypeBase(PublicationType type) {

@@ -53,6 +53,17 @@ class ChannelFactoryTest {
   }
 
   @Test
+  void testCreateChannelWithIdBasedResourcesLayout() {
+
+    ChannelFactory factory = new ChannelFactory();
+    Channel channel = factory.create(this.resourcesLayoutBase.resolve("idBased"));
+    Channel expected =
+        Channel.of(ChannelLayout.ID_BASED_RESOURCES, this.resourcesLayoutBase.resolve("idBased"));
+
+    assertEquals(expected, channel, "unexpected channel");
+  }
+
+  @Test
   void testCreateChannelWithResourcesLayoutWithMissingObjectsDir() {
 
     ChannelFactory factory = new ChannelFactory();
