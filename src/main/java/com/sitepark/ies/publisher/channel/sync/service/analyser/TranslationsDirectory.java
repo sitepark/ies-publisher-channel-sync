@@ -19,12 +19,17 @@ public class TranslationsDirectory implements PublishedPathAnalyser {
       return AnalyserResult.OK;
     }
 
+    String suffix =
+        ctx.getChannel().layout() == ChannelLayout.ID_BASED_RESOURCES
+            ? ID_BASED_SUFFIX
+            : URL_BASED_SUFFIX;
+
     String name = path.baseName();
-    if (!name.endsWith(URL_BASED_SUFFIX) && !name.endsWith(ID_BASED_SUFFIX)) {
+    if (!name.endsWith(suffix)) {
       return AnalyserResult.OK;
     }
 
-    String translationBaseName = this.toTranslationBaseName(name, ctx.getChannel().layout());
+    String translationBaseName = name.substring(0, name.length() - suffix.length()) + ".php";
 
     for (Publication p : ctx.getPublicationDirectory().getPublications(translationBaseName)) {
       if (p.isPublished()) {
@@ -35,13 +40,5 @@ public class TranslationsDirectory implements PublishedPathAnalyser {
     AnalyserResultFactory resultFactory = ctx.getAnalyserResultFactory();
     return resultFactory.createRecursiveInterruptResultDeleteForce(
         ResultType.UNKNOWN_FILE_OR_DIRECTORY, path);
-  }
-
-  public String toTranslationBaseName(String name, ChannelLayout layout) {
-    if (layout == ChannelLayout.ID_BASED_RESOURCES) {
-      return name.substring(0, name.lastIndexOf(ID_BASED_SUFFIX)) + ".php";
-    } else {
-      return name.substring(0, name.lastIndexOf(URL_BASED_SUFFIX)) + ".php";
-    }
   }
 }

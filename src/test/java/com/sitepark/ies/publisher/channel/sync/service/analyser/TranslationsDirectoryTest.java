@@ -57,6 +57,20 @@ class TranslationsDirectoryTest extends AnalyserTestBase {
   }
 
   @Test
+  void testUrlBasedIgnoresTranslationsSuffixWithoutPhp() {
+    AnalyserContext ctx = this.mockAnalyserContext();
+    Channel channel = mock();
+    when(ctx.getChannel()).thenReturn(channel);
+    when(channel.layout()).thenReturn(ChannelLayout.URL_BASED_RESOURCES);
+
+    PublishedPath path = mock();
+    when(path.isDirectory()).thenReturn(true);
+    when(path.baseName()).thenReturn("baseName.translations");
+
+    assertEquals(AnalyserResult.OK, this.analyser.analyse(ctx, path), "Should return OK");
+  }
+
+  @Test
   void testWithExistsPublicationDirectoryUrlBased() {
     AnalyserContext ctx = this.mockAnalyserContext();
     Channel channel = mock();
