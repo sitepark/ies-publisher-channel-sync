@@ -73,10 +73,10 @@ public final class FixedDecimalGroupingStrategy implements IdPathStrategy {
 
     if (id < 0) throw new IllegalArgumentException("id must be >= 0");
 
-    long cap = safePowLong(base, levels + 1); // base^(levels+1)
-    long max = cap - 1;
+    // base^(levels+1), multiplyExact throws on overflow
+    long max = safePowLong(base, levels + 1) - 1;
 
-    if (max >= 0 && id > max) {
+    if (id > max) {
       throw new IllegalArgumentException(
           "id must be <= "
               + max

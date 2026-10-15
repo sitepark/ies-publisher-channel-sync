@@ -252,8 +252,7 @@ public class Analyse {
 
     for (Publication publication : ctx.getPublicationDirectory().getPublications(false)) {
 
-      if ((ctx.getChannel().layout() == ChannelLayout.URL_BASED_RESOURCES
-              || ctx.getChannel().layout() == ChannelLayout.ID_BASED_RESOURCES)
+      if (ctx.getChannel().layout() != ChannelLayout.DOCUMENT_ROOT
           && ctx.getPublicationType() != publication.type()) {
         continue;
       }
