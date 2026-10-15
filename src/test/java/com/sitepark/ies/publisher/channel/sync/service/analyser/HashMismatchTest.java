@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResult;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.Publication;
 import com.sitepark.ies.publisher.channel.sync.domain.value.PublicationDirectory;
+import com.sitepark.ies.publisher.channel.sync.domain.value.PublicationType;
 import com.sitepark.ies.publisher.channel.sync.domain.value.PublishedPath;
 import com.sitepark.ies.publisher.channel.sync.domain.value.ResultType;
 import com.sitepark.ies.publisher.channel.sync.port.Hasher;
@@ -74,6 +75,62 @@ class HashMismatchTest extends AnalyserTestBase {
         ctx.getAnalyserResultFactory().createResult(ResultType.HASH_MISMATCH, e);
 
     assertEquals(expected, result, "Unexpected result");
+  }
+
+  @Test
+  void testMediaMetaFileIsNotCompared() {
+    AnalyserContext ctx = this.mockAnalyserContext();
+
+    PublishedPath path = mock();
+    when(path.isDirectory()).thenReturn(false);
+    when(path.baseName()).thenReturn("baseName");
+
+    PublicationDirectory directory = mock();
+    when(ctx.getPublicationDirectory()).thenReturn(directory);
+
+    Publication mediaMetaFile = mock();
+    when(mediaMetaFile.isPublished()).thenReturn(true);
+    when(mediaMetaFile.type()).thenReturn(PublicationType.OBJECT);
+    when(mediaMetaFile.mediaId()).thenReturn(123L);
+    when(mediaMetaFile.path()).thenReturn(Path.of("test/baseName"));
+    when(mediaMetaFile.absolutePath())
+        .thenReturn(this.resourceDir.resolve("exists-file").toAbsolutePath());
+    when(mediaMetaFile.hash()).thenReturn("invalid-hash");
+
+    when(directory.getPublications("baseName")).thenReturn(Arrays.asList(mediaMetaFile));
+
+    assertEquals(
+        AnalyserResult.OK,
+        this.analyser.analyse(ctx, path),
+        "a media meta file has no hash and should not be compared");
+  }
+
+  @Test
+  void testMediumIsCompared() {
+    AnalyserContext ctx = this.mockAnalyserContext();
+
+    PublishedPath path = mock();
+    when(path.isDirectory()).thenReturn(false);
+    when(path.baseName()).thenReturn("baseName");
+
+    PublicationDirectory directory = mock();
+    when(ctx.getPublicationDirectory()).thenReturn(directory);
+
+    Publication medium = mock();
+    when(medium.isPublished()).thenReturn(true);
+    when(medium.type()).thenReturn(PublicationType.PUBLIC_MEDIA);
+    when(medium.mediaId()).thenReturn(123L);
+    when(medium.path()).thenReturn(Path.of("test/baseName"));
+    when(medium.absolutePath())
+        .thenReturn(this.resourceDir.resolve("exists-file").toAbsolutePath());
+    when(medium.hash()).thenReturn("invalid-hash");
+
+    when(directory.getPublications("baseName")).thenReturn(Arrays.asList(medium));
+
+    assertEquals(
+        ctx.getAnalyserResultFactory().createResult(ResultType.HASH_MISMATCH, medium),
+        this.analyser.analyse(ctx, path),
+        "a medium with a media id should still be compared");
   }
 
   @SuppressWarnings("PMD.TestClassWithoutTestCases")

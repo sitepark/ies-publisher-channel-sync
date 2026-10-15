@@ -6,6 +6,7 @@ import com.sitepark.ies.publisher.channel.sync.domain.entity.ChannelLayout;
 import com.sitepark.ies.publisher.channel.sync.domain.value.PublicationType;
 import java.io.IOException;
 import java.nio.file.Path;
+import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("PMD.TooManyMethods")
@@ -18,26 +19,26 @@ class ChannelTest {
     Path root = Path.of("root");
     assertThrows(
         IllegalArgumentException.class,
-        () -> new Channel(ChannelLayout.RESOURCES, root),
+        () -> Channel.of(ChannelLayout.URL_BASED_RESOURCES, root),
         "Root path must be absolute");
   }
 
   @Test
   void testGetRoot() {
-    Channel channel = new Channel(ChannelLayout.RESOURCES, this.root);
+    Channel channel = Channel.of(ChannelLayout.URL_BASED_RESOURCES, this.root);
     assertEquals(this.root, channel.root(), "The root path should be equal");
   }
 
   @Test
   void testGetLayout() {
-    Channel channel = new Channel(ChannelLayout.RESOURCES, this.root);
-    assertEquals(ChannelLayout.RESOURCES, channel.layout(), "The layout should be equal");
+    Channel channel = Channel.of(ChannelLayout.URL_BASED_RESOURCES, this.root);
+    assertEquals(ChannelLayout.URL_BASED_RESOURCES, channel.layout(), "The layout should be equal");
   }
 
   @Test
   @SuppressWarnings("PMD.AvoidDuplicateLiterals")
   void testResolveWithPathFromDocumentRootLayout() {
-    Channel channel = new Channel(ChannelLayout.DOCUMENT_ROOT, this.root);
+    Channel channel = Channel.of(ChannelLayout.DOCUMENT_ROOT, this.root);
     assertEquals(
         this.root.resolve("abc"),
         channel.resolve(PublicationType.OBJECT, Path.of("abc")),
@@ -46,7 +47,7 @@ class ChannelTest {
 
   @Test
   void testResolveWithPathFromResourcesLayout() {
-    Channel channel = new Channel(ChannelLayout.RESOURCES, this.root);
+    Channel channel = Channel.of(ChannelLayout.URL_BASED_RESOURCES, this.root);
     assertEquals(
         this.root.resolve("objects/abc"),
         channel.resolve(PublicationType.OBJECT, Path.of("abc")),
@@ -55,7 +56,7 @@ class ChannelTest {
 
   @Test
   void testResolveWithStringFromResourcesLayout() {
-    Channel channel = new Channel(ChannelLayout.RESOURCES, this.root);
+    Channel channel = Channel.of(ChannelLayout.URL_BASED_RESOURCES, this.root);
     assertEquals(
         this.root.resolve("objects/abc"),
         channel.resolve(PublicationType.OBJECT, "abc"),
@@ -64,7 +65,7 @@ class ChannelTest {
 
   @Test
   void testRelativize() {
-    Channel channel = new Channel(ChannelLayout.RESOURCES, this.root);
+    Channel channel = Channel.of(ChannelLayout.URL_BASED_RESOURCES, this.root);
     assertEquals(
         Path.of("abc/cde/efg"),
         channel.relativize(PublicationType.OBJECT, this.root.resolve("objects/abc/cde/efg")),
@@ -73,14 +74,14 @@ class ChannelTest {
 
   @Test
   void testExists() {
-    Channel channel = new Channel(ChannelLayout.RESOURCES, this.root);
+    Channel channel = Channel.of(ChannelLayout.URL_BASED_RESOURCES, this.root);
     Path path = this.root.resolve("testExists");
     assertTrue(channel.exists(PublicationType.OBJECT, path), "The path should exist");
   }
 
   @Test
   void testToPublicationPathWithDocumentRootLayout() {
-    Channel channel = new Channel(ChannelLayout.DOCUMENT_ROOT, this.root);
+    Channel channel = Channel.of(ChannelLayout.DOCUMENT_ROOT, this.root);
     Path path = this.root.resolve("abc");
     assertEquals(
         Path.of("abc"), channel.toPublicationPath(path), "The publication path should be equal");
@@ -88,7 +89,7 @@ class ChannelTest {
 
   @Test
   void testToPublicationPathWithResourceLayout() {
-    Channel channel = new Channel(ChannelLayout.RESOURCES, this.root);
+    Channel channel = Channel.of(ChannelLayout.URL_BASED_RESOURCES, this.root);
     Path path = this.root.resolve("objects/abc");
     assertEquals(
         Path.of("abc"), channel.toPublicationPath(path), "The publication path should be equal");
@@ -96,7 +97,7 @@ class ChannelTest {
 
   @Test
   void testToPublicationPathWithUnknownType() {
-    Channel channel = new Channel(ChannelLayout.RESOURCES, this.root);
+    Channel channel = Channel.of(ChannelLayout.URL_BASED_RESOURCES, this.root);
     Path path = this.root.resolve("unknown/abc");
     assertThrows(
         IllegalArgumentException.class,
@@ -105,8 +106,49 @@ class ChannelTest {
   }
 
   @Test
+  void testPathForWithIdBasedLayout() {
+    Channel channel = Channel.of(ChannelLayout.ID_BASED_RESOURCES, this.root);
+    assertEquals(
+        Path.of("000/001/123"), channel.pathFor(1123), "The id should be mapped to its path");
+  }
+
+  @Test
+  void testPathForWithUrlBasedLayout() {
+    Channel channel = Channel.of(ChannelLayout.URL_BASED_RESOURCES, this.root);
+    assertThrows(
+        IllegalStateException.class,
+        () -> channel.pathFor(1123),
+        "A url based layout has no id based paths");
+  }
+
+  @Test
+  void testEquals() {
+    EqualsVerifier.forClass(Channel.class)
+        .withIgnoredFields("idPathMapper")
+        .withPrefabValues(Path.class, Path.of("/a"), Path.of("/b"))
+        .verify();
+  }
+
+  @Test
+  void testEqualsWithIdBasedLayout() {
+    assertEquals(
+        Channel.of(ChannelLayout.ID_BASED_RESOURCES, this.root),
+        Channel.of(ChannelLayout.ID_BASED_RESOURCES, this.root),
+        "Channels with the same id based layout and root should be equal");
+  }
+
+  @Test
+  void testToString() {
+    Channel channel = Channel.of(ChannelLayout.ID_BASED_RESOURCES, this.root);
+    assertEquals(
+        "Channel{layout=ID_BASED_RESOURCES, root=" + this.root + "}",
+        channel.toString(),
+        "Unexpected string representation");
+  }
+
+  @Test
   void testNewDirectoryStream() throws IOException {
-    Channel channel = new Channel(ChannelLayout.RESOURCES, this.root);
+    Channel channel = Channel.of(ChannelLayout.URL_BASED_RESOURCES, this.root);
     assertInstanceOf(
         ChannelDirectoryStream.class,
         channel.newDirectoryStream(PublicationType.OBJECT, this.root));

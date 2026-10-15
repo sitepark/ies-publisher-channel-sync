@@ -153,6 +153,39 @@ class PublicationTest {
   }
 
   @Test
+  void testId() {
+    PublicationType type = mock();
+    Path path = Path.of("a");
+    Publication publication = Publication.builder().type(type).path(path).id(123).build();
+    assertEquals(123, publication.id(), "unexpected id");
+  }
+
+  @Test
+  void testMediaId() {
+    PublicationType type = mock();
+    Path path = Path.of("a");
+    Publication publication = Publication.builder().type(type).path(path).mediaId(456).build();
+    assertEquals(456, publication.mediaId(), "unexpected mediaId");
+  }
+
+  @Test
+  void testAbsolutePathMediaOwner() {
+    PublicationType type = mock();
+    Path path = Path.of("a");
+    Path absolutePathMediaOwner = mock();
+    Publication publication =
+        Publication.builder()
+            .type(type)
+            .path(path)
+            .absolutePathMediaOwner(absolutePathMediaOwner)
+            .build();
+    assertEquals(
+        absolutePathMediaOwner,
+        publication.absolutePathMediaOwner(),
+        "unexpected absolutePathMediaOwner");
+  }
+
+  @Test
   void testAbsolutePath() {
     PublicationType type = mock();
     Path path = Path.of("a");

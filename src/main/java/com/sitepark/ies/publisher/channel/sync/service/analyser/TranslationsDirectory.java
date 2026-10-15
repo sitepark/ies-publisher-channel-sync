@@ -2,13 +2,15 @@ package com.sitepark.ies.publisher.channel.sync.service.analyser;
 
 import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResult;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.AnalyserResultFactory;
+import com.sitepark.ies.publisher.channel.sync.domain.entity.ChannelLayout;
 import com.sitepark.ies.publisher.channel.sync.domain.entity.Publication;
 import com.sitepark.ies.publisher.channel.sync.domain.value.PublishedPath;
 import com.sitepark.ies.publisher.channel.sync.domain.value.ResultType;
 
 public class TranslationsDirectory implements PublishedPathAnalyser {
 
-  private static final String SUFFIX = ".translations";
+  private static final String URL_BASED_SUFFIX = ".php.translations";
+  private static final String ID_BASED_SUFFIX = ".translations";
 
   @Override
   public AnalyserResult analyse(AnalyserContext ctx, PublishedPath path) {
@@ -17,12 +19,17 @@ public class TranslationsDirectory implements PublishedPathAnalyser {
       return AnalyserResult.OK;
     }
 
+    String suffix =
+        ctx.getChannel().layout() == ChannelLayout.ID_BASED_RESOURCES
+            ? ID_BASED_SUFFIX
+            : URL_BASED_SUFFIX;
+
     String name = path.baseName();
-    if (!name.endsWith(SUFFIX)) {
+    if (!name.endsWith(suffix)) {
       return AnalyserResult.OK;
     }
 
-    String translationBaseName = name.substring(0, name.lastIndexOf(SUFFIX));
+    String translationBaseName = name.substring(0, name.length() - suffix.length()) + ".php";
 
     for (Publication p : ctx.getPublicationDirectory().getPublications(translationBaseName)) {
       if (p.isPublished()) {

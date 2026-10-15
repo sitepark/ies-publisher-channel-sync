@@ -20,7 +20,7 @@ public class PublicationTypeMismatch implements PublishedPathAnalyser {
       return AnalyserResult.OK;
     }
 
-    if (ctx.getChannel().layout() != ChannelLayout.RESOURCES) {
+    if (ctx.getChannel().layout() == ChannelLayout.DOCUMENT_ROOT) {
       return AnalyserResult.OK;
     }
 
