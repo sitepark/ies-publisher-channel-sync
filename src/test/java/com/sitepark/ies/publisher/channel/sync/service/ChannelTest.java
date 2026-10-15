@@ -6,6 +6,7 @@ import com.sitepark.ies.publisher.channel.sync.domain.entity.ChannelLayout;
 import com.sitepark.ies.publisher.channel.sync.domain.value.PublicationType;
 import java.io.IOException;
 import java.nio.file.Path;
+import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("PMD.TooManyMethods")
@@ -102,6 +103,47 @@ class ChannelTest {
         IllegalArgumentException.class,
         () -> channel.toPublicationPath(path),
         "Unknown publication type for path: unknown/abc");
+  }
+
+  @Test
+  void testPathForWithIdBasedLayout() {
+    Channel channel = Channel.of(ChannelLayout.ID_BASED_RESOURCES, this.root);
+    assertEquals(
+        Path.of("000/001/123"), channel.pathFor(1123), "The id should be mapped to its path");
+  }
+
+  @Test
+  void testPathForWithUrlBasedLayout() {
+    Channel channel = Channel.of(ChannelLayout.URL_BASED_RESOURCES, this.root);
+    assertThrows(
+        IllegalStateException.class,
+        () -> channel.pathFor(1123),
+        "A url based layout has no id based paths");
+  }
+
+  @Test
+  void testEquals() {
+    EqualsVerifier.forClass(Channel.class)
+        .withIgnoredFields("idPathMapper")
+        .withPrefabValues(Path.class, Path.of("/a"), Path.of("/b"))
+        .verify();
+  }
+
+  @Test
+  void testEqualsWithIdBasedLayout() {
+    assertEquals(
+        Channel.of(ChannelLayout.ID_BASED_RESOURCES, this.root),
+        Channel.of(ChannelLayout.ID_BASED_RESOURCES, this.root),
+        "Channels with the same id based layout and root should be equal");
+  }
+
+  @Test
+  void testToString() {
+    Channel channel = Channel.of(ChannelLayout.ID_BASED_RESOURCES, this.root);
+    assertEquals(
+        "Channel{layout=ID_BASED_RESOURCES, root=" + this.root + "}",
+        channel.toString(),
+        "Unexpected string representation");
   }
 
   @Test
